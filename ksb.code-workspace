@@ -1,0 +1,20 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "explorer.confirmDelete": false,
+        "editor.renderWhitespace": "all",
+        "editor.renderControlCharacters": false,
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "breadcrumbs.enabled": true,
+        "window.zoomLevel": 0,
+        "namespaceResolver.sortOnSave": true,
+        "namespaceResolver.showMessageOnStatusBar": true
+    }
+}

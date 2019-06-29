@@ -1,0 +1,17 @@
+{
+    "name": "ksb",
+    "description": "Knowledge Sharing Bulletin",
+    "type": "project",
+    "require": {
+        "slim/psr7": "0.3.0",
+        "slim/slim": "4.0.0-beta",
+        "aura/di": "4.0.0-alpha1"
+    },
+    "authors": [
+        {
+            "name": "Tea Bag",
+            "email": "sakmyapeo@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
