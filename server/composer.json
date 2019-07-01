@@ -5,7 +5,13 @@
     "require": {
         "slim/psr7": "0.3.0",
         "slim/slim": "4.0.0-beta",
-        "aura/di": "4.0.0-alpha1"
+        "aura/di": "4.0.0-alpha1",
+        "slim/twig-view": "3.0.0-alpha"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ksb\\": "src/framework"
+        }
     },
     "authors": [
         {

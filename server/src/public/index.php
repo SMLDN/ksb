@@ -1,26 +1,26 @@
 <?php
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
+
+use Slim\Views\Twig;
 use Slim\Factory\AppFactory;
 use Aura\Di\ContainerBuilder;
-use Slim\Middleware\ErrorMiddleware;
 
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . "/../../vendor/autoload.php";
+
+session_start();
 
 $builder = new ContainerBuilder();
-$container = $builder->newInstance();
+$container = $builder->newInstance($builder::AUTO_RESOLVE);
 
-// $container->set("viewer", $container->lazyNew("Congaco"));
+//Config container
+require_once __DIR__ . "/../bootstrap/container.php";
 
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
-$errorMiddleware = new ErrorMiddleware($app->getCallableResolver(), $app->getResponseFactory(), true, false, false);
-$app->add($errorMiddleware);
+//Config app middleware
+require_once __DIR__ . "/../bootstrap/middleware.php";
 
-$app->get("/", function (Request $request, Response $response, $args) {
-    $response->getBody()->write("hello");
-    return $response;
-});
+// Config controller
+require_once __DIR__ . "/../bootstrap/controller.php";
 
 $app->run();
