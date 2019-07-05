@@ -10,7 +10,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Ksb\\": "src/framework"
+            "Ksb\\": "src/ksb",
+            "Bootstrap\\": "src/bootstrap"
         }
     },
     "authors": [

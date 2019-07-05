@@ -1,26 +1,26 @@
 <?php
 
-use Slim\Views\Twig;
-use Slim\Factory\AppFactory;
 use Aura\Di\ContainerBuilder;
+use Bootstrap\Config\BootstrapContainerConfig;
+use Ksb\Config\ContainerConfig;
+use Slim\Factory\AppFactory;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
 session_start();
 
-$builder = new ContainerBuilder();
-$container = $builder->newInstance($builder::AUTO_RESOLVE);
+$bootstrapDir = __DIR__ . "/../bootstrap/";
 
-//Config container
-require_once __DIR__ . "/../bootstrap/container.php";
+$builder = new ContainerBuilder();
+$container = $builder->newConfiguredInstance([BootstrapContainerConfig::class, ContainerConfig::class], $builder::AUTO_RESOLVE);
 
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 //Config app middleware
-require_once __DIR__ . "/../bootstrap/middleware.php";
+require_once $bootstrapDir . "middleware.php";
 
 // Config controller
-require_once __DIR__ . "/../bootstrap/controller.php";
+require_once $bootstrapDir . "controller.php";
 
 $app->run();

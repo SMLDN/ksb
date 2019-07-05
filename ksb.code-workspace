@@ -15,6 +15,9 @@
         "breadcrumbs.enabled": true,
         "window.zoomLevel": 0,
         "namespaceResolver.sortOnSave": true,
-        "namespaceResolver.showMessageOnStatusBar": true
+        "namespaceResolver.showMessageOnStatusBar": true,
+        "namespaceResolver.sortAlphabetically": true,
+        "php.suggest.basic": false,
+        "phpfmt.smart_linebreak_after_curly": true
     }
 }
