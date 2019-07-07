@@ -19,7 +19,12 @@ class BootstrapSetting
             "templateDir" => __DIR__ . "/../../view",
         ],
         "db" => [
-            "db" => "postgresql",
+            "driver" => "pgsql",
+            "host" => "localhost",
+            "database" => "ksb",
+            "username" => "ksb",
+            "password" => "ksb",
+            "charset" => "utf8",
         ],
     ];
 

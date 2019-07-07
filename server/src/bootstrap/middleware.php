@@ -2,9 +2,9 @@
 
 use Slim\Middleware\ErrorMiddleware;
 
-$settings = $container->get("settings");
+$setting = $container->get("setting");
 
 $app->add(new ErrorMiddleware($app->getCallableResolver(), $app->getResponseFactory(),
-    $settings->get("errorMiddleware.displayErrorDetails"),
-    $settings->get("errorMiddleware.logErrors"),
-    $settings->get("errorMiddleware.logErrorDetails")));
+    $setting->get("errorMiddleware.displayErrorDetails"),
+    $setting->get("errorMiddleware.logErrors"),
+    $setting->get("errorMiddleware.logErrorDetails")));

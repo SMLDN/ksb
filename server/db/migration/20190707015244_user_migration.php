@@ -33,9 +33,10 @@ class UserMigration extends AbstractMigration
     {
         $table = $this->table("user", ["id" => "user_id"]);
         $table->addColumn("login_name", "string", ["limit" => 127])
-            ->addColumn("email", "string", ["limit" => 255])
+            ->addColumn("password", "string", ["null" => true, "limit" => 255])
+            ->addColumn("email", "string", ["null" => true, "limit" => 255])
             ->addColumn("created_at", "timestamp", ["default" => "CURRENT_TIMESTAMP", "timezone" => false])
-            ->addColumn("updated_at", "timestamp", ["timezone" => false])
+            ->addColumn("updated_at", "timestamp", ["null" => true, "timezone" => false])
             ->addIndex(["user_id"])
             ->addIndex(["login_name"], ["unique" => true, "name" => "idx_login_name"])
             ->create();

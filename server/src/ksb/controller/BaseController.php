@@ -13,5 +13,4 @@ class BaseController
     {
         $this->view = $view;
     }
-
 }

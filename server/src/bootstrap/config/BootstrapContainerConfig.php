@@ -16,7 +16,7 @@ class BootstrapContainerConfig extends ContainerConfig
      */
     public function define(Container $container): void
     {
-        $container->set("settings", $container->lazyNew(BootstrapSetting::class));
+        $container->set("setting", $container->lazyNew(BootstrapSetting::class));
     }
 
     /**
