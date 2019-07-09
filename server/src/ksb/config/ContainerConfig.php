@@ -5,7 +5,9 @@ namespace Ksb\Config;
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
 use Illuminate\Database\Capsule\Manager;
+use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
+use Ksb\Logic\UserLogic;
 use Slim\Views\Twig;
 
 class ContainerConfig extends AuraContainerConfig
@@ -40,6 +42,8 @@ class ContainerConfig extends AuraContainerConfig
 
         // Lazy new
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
+        $container->set(AuthController::class, $container->lazyNew(AuthController::class));
+        $container->set(UserLogic::class, $container->lazyNew(UserLogic::class));
     }
 
     /**

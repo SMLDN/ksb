@@ -1,6 +1,7 @@
 <?php
 
 use Slim\Middleware\ErrorMiddleware;
+use Slim\Middleware\RoutingMiddleware;
 
 $setting = $container->get("setting");
 

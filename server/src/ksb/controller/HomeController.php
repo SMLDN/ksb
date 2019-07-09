@@ -2,13 +2,34 @@
 
 namespace Ksb\Controller;
 
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Views\Twig;
 
-class HomeController extends BaseController
+class HomeController
 {
 
-    public function index(Request $request, Response $response, $args): Response
+    protected $view;
+
+    /**
+     * Construct
+     *
+     * @param Twig $view
+     */
+    public function __construct(Twig $view)
+    {
+        $this->view = $view;
+    }
+
+    /**
+     * Trang chủ
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param [type] $args
+     * @return void
+     */
+    public function index(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         return $this->view->render($response, "Home.twig");
     }
