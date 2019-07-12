@@ -32,13 +32,14 @@ class UserMigration extends AbstractMigration
     public function change()
     {
         $table = $this->table("user", ["id" => "user_id"]);
-        $table->addColumn("login_name", "string", ["limit" => 127])
+        $table->addColumn("user_name", "string", ["limit" => 127])
             ->addColumn("password", "string", ["null" => true, "limit" => 255])
+            ->addColumn("session_key", "string", ["null" => true, "limit" => 255])
+            ->addColumn("session_value", "string", ["null" => true, "limit" => 255])
             ->addColumn("email", "string", ["null" => true, "limit" => 255])
             ->addColumn("created_at", "timestamp", ["default" => "CURRENT_TIMESTAMP", "timezone" => false])
             ->addColumn("updated_at", "timestamp", ["null" => true, "timezone" => false])
-            ->addIndex(["user_id"])
-            ->addIndex(["login_name"], ["unique" => true, "name" => "idx_login_name"])
+            ->addIndex(["user_name"], ["unique" => true, "name" => "idx_user_name"])
             ->create();
     }
 }

@@ -31,7 +31,7 @@ class AuthController
     }
 
     /**
-     * Trang login GET
+     * Trang đăng nhập GET
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -40,11 +40,11 @@ class AuthController
      */
     public function loginGet(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        return $this->view->render($response, "Login.twig");
+        return $this->view->render($response, "auth/Login.twig");
     }
 
     /**
-     * Trang login POST
+     * Trang đăng nhập POST
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -60,8 +60,43 @@ class AuthController
 
         if ($user && $this->userLogic->login($user)) {
             return $response->withRedirect($this->router->urlFor("index"));
-        } else {
-            return $response->withRedirect($this->router->urlFor("auth.login"));
         }
+        return $response->withRedirect($this->router->urlFor("auth.login"));
+    }
+
+    /**
+     * Trang đăng ký GET
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param [type] $args
+     * @return void
+     */
+    public function registerGet(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        return $this->view->render($response, "auth/Register.twig");
+    }
+
+    /**
+     * Trang đăng ký POST
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param [type] $args
+     * @return void
+     */
+    public function registerPost(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $user = new User();
+
+        $user->email = $request->getParsedBody()["email"];
+        $user->userName = $request->getParsedBody()["userName"];
+        $user->password = $request->getParsedBody()["loginPassword"];
+
+        $this->userLogic->register($user);
+        if ($user->userId) {
+            return $response->withRedirect($this->router->urlFor("index"));
+        }
+        return $response->withRedirect($this->router->urlFor("auth.register"));
     }
 }

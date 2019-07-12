@@ -1,11 +1,10 @@
 <?php
 namespace Ksb\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use Bootstrap\Model\BootstrapModel;
 
-class User extends Model
+class User extends BootstrapModel
 {
     protected $table = "user";
     protected $primaryKey = 'user_id';
-
 }
