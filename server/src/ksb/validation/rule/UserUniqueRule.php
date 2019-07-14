@@ -6,7 +6,7 @@ use Bootstrap\Interfaces\Helper\RuleInterface;
 use Illuminate\Support\Str;
 use Ksb\Model\User;
 
-class UserUniqValidRule implements RuleInterface
+class UserUniqueRule implements RuleInterface
 {
     /**
      * Undocumented function
@@ -20,7 +20,6 @@ class UserUniqValidRule implements RuleInterface
         if ($value == null) {
             return false;
         }
-        $cnt = User::where(Str::snake($field), $value)->count();
-        return $cnt > 0 ? false : true;
+        return User::where(Str::snake($field), $value)->doesntExist();
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Ksb\Logic;
 
-use Bootstrap\Helper\BootstrapValidator;
+use Bootstrap\Helper\Validation\BootstrapValidator;
 use Ksb\Model\User;
-use Ksb\Validation\Rule\UserUniqValidRule;
+use Ksb\Validation\Rule\UserUniqueRule;
 
 class UserLogic
 {
@@ -31,43 +31,62 @@ class UserLogic
     }
 
     /**
-     * Undocumented function
+     * Đăng ký user mới
      *
      * @param User $user
      * @return void
      */
     public function register(User $user)
     {
-        $v = new BootstrapValidator(
-            $user->getAttributesCamel(),
+        $v = new BootstrapValidator();
+        $v->setData($user->getAttributesCamel());
+        // Tên hiển thị
+        $v->addRule("userName",
             [
-                "userName" => [
-                    "fieldName" => "Tên hiển thị",
-                    "rule" => [
-                        "require",
-                        "alpha",
-                        "userUniqValid",
-                    ],
+                "fieldName" => "Tên hiển thị",
+                "rule" => [
+                    "require",
+                    "alphaNumber",
+                    "minLength:6",
+                    "maxLength:50",
+                    "userUnique",
                 ],
-                "email" => [
-                    "fieldName" => "Email",
-                    "rule" => [
-                        "require",
-                        "userUniqValid",
-                    ],
-                ],
-                "password" => [
-                    "fieldName" => "Mật khẩu",
-                    "rule" => "require",
-                ],
-            ],
-            [UserUniqValidRule::class]
+            ]
         );
 
-        if ($v->validate()) {
+        // Email
+        $v->addRule("email",
+            [
+                "fieldName" => "Email",
+                "rule" => [
+                    "require",
+                    "email",
+                    "minLength:6",
+                    "maxLength:100",
+                    "userUnique",
+                ],
+            ]
+        );
+
+        // Mật khẩu
+        $v->addRule("password",
+            [
+                "fieldName" => "Mật khẩu",
+                "rule" => [
+                    "require",
+                    "password",
+                ],
+            ]
+        );
+
+        $v->addClassPath(UserUniqueRule::class);
+
+        if ($v->isPassed()) {
             $user->password = password_hash($user->password, PASSWORD_BCRYPT, ["cost" => 10]);
             $user->save();
         }
+        dump($v->getErrors());
+        die();
         return $user;
     }
 }

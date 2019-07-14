@@ -1,15 +1,15 @@
 <?php
 
-namespace Bootstrap\Helper\Message;
+namespace Ksb\Validation\Message;
 
 use Bootstrap\Interfaces\Helper\ValidateMessageInterface;
 
-class DefaultValidateMessage implements ValidateMessageInterface
+class UserUniqueValidateMessage implements ValidateMessageInterface
 {
     public static $fieldName = "Trường";
 
     public static function getMsg()
     {
-        return static::$fieldName . " không hợp lệ";
+        return static::$fieldName . " là bắt buộc";
     }
 }

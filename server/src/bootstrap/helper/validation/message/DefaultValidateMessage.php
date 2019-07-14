@@ -1,10 +1,10 @@
 <?php
 
-namespace Ksb\Validation\Message;
+namespace Bootstrap\Helper\Validation\Message;
 
 use Bootstrap\Interfaces\Helper\ValidateMessageInterface;
 
-class UserUniqValidValidateMessage implements ValidateMessageInterface
+class DefaultValidateMessage implements ValidateMessageInterface
 {
     public static $fieldName = "Trường";
 

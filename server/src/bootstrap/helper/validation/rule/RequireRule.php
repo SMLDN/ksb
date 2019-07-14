@@ -1,6 +1,6 @@
 <?php
 
-namespace Bootstrap\Helper\Rule;
+namespace Bootstrap\Helper\Validation\Rule;
 
 use Bootstrap\Interfaces\Helper\RuleInterface;
 

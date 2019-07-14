@@ -1,10 +1,10 @@
 <?php
 
-namespace Bootstrap\Helper\Rule;
+namespace Bootstrap\Helper\Validation\Rule;
 
 use Bootstrap\Interfaces\Helper\RuleInterface;
 
-class AlphaRule implements RuleInterface
+class EmailRule implements RuleInterface
 {
     /**
      * Undocumented function
@@ -15,6 +15,6 @@ class AlphaRule implements RuleInterface
      */
     public static function validate($field, $value = null)
     {
-        return preg_match('/^[a-zA-Z]$/', $value) == 1;
+        return filter_var($value, FILTER_VALIDATE_EMAIL) ? true : false;
     }
 }
