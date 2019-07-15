@@ -2,6 +2,7 @@
 
 namespace Ksb\Controller;
 
+use Bootstrap\Helper\SessionManager;
 use Ksb\Logic\UserLogic;
 use Ksb\Model\User;
 use Psr\Http\Message\ResponseInterface;
@@ -40,6 +41,7 @@ class AuthController
      */
     public function loginGet(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        SessionManager::setFlash($this->view, "flash_errors");
         return $this->view->render($response, "auth/Login.twig");
     }
 
@@ -55,12 +57,14 @@ class AuthController
     {
 
         $user = new User();
-        $user->loginName = $request->getParsedBody()["loginName"];
-        $user->password = $request->getParsedBody()["loginPassword"];
+        $user->email = $request->getParsedBody()["email"] ?? "";
+        $user->password = $request->getParsedBody()["loginPassword"] ?? "";
 
-        if ($user && $this->userLogic->login($user)) {
+        if ($this->userLogic->login($user)) {
             return $response->withRedirect($this->router->urlFor("index"));
         }
+
+        SessionManager::set("flash_errors", $user->getValidationErrors());
         return $response->withRedirect($this->router->urlFor("auth.login"));
     }
 
@@ -74,6 +78,7 @@ class AuthController
      */
     public function registerGet(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        SessionManager::setFlash($this->view, "flash_errors");
         return $this->view->render($response, "auth/Register.twig");
     }
 
@@ -89,14 +94,16 @@ class AuthController
     {
         $user = new User();
 
-        $user->email = $request->getParsedBody()["email"];
-        $user->userName = $request->getParsedBody()["userName"];
-        $user->password = $request->getParsedBody()["loginPassword"];
+        $user->email = $request->getParsedBody()["email"] ?? "";
+        $user->userName = $request->getParsedBody()["userName"] ?? "";
+        $user->password = $request->getParsedBody()["loginPassword"] ?? "";
 
         $this->userLogic->register($user);
         if ($user->userId) {
             return $response->withRedirect($this->router->urlFor("index"));
         }
+
+        SessionManager::set("flash_errors", $user->getValidationErrors());
         return $response->withRedirect($this->router->urlFor("auth.register"));
     }
 }

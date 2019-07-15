@@ -3,11 +3,12 @@
 use Aura\Di\ContainerBuilder;
 use Bootstrap\AppBootstrap;
 use Bootstrap\Config\BootstrapContainerConfig;
+use Bootstrap\Helper\SessionManager;
 use Ksb\Config\ContainerConfig;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
-session_start();
+SessionManager::start();
 
 $partialDir = __DIR__ . "/../ksb/partial/";
 

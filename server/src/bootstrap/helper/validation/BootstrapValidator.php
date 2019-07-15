@@ -78,9 +78,11 @@ class BootstrapValidator
     {
         $className = ucfirst(Str::before($className, $this->ruleDemiliter));
         $ruleClassName = $this->baseClasspath . "Rule\\" . $className . "Rule";
+        $ruleName = $className . "Rule";
         if (!empty($this->classpath)) {
             foreach ($this->classpath as $path) {
-                if (!Str::contains($path, $className)) {
+                $pathSplit = explode("\\", $path);
+                if ($pathSplit[count($pathSplit) - 1] != $ruleName) {
                     continue;
                 }
                 $ruleClassName = class_exists($path) ? $path : $ruleClassName;
@@ -100,12 +102,14 @@ class BootstrapValidator
         $className = ucfirst(Str::before($className, $this->ruleDemiliter));
         $defaultClassName = DefaultValidateMessage::class;
         $ruleClassName = $this->baseClasspath . "Message\\" . $className . "ValidateMessage";
+        $ruleName = $className . "Rule";
 
         $ruleClassName = class_exists($ruleClassName) ? $ruleClassName : $defaultClassName;
 
         if (!empty($this->classpath)) {
             foreach ($this->classpath as $path) {
-                if (!Str::contains($path, $className)) {
+                $pathSplit = explode("\\", $path);
+                if ($pathSplit[count($pathSplit) - 1] != $ruleName) {
                     continue;
                 }
                 $msgPath = preg_replace('/Rule\\\/', 'Message\\', $path);
@@ -127,7 +131,7 @@ class BootstrapValidator
         if (empty($this->data)) {
             throw new DataEmptyException;
         }
-        return $this->data[$index] ?? $this->data[$index];
+        return $this->data[$index] ?? null;
     }
 
     /**
@@ -194,13 +198,31 @@ class BootstrapValidator
     }
 
     /**
-     * Lấy thông tin lỗi sau khi check
+     * Lấy thông tin lỗi sau khi check(dạng đầy đù)
+     *
+     * @return void
+     */
+    public function getRawErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Lấy thông tin lỗi sau khi check(dạng rút gọn)
      *
      * @return void
      */
     public function getErrors()
     {
-        return $this->errors;
+        $fullErrors = $this->errors;
+        $errors = [];
+        foreach ($fullErrors as $field => $error) {
+            $errors[$field] = [];
+            foreach ($error as $rule => $msg) {
+                array_push($errors[$field], $msg);
+            }
+        }
+        return $errors;
     }
 
     /**

@@ -7,8 +7,10 @@ use Aura\Di\ContainerConfig as AuraContainerConfig;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
+use Ksb\Logic\AuthLogic;
 use Ksb\Logic\UserLogic;
 use Slim\Views\Twig;
+use Twig\Extension\DebugExtension;
 
 class ContainerConfig extends AuraContainerConfig
 {
@@ -35,15 +37,24 @@ class ContainerConfig extends AuraContainerConfig
 
         // view
         $container->set("view", function () use ($container) {
-            $view = new Twig($container->get("setting")->get("view.templateDir"));
+            $view = new Twig($container->get("setting")->get("view.templateDir"), [
+                "debug" => true,
+            ]);
+            $view->getEnvironment()->addGlobal("user", $container->get("auth")->getUser());
+
+            $view->addExtension(new DebugExtension());
             return $view;
         });
         $container->types[Twig::class] = $container->lazyGet("view");
+
+        // current user
+        $container->set("auth", $container->lazyNew(AuthLogic::class));
 
         // Lazy new
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserLogic::class, $container->lazyNew(UserLogic::class));
+        $container->set(AuthLogic::class, $container->lazyNew(AuthLogic::class));
     }
 
     /**
@@ -55,5 +66,6 @@ class ContainerConfig extends AuraContainerConfig
     public function modify(Container $container): void
     {
         $container->get("db");
+        $container->get("auth");
     }
 }

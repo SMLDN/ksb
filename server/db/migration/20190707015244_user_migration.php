@@ -41,6 +41,7 @@ class UserMigration extends AbstractMigration
             ->addColumn("created_at", "timestamp", ["default" => "CURRENT_TIMESTAMP", "timezone" => false, "comment" => "Thời gian tạo mới"])
             ->addColumn("updated_at", "timestamp", ["null" => true, "timezone" => false, "comment" => "Thời gian cập nhập"])
             ->addIndex(["user_name"], ["unique" => true, "name" => "idx_user_name"])
+            ->addIndex(["email"], ["unique" => true, "name" => "idx_email"])
             ->create();
     }
 }

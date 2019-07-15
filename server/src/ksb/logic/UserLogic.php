@@ -2,8 +2,12 @@
 
 namespace Ksb\Logic;
 
+use Bootstrap\Helper\CookieManager;
+use Bootstrap\Helper\SessionManager;
 use Bootstrap\Helper\Validation\BootstrapValidator;
 use Ksb\Model\User;
+use Ksb\Validation\Rule\PasswordMatchRule;
+use Ksb\Validation\Rule\UserExistRule;
 use Ksb\Validation\Rule\UserUniqueRule;
 
 class UserLogic
@@ -17,17 +21,45 @@ class UserLogic
      */
     public function login(User $user)
     {
-        $dbUser = User::where("login_name", $user->loginName)->first();
+        $v = new BootstrapValidator();
+        $v->setData($user->getAttributesCamel());
 
-        if (!$dbUser) {
-            return false;
+        // Email
+        $v->addRule("email",
+            [
+                "fieldName" => "Email",
+                "rule" => [
+                    "require",
+                    "email",
+                    "minLength:6",
+                    "maxLength:100",
+                    "userExist",
+                ],
+            ]
+        );
+
+        // Mật khẩu
+        $v->addRule("password",
+            [
+                "fieldName" => "Mật khẩu",
+                "rule" => [
+                    "require",
+                    "password",
+                    "passwordMatch:" . $user->email,
+                ],
+            ]
+        );
+
+        $v->addClassPath(UserExistRule::class);
+        $v->addClassPath(PasswordMatchRule::class);
+
+        if ($v->isPassed()) {
+            $this->doLogin($user);
+            return true;
         }
 
-        if ($user->password != $dbUser->password) {
-            return false;
-        }
-
-        return true;
+        $user->setValidationErrors($v->getErrors());
+        return false;
     }
 
     /**
@@ -86,10 +118,42 @@ class UserLogic
         $v->addClassPath(UserUniqueRule::class);
 
         if ($v->isPassed()) {
-            $user->password = password_hash($user->password, PASSWORD_ARGON2I);
-            $user->active_status = "0";
-            $user->save();
+            $this->doRegister($user);
+        } else {
+            $user->setValidationErrors($v->getErrors());
         }
+
         return $user;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param User $user
+     * @return void
+     */
+    public function doRegister(User $user)
+    {
+        $user->password = password_hash($user->password, PASSWORD_ARGON2I);
+        $user->active_status = "0";
+        $user->save();
+    }
+
+    /**
+     * Đăng nhập user
+     *
+     * @return void
+     */
+    public function doLogin(User $user)
+    {
+        CookieManager::unsetLoginInfo();
+        $user = User::where("email", $user->email)->first();
+        $rememberKey = md5($user->email . time());
+        $rememberValue = hash("sha256", $user->email . time() . uniqid("ksb"));
+        $user->rememberKey = $rememberKey;
+        $user->rememberValue = $rememberValue;
+        $user->update();
+        CookieManager::setLoginInfo($user->userId, $rememberKey, $rememberValue);
+        SessionManager::regenerate();
     }
 }

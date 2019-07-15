@@ -7,5 +7,11 @@
         <h1>Trang chủ</h1>
         <a href="/auth/login">Login</a><br>
         <a href="/auth/register">Register</a>
+        {{ dump(user) }}
+        {% if user %}
+            <h2>
+                {{ user.userName }}
+            </h2>
+        {% endif %}
     </body>
 </html>

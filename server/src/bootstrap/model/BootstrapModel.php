@@ -47,4 +47,42 @@ class BootstrapModel extends Model
 
         return $camelAttributes;
     }
+
+    /**
+     * Lấy entity với tên key dạng camel case
+     *
+     * @return void
+     */
+    public function toArrayCamel()
+    {
+        $camelArray = [];
+
+        $arrays = $this->toArray();
+        foreach ($arrays as $key => $value) {
+            $camelArray[Str::camel($key)] = $value;
+        }
+
+        return $camelArray;
+    }
+
+    /**
+     * Thêm Validation errors
+     *
+     * @param [type] $value
+     * @return void
+     */
+    public function setValidationErrors($value)
+    {
+        $this->validationErrors = $value;
+    }
+
+    /**
+     * Lấy giá trị validation errors
+     *
+     * @return void
+     */
+    public function getValidationErrors()
+    {
+        return $this->validationErrors;
+    }
 }
