@@ -3,7 +3,6 @@
 namespace Ksb\Logic;
 
 use Bootstrap\Helper\CookieManager;
-use Bootstrap\Helper\SessionManager;
 use Bootstrap\Helper\Validation\BootstrapValidator;
 use Ksb\Model\User;
 use Ksb\Validation\Rule\PasswordMatchRule;
@@ -54,6 +53,7 @@ class UserLogic
         $v->addClassPath(PasswordMatchRule::class);
 
         if ($v->isPassed()) {
+            $user = User::where("email", $user->email)->first();
             $this->doLogin($user);
             return true;
         }
@@ -147,13 +147,22 @@ class UserLogic
     public function doLogin(User $user)
     {
         CookieManager::unsetLoginInfo();
-        $user = User::where("email", $user->email)->first();
         $rememberKey = md5($user->email . time());
         $rememberValue = hash("sha256", $user->email . time() . uniqid("ksb"));
         $user->rememberKey = $rememberKey;
         $user->rememberValue = $rememberValue;
         $user->update();
         CookieManager::setLoginInfo($user->userId, $rememberKey, $rememberValue);
-        SessionManager::regenerate();
+
+    }
+
+    /**
+     * Đăng xuất
+     *
+     * @return void
+     */
+    public function doLogout()
+    {
+        CookieManager::unsetLoginInfo();
     }
 }

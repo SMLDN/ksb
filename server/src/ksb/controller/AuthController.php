@@ -69,6 +69,20 @@ class AuthController
     }
 
     /**
+     * Trang đăng xuất GET
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param [type] $args
+     * @return void
+     */
+    public function logoutGet(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $this->userLogic->doLogout();
+        return $response->withRedirect($this->router->urlFor("index"));
+    }
+
+    /**
      * Trang đăng ký GET
      *
      * @param ServerRequestInterface $request

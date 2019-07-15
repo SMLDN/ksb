@@ -2,6 +2,8 @@
 
 namespace Bootstrap\Helper;
 
+use Bootstrap\Helper\SessionManager;
+
 class CookieManager
 {
 
@@ -56,6 +58,7 @@ class CookieManager
         static::set(static::$rememberUserName, $userId, $time);
         static::set(static::$rememberKeyName, $rememberKey, $time);
         static::set(static::$rememberValueName, $rememberValue, $time);
+        SessionManager::regenerate();
     }
 
     /**
@@ -71,6 +74,7 @@ class CookieManager
         static::set(static::$rememberUserName, "", -1);
         static::set(static::$rememberKeyName, "", -1);
         static::set(static::$rememberValueName, "", -1);
+        SessionManager::regenerate();
     }
 
     /**

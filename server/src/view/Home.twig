@@ -5,13 +5,15 @@
 
     <body>
         <h1>Trang chủ</h1>
-        <a href="/auth/login">Login</a><br>
-        <a href="/auth/register">Register</a>
-        {{ dump(user) }}
         {% if user %}
+            <a href="/auth/logout">Logout</a><br>
             <h2>
-                {{ user.userName }}
+                Xin chào
+                {{ user.userName }}!
             </h2>
+        {% else %}
+            <a href="/auth/login">Login</a><br>
+            <a href="/auth/register">Register</a>
         {% endif %}
     </body>
 </html>
