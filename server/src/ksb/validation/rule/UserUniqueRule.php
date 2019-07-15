@@ -17,7 +17,7 @@ class UserUniqueRule implements RuleInterface
      */
     public static function validate($field, $value = null)
     {
-        if ($value == null) {
+        if (empty($value)) {
             return false;
         }
         return User::where(Str::snake($field), $value)->doesntExist();

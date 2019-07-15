@@ -38,6 +38,8 @@ class UserLogic
      */
     public function register(User $user)
     {
+        $user->userName = trim(preg_replace('/\s+/', ' ', $user->userName));
+
         $v = new BootstrapValidator();
         $v->setData($user->getAttributesCamel());
         // Tên hiển thị
@@ -46,7 +48,7 @@ class UserLogic
                 "fieldName" => "Tên hiển thị",
                 "rule" => [
                     "require",
-                    "alphaNumber",
+                    "vietnameseCharacter",
                     "minLength:6",
                     "maxLength:50",
                     "userUnique",
@@ -75,6 +77,8 @@ class UserLogic
                 "rule" => [
                     "require",
                     "password",
+                    "minLength:6",
+                    "maxLength:100",
                 ],
             ]
         );
@@ -82,11 +86,10 @@ class UserLogic
         $v->addClassPath(UserUniqueRule::class);
 
         if ($v->isPassed()) {
-            $user->password = password_hash($user->password, PASSWORD_BCRYPT, ["cost" => 10]);
+            $user->password = password_hash($user->password, PASSWORD_ARGON2I);
+            $user->active_status = "0";
             $user->save();
         }
-        dump($v->getErrors());
-        die();
         return $user;
     }
 }

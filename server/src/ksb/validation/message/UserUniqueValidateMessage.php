@@ -10,6 +10,6 @@ class UserUniqueValidateMessage implements ValidateMessageInterface
 
     public static function getMsg()
     {
-        return static::$fieldName . " là bắt buộc";
+        return static::$fieldName . " đã tồn tại";
     }
 }
