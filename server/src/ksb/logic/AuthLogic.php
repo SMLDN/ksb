@@ -2,21 +2,190 @@
 namespace Ksb\Logic;
 
 use Bootstrap\Helper\CookieManager;
+use Bootstrap\Helper\SessionManager;
 use Ksb\Model\User;
 
 class AuthLogic
 {
     protected $user;
 
-    protected $userLogic;
+    protected $cookieUserName = "keep_user";
+
+    protected $cookieKeyName = "keep_key";
+
+    protected $cookieValueName = "keep_value";
+
+    protected $sessionUserName = "user_id";
+
+    protected $sessionKeyName = "remember_key";
+
+    protected $sessionValueName = "remember_value";
+
+    protected $cookieLong = 180;
 
     /**
-     * Construct
+     * Tự động đăng nhập
+     *
+     * @return void
      */
-    public function __construct(UserLogic $userLogic)
+    public function autoLogin()
     {
-        $this->userLogic = $userLogic;
-        $this->loginFromCookie();
+        if (!$this->loginFromSession()) {
+            $this->loginFromCookie();
+        }
+    }
+
+    /**
+     * Đăng nhập dựa vào thông tin Session
+     *
+     * @return void
+     */
+    public function loginFromSession()
+    {
+        $sessionUserId = SessionManager::get($this->sessionUserName);
+        $sessionKey = SessionManager::get($this->sessionKeyName);
+        $sessionValue = SessionManager::get($this->sessionValueName);
+
+        if (!$sessionUserId || !$sessionKey || !$sessionValue) {
+            return false;
+        }
+
+        $cookieUserId = CookieManager::get($this->cookieUserName);
+        $cookieKey = CookieManager::get($this->cookieKeyName);
+        $cookieValue = CookieManager::get($this->cookieValueName);
+
+        if ($sessionUserId != $cookieUserId || $sessionKey != $cookieKey || $sessionValue != $cookieValue) {
+            return false;
+        }
+
+        $user = User::find($sessionUserId);
+
+        if (!$user) {
+            return false;
+        }
+
+        $this->user = $user;
+
+        return true;
+    }
+
+    /**
+     * Đăng nhập dựa vào thông tin cookie
+     *
+     * @return boolean
+     */
+    public function loginFromCookie()
+    {
+        $cookieUserId = CookieManager::get($this->cookieUserName);
+        $cookieKey = CookieManager::get($this->cookieKeyName);
+        $cookieValue = CookieManager::get($this->cookieValueName);
+
+        if ($cookieUserId != null && $cookieKey != null && $cookieValue != null) {
+            $user = User::find($cookieUserId);
+            if ($user && $user->rememberKey == $cookieKey && $user->rememberValue == $cookieValue) {
+                $this->doLogin($user);
+                return true;
+            }
+        }
+
+        $this->unsetCookieLogin();
+
+        return false;
+    }
+
+    /**
+     * Đăng nhập từ code
+     *
+     * @return void
+     */
+    public function loginFromProgram(User $user)
+    {
+        $this->doLogin($user);
+    }
+
+    /**
+     * Đăng xuất
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        $this->doLogout();
+    }
+
+    /**
+     * Thêm thông tin đăng nhập vào cookie
+     *
+     * @return void
+     */
+    protected function setCookieLogin($userId, $rememberKey, $rememberValue)
+    {
+        CookieManager::set($this->cookieUserName, $userId, $this->cookieLong);
+        CookieManager::set($this->cookieKeyName, $rememberKey, $this->cookieLong);
+        CookieManager::set($this->cookieValueName, $rememberValue, $this->cookieLong);
+    }
+
+    /**
+     * Xóa thông tin đăng nhập từ cookie
+     *
+     * @return void
+     */
+    protected function unsetCookieLogin()
+    {
+        CookieManager::unset($this->cookieUserName);
+        CookieManager::unset($this->cookieKeyName);
+        CookieManager::unset($this->cookieValueName);
+    }
+
+    /**
+     * Thêm thông tin đăng nhập vào session
+     *
+     * @return void
+     */
+    protected function setSessionLogin($userId, $rememberKey, $rememberValue)
+    {
+        SessionManager::set($this->sessionUserName, $userId);
+        SessionManager::set($this->sessionKeyName, $rememberKey);
+        SessionManager::set($this->sessionValueName, $rememberValue);
+    }
+
+    /**
+     * Đăng nhập
+     *
+     * @return void
+     */
+    protected function doLogin(User $user)
+    {
+        // update remember key & value
+        $rememberKey = md5($user->email . time());
+        $rememberValue = hash("sha256", $user->email . time() . uniqid("ksb"));
+        $user->rememberKey = $rememberKey;
+        $user->rememberValue = $rememberValue;
+        $user->update();
+        $this->user = $user;
+
+        // update cookie
+        $this->setCookieLogin($user->userId, $rememberKey, $rememberValue);
+        SessionManager::regenerate();
+        $this->setSessionLogin($user->userId, $rememberKey, $rememberValue);
+    }
+
+    /**
+     * Đăng xuất
+     *
+     * @return void
+     */
+    protected function doLogout()
+    {
+        if (!$this->isLoggedIn()) {
+            return;
+        }
+
+        $this->user = null;
+        CookieManager::unset($this->cookieUserName);
+        CookieManager::unset($this->cookieKeyName);
+        CookieManager::unset($this->cookieValueName);
+        SessionManager::regenerate();
     }
 
     /**
@@ -44,24 +213,13 @@ class AuthLogic
     }
 
     /**
-     * Đăng nhập dựa theo thông tin cookie
+     * Người dùng hiện tại có đăng nhập hay không?
      *
      * @return boolean
      */
-    public function loginFromCookie()
+    public function isLoggedIn()
     {
-        $userId = CookieManager::getRememberUser();
-        $cookieKey = CookieManager::getRememberKey();
-        $cookieValue = CookieManager::getRememberValue();
-        if ($userId != null && $cookieKey != null && $cookieValue != null) {
-            $user = User::find($userId);
-            if ($user && $user->rememberKey == $cookieKey && $user->rememberValue == $cookieValue) {
-                $this->userLogic->doLogin($user);
-                $this->user = $user;
-                return true;
-            }
-        }
-        CookieManager::unsetLoginInfo();
-        return false;
+        return isset($this->user) ? true : false;
     }
+
 }

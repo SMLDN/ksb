@@ -57,8 +57,8 @@ class AuthController
     {
 
         $user = new User();
-        $user->email = $request->getParsedBody()["email"] ?? "";
-        $user->password = $request->getParsedBody()["loginPassword"] ?? "";
+        $user->email = $request->getParsedBody()["email"] ?? null;
+        $user->password = $request->getParsedBody()["loginPassword"] ?? null;
 
         if ($this->userLogic->login($user)) {
             return $response->withRedirect($this->router->urlFor("index"));
@@ -78,7 +78,7 @@ class AuthController
      */
     public function logoutGet(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        $this->userLogic->doLogout();
+        $this->userLogic->logout();
         return $response->withRedirect($this->router->urlFor("index"));
     }
 
@@ -108,9 +108,9 @@ class AuthController
     {
         $user = new User();
 
-        $user->email = $request->getParsedBody()["email"] ?? "";
-        $user->userName = $request->getParsedBody()["userName"] ?? "";
-        $user->password = $request->getParsedBody()["loginPassword"] ?? "";
+        $user->email = $request->getParsedBody()["email"] ?? null;
+        $user->userName = $request->getParsedBody()["userName"] ?? null;
+        $user->password = $request->getParsedBody()["loginPassword"] ?? null;
 
         $this->userLogic->register($user);
         if ($user->userId) {
@@ -120,4 +120,5 @@ class AuthController
         SessionManager::set("flash_errors", $user->getValidationErrors());
         return $response->withRedirect($this->router->urlFor("auth.register"));
     }
+
 }

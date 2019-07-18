@@ -1,7 +1,7 @@
 <?php
 
+use Bootstrap\Middleware\AuthMiddleware;
 use Slim\Middleware\ErrorMiddleware;
-use Slim\Middleware\RoutingMiddleware;
 
 $setting = $container->get("setting");
 
@@ -9,3 +9,5 @@ $app->add(new ErrorMiddleware($app->getCallableResolver(), $app->getResponseFact
     $setting->get("errorMiddleware.displayErrorDetails"),
     $setting->get("errorMiddleware.logErrors"),
     $setting->get("errorMiddleware.logErrorDetails")));
+
+$app->add(new AuthMiddleware($container->get("auth")));

@@ -2,18 +2,10 @@
 
 namespace Bootstrap\Helper;
 
-use Bootstrap\Helper\SessionManager;
-
 class CookieManager
 {
 
     protected static $prefix = "ksb_";
-
-    protected static $rememberUserName = "keep_user";
-
-    protected static $rememberKeyName = "keep_key";
-
-    protected static $rememberValueName = "keep_value";
 
     /**
      * Thêm cookie mới
@@ -23,7 +15,7 @@ class CookieManager
      * @param integer $time
      * @return void
      */
-    public static function set(string $key, $value, int $time)
+    public static function set(string $key, string $value, int $time)
     {
         $key = static::$prefix . $key;
         // TODO domain với secure
@@ -46,64 +38,13 @@ class CookieManager
     }
 
     /**
-     * Thiết lập thông tin đăng nhập
+     * Undocumented function
      *
-     * @param string $rememberKey
-     * @param string $rememberValue
-     * @param integer $time
+     * @param string $key
      * @return void
      */
-    public static function setLoginInfo(int $userId, string $rememberKey, string $rememberValue, int $time = 10)
-    {
-        static::set(static::$rememberUserName, $userId, $time);
-        static::set(static::$rememberKeyName, $rememberKey, $time);
-        static::set(static::$rememberValueName, $rememberValue, $time);
-        SessionManager::regenerate();
+    function unset(string $key) {
+        static::set($key, "", -1);
     }
 
-    /**
-     * Xóa thông tin đăng nhập
-     *
-     * @param string $rememberKey
-     * @param string $rememberValue
-     * @param integer $time
-     * @return void
-     */
-    public static function unsetLoginInfo()
-    {
-        static::set(static::$rememberUserName, "", -1);
-        static::set(static::$rememberKeyName, "", -1);
-        static::set(static::$rememberValueName, "", -1);
-        SessionManager::regenerate();
-    }
-
-    /**
-     * Lấy Remember key
-     *
-     * @return void
-     */
-    public static function getRememberKey()
-    {
-        return static::get(static::$rememberKeyName);
-    }
-
-    /**
-     * Lấy Remember value
-     *
-     * @return void
-     */
-    public static function getRememberValue()
-    {
-        return static::get(static::$rememberValueName);
-    }
-
-    /**
-     * Lấy Remember user
-     *
-     * @return void
-     */
-    public static function getRememberUser()
-    {
-        return static::get(static::$rememberUserName);
-    }
 }

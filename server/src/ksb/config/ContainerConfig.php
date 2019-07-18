@@ -35,26 +35,28 @@ class ContainerConfig extends AuraContainerConfig
         });
         $container->types[Manager::class] = $container->lazyGet("db");
 
+        // auth
+        $container->set("auth", $container->lazyNew(AuthLogic::class));
         // view
         $container->set("view", function () use ($container) {
             $view = new Twig($container->get("setting")->get("view.templateDir"), [
                 "debug" => true,
             ]);
-            $view->getEnvironment()->addGlobal("user", $container->get("auth")->getUser());
 
             $view->addExtension(new DebugExtension());
+
+            $view->getEnvironment()->addGlobal("user", $container->get("auth")->getUser());
             return $view;
         });
+
+        // Type for injection
         $container->types[Twig::class] = $container->lazyGet("view");
+        $container->types[AuthLogic::class] = $container->lazyGet("auth");
 
-        // current user
-        $container->set("auth", $container->lazyNew(AuthLogic::class));
-
-        // Lazy new
+        // Lazy new for auto-wiring
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserLogic::class, $container->lazyNew(UserLogic::class));
-        $container->set(AuthLogic::class, $container->lazyNew(AuthLogic::class));
     }
 
     /**
@@ -66,6 +68,6 @@ class ContainerConfig extends AuraContainerConfig
     public function modify(Container $container): void
     {
         $container->get("db");
-        $container->get("auth");
     }
+
 }

@@ -2,8 +2,8 @@
 
 namespace Ksb\Logic;
 
-use Bootstrap\Helper\CookieManager;
 use Bootstrap\Helper\Validation\BootstrapValidator;
+use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
 use Ksb\Validation\Rule\PasswordMatchRule;
 use Ksb\Validation\Rule\UserExistRule;
@@ -11,6 +11,18 @@ use Ksb\Validation\Rule\UserUniqueRule;
 
 class UserLogic
 {
+    protected $authLogic;
+
+    /**
+     * Construct
+     *
+     * @param AuthLogic $authLogic
+     * @return void
+     */
+    public function __construct(AuthLogic $authLogic)
+    {
+        $this->authLogic = $authLogic;
+    }
 
     /**
      * Login User(có kèm check password)
@@ -54,7 +66,7 @@ class UserLogic
 
         if ($v->isPassed()) {
             $user = User::where("email", $user->email)->first();
-            $this->doLogin($user);
+            $this->authLogic->loginFromProgram($user);
             return true;
         }
 
@@ -74,6 +86,7 @@ class UserLogic
 
         $v = new BootstrapValidator();
         $v->setData($user->getAttributesCamel());
+
         // Tên hiển thị
         $v->addRule("userName",
             [
@@ -119,6 +132,7 @@ class UserLogic
 
         if ($v->isPassed()) {
             $this->doRegister($user);
+            $this->authLogic->loginFromProgram($user);
         } else {
             $user->setValidationErrors($v->getErrors());
         }
@@ -127,12 +141,12 @@ class UserLogic
     }
 
     /**
-     * Undocumented function
+     * Đăng ký người dùng mới
      *
      * @param User $user
      * @return void
      */
-    public function doRegister(User $user)
+    protected function doRegister(User $user)
     {
         $user->password = password_hash($user->password, PASSWORD_ARGON2I);
         $user->active_status = "0";
@@ -140,29 +154,13 @@ class UserLogic
     }
 
     /**
-     * Đăng nhập user
-     *
-     * @return void
-     */
-    public function doLogin(User $user)
-    {
-        CookieManager::unsetLoginInfo();
-        $rememberKey = md5($user->email . time());
-        $rememberValue = hash("sha256", $user->email . time() . uniqid("ksb"));
-        $user->rememberKey = $rememberKey;
-        $user->rememberValue = $rememberValue;
-        $user->update();
-        CookieManager::setLoginInfo($user->userId, $rememberKey, $rememberValue);
-
-    }
-
-    /**
      * Đăng xuất
      *
      * @return void
      */
-    public function doLogout()
+    public function logout()
     {
-        CookieManager::unsetLoginInfo();
+        $this->authLogic->logout();
     }
+
 }
