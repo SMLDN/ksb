@@ -17,9 +17,22 @@ class CookieManager
      */
     public static function set(string $key, string $value, int $time)
     {
+        static::setTimeManually($key, $value, time() + ($time * 60));
+    }
+
+    /**
+     * Thêm cookie mới với thời gian hết hạn tự thêm thủ công
+     *
+     * @param string $key
+     * @param string $value
+     * @param integer $time
+     * @return void
+     */
+    public static function setTimeManually(string $key, string $value, int $time)
+    {
         $key = static::$prefix . $key;
         // TODO domain với secure
-        setcookie($key, $value, time() + ($time * 60), "/");
+        setcookie($key, $value, $time, "/");
     }
 
     /**

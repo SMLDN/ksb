@@ -3,6 +3,7 @@ namespace Ksb\Logic;
 
 use Bootstrap\Helper\CookieManager;
 use Bootstrap\Helper\SessionManager;
+use Illuminate\Support\Carbon;
 use Ksb\Model\User;
 
 class AuthLogic
@@ -82,15 +83,25 @@ class AuthLogic
 
         if ($cookieUserId != null && $cookieKey != null && $cookieValue != null) {
             $user = User::find($cookieUserId);
-            if ($user && $user->rememberKey == $cookieKey && $user->rememberValue == $cookieValue) {
+            if ($user && $user->rememberKey == $cookieKey && $user->rememberValue == $cookieValue && $this->isCookieValid($user)) {
                 $this->doLogin($user);
                 return true;
             }
         }
 
         $this->unsetCookieLogin();
-
         return false;
+    }
+
+    /**
+     * Cookie còn thời gian hiệu lực hay không?
+     *
+     * @return boolean
+     */
+    protected function isCookieValid(User $user)
+    {
+        $rememberLast = Carbon::parse($user->rememberLast)->timestamp;
+        return time() <= $rememberLast;
     }
 
     /**
@@ -118,11 +129,11 @@ class AuthLogic
      *
      * @return void
      */
-    protected function setCookieLogin($userId, $rememberKey, $rememberValue)
+    protected function setCookieLogin($userId, $rememberKey, $rememberValue, $time)
     {
-        CookieManager::set($this->cookieUserName, $userId, $this->cookieLong);
-        CookieManager::set($this->cookieKeyName, $rememberKey, $this->cookieLong);
-        CookieManager::set($this->cookieValueName, $rememberValue, $this->cookieLong);
+        CookieManager::setTimeManually($this->cookieUserName, $userId, $time);
+        CookieManager::setTimeManually($this->cookieKeyName, $rememberKey, $time);
+        CookieManager::setTimeManually($this->cookieValueName, $rememberValue, $time);
     }
 
     /**
@@ -156,16 +167,19 @@ class AuthLogic
      */
     protected function doLogin(User $user)
     {
+        $cookieTime = time() + ($this->cookieLong * 60);
+
         // update remember key & value
         $rememberKey = md5($user->email . time());
-        $rememberValue = hash("sha256", $user->email . time() . uniqid("ksb"));
+        $rememberValue = hash("sha256", $user->email . time() . uniqid("ksb-protected"));
         $user->rememberKey = $rememberKey;
         $user->rememberValue = $rememberValue;
+        $user->rememberLast = Carbon::createFromTimestamp($cookieTime)->toDateTimeString();
         $user->update();
         $this->user = $user;
 
         // update cookie
-        $this->setCookieLogin($user->userId, $rememberKey, $rememberValue);
+        $this->setCookieLogin($user->userId, $rememberKey, $rememberValue, $cookieTime);
         SessionManager::regenerate();
         $this->setSessionLogin($user->userId, $rememberKey, $rememberValue);
     }

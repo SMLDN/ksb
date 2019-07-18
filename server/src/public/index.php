@@ -8,6 +8,8 @@ use Ksb\Config\ContainerConfig;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
+date_default_timezone_set("Asia/Ho_Chi_Minh");
+
 SessionManager::start();
 
 $partialDir = __DIR__ . "/../ksb/partial/";
