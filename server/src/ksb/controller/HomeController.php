@@ -29,7 +29,7 @@ class HomeController
      * @param [type] $args
      * @return void
      */
-    public function index(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public function home(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         return $this->view->render($response, "Home.twig");
     }

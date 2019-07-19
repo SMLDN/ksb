@@ -1,31 +1,32 @@
-<html>
-    <head>
-        <title>Knowledge Sharing Bulletin</title>
-    </head>
+{% extends "partial/MainLayout.twig" %}
 
-    <body>
-        <h1>Register</h1>
-        {{   flashErrors.userName[0]  }}
-        <form accept-charset="UTF-8" action="/auth/register" method="post">
-            <h3>
-                <label for="email">Email</label>
-            </h3>
-            <input autocomplete="off" id="email" name="email" type="text">
+{% block title %}
+    Login
+{% endblock %}
 
-            <h3>
-                <label for="userName">Tên hiển thị</label>
-            </h3>
-            <input autocomplete="off" id="userName" name="userName" type="text">
+{% block section %}
+    <h1>Register</h1>
 
-            <h3>
-                <label for="loginPassword">Mật khẩu</label>
-            </h3>
-            <input id="loginPassword" name="loginPassword" type="text">
+    {{   flashErrors.userName[0]  }}
+    <form accept-charset="UTF-8" action="{{ urlFor('auth.register') }}" method="post">
+        <h3>
+            <label for="email">Email</label>
+        </h3>
+        <input autocomplete="off" id="email" name="email" type="text">
 
-            <div>
-                <input type="submit" value="Đăng ký">
-            </div>
-        </form>
-        <a href="/">Home</a>
-    </body>
-</html>
+        <h3>
+            <label for="userName">Tên hiển thị</label>
+        </h3>
+        <input autocomplete="off" id="userName" name="userName" type="text">
+
+        <h3>
+            <label for="loginPassword">Mật khẩu</label>
+        </h3>
+        <input id="loginPassword" name="loginPassword" type="text">
+
+        <div>
+            <input type="submit" value="Đăng ký">
+        </div>
+    </form>
+    <a href="{{ urlFor('home') }}">Home</a>
+{% endblock %}

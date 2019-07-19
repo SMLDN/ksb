@@ -3,7 +3,8 @@
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
 
-$app->get("/", HomeController::class . ":index")->setName("index");
+//home
+$app->get("/", HomeController::class . ":home")->setName("home");
 
 //login
 $app->get("/auth/login", AuthController::class . ":loginGet")->setName("auth.login");

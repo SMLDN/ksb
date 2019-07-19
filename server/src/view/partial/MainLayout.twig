@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <meta charset="utf-8">
+        <title>
+            {% block title %}{% endblock %}
+            - KSB
+        </title>
+        {% block style %}{% endblock %}
+        {% block head_script %}{% endblock %}
+    </head>
+    <body>
+        <section class="section"> {% block section %}{% endblock %}
+            </section>
+            {% block tail_script %}{%  endblock %}
+        </body>
+    </html>

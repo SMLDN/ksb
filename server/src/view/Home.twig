@@ -1,19 +1,20 @@
-<html>
-    <head>
-        <title>Knowledge Sharing Bulletin</title>
-    </head>
+{% extends "partial/MainLayout.twig" %}
 
-    <body>
-        <h1>Trang chủ</h1>
-        {% if user %}
-            <a href="/auth/logout">Logout</a><br>
-            <h2>
-                Xin chào
-                {{ user.userName }}!
-            </h2>
-        {% else %}
-            <a href="/auth/login">Login</a><br>
-            <a href="/auth/register">Register</a>
-        {% endif %}
-    </body>
-</html>
+{% block title %}
+    Home
+{% endblock %}
+
+{% block section %}
+    <h1>Home</h1>
+
+    {% if user %}
+        <a href="{{ urlFor('auth.logout') }}">Logout</a><br>
+        <h2>
+            Xin chào
+            {{ user.userName }}!
+        </h2>
+    {% else %}
+        <a href="{{ urlFor('auth.login') }}">Login</a><br>
+        <a href="{{ urlFor('auth.register') }}">Register</a>
+    {% endif %}
+{% endblock %}

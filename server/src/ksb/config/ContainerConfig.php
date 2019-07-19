@@ -4,11 +4,13 @@ namespace Ksb\Config;
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
+use Bootstrap\Helper\Extension\BootstrapTwigExtension;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
 use Ksb\Logic\AuthLogic;
 use Ksb\Logic\UserLogic;
+use Slim\Psr7\Uri;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
 
@@ -37,14 +39,14 @@ class ContainerConfig extends AuraContainerConfig
 
         // auth
         $container->set("auth", $container->lazyNew(AuthLogic::class));
+
         // view
         $container->set("view", function () use ($container) {
             $view = new Twig($container->get("setting")->get("view.templateDir"), [
                 "debug" => true,
             ]);
-
             $view->addExtension(new DebugExtension());
-
+            $view->addExtension(new BootstrapTwigExtension($container->get("routeParser"), new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"])));
             $view->getEnvironment()->addGlobal("user", $container->get("auth")->getUser());
             return $view;
         });
