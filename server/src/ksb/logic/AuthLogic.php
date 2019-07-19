@@ -101,7 +101,7 @@ class AuthLogic
     protected function isCookieValid(User $user)
     {
         $rememberLast = Time::parse($user->rememberLast)->timestamp;
-        return time() <= $rememberLast;
+        return Time::nowTimestamp() <= $rememberLast;
     }
 
     /**
@@ -167,11 +167,11 @@ class AuthLogic
      */
     protected function doLogin(User $user)
     {
-        $cookieTime = time() + ($this->cookieLong * 60);
+        $cookieTime = Time::nowTimestamp() + ($this->cookieLong * 60);
 
         // update remember key & value
-        $rememberKey = md5($user->email . time());
-        $rememberValue = hash("sha256", $user->email . time() . uniqid("ksb-protected"));
+        $rememberKey = md5($user->email . Time::nowTimestamp());
+        $rememberValue = hash("sha256", $user->email . Time::nowTimestamp() . uniqid("ksb-protected"));
         $user->rememberKey = $rememberKey;
         $user->rememberValue = $rememberValue;
         $user->rememberLast = Time::createFromTimestamp($cookieTime)->toDateTimeString();

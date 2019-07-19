@@ -2,6 +2,8 @@
 
 namespace Bootstrap\Helper;
 
+use Bootstrap\Utility\Time;
+
 class CookieManager
 {
 
@@ -17,7 +19,7 @@ class CookieManager
      */
     public static function set(string $key, string $value, int $time)
     {
-        static::setTimeManually($key, $value, time() + ($time * 60));
+        static::setTimeManually($key, $value, Time::nowTimestamp() + ($time * 60));
     }
 
     /**

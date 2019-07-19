@@ -3,6 +3,7 @@
 namespace Bootstrap\Helper;
 
 use Bootstrap\Utility\Str;
+use Bootstrap\Utility\Time;
 use Slim\Views\Twig;
 
 class SessionManager
@@ -33,7 +34,7 @@ class SessionManager
      */
     public static function checkSessionValid()
     {
-        return empty($_SESSION["deleted_time"]) || $_SESSION["deleted_time"] > time()-static::$sessionValidTime;
+        return empty($_SESSION["deleted_time"]) || $_SESSION["deleted_time"] > Time::nowTimestamp()-static::$sessionValidTime;
     }
 
     /**
@@ -51,7 +52,7 @@ class SessionManager
         // WARNING: Never use confidential strings for prefix!
         $newid = session_create_id("ksb-");
         // Set deleted timestamp. Session data must not be deleted immediately for reasons.
-        $_SESSION["deleted_time"] = time();
+        $_SESSION["deleted_time"] = Time::nowTimestamp();
         // Finish session
         session_commit();
         // Make sure to accept user defined session ID
