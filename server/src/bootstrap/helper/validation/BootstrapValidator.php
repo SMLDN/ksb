@@ -4,7 +4,7 @@ namespace Bootstrap\Helper\Validation;
 
 use Bootstrap\Exception\DataEmptyException;
 use Bootstrap\Helper\Validation\Message\DefaultValidateMessage;
-use Illuminate\Support\Str;
+use Bootstrap\Utility\Str;
 
 class BootstrapValidator
 {
@@ -76,7 +76,7 @@ class BootstrapValidator
      */
     protected function getClass(string $className)
     {
-        $className = ucfirst(Str::before($className, $this->ruleDemiliter));
+        $className = Str::ucfirst(Str::before($className, $this->ruleDemiliter));
         $ruleClassName = $this->baseClasspath . "Rule\\" . $className . "Rule";
         $ruleName = $className . "Rule";
         if (!empty($this->classpath)) {
@@ -99,7 +99,7 @@ class BootstrapValidator
      */
     protected function getValidateMsgClass(string $className)
     {
-        $className = ucfirst(Str::before($className, $this->ruleDemiliter));
+        $className = Str::ucfirst(Str::before($className, $this->ruleDemiliter));
         $defaultClassName = DefaultValidateMessage::class;
         $ruleClassName = $this->baseClasspath . "Message\\" . $className . "ValidateMessage";
         $ruleName = $className . "Rule";

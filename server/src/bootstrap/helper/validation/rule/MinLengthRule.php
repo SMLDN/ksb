@@ -3,7 +3,7 @@
 namespace Bootstrap\Helper\Validation\Rule;
 
 use Bootstrap\Interfaces\Helper\RuleInterface;
-use Illuminate\Support\Str;
+use Bootstrap\Utility\Str;
 
 class MinLengthRule implements RuleInterface
 {

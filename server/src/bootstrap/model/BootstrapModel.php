@@ -2,8 +2,8 @@
 
 namespace Bootstrap\Model;
 
+use Bootstrap\Utility\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class BootstrapModel extends Model
 {

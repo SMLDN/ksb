@@ -3,6 +3,7 @@
 namespace Ksb\Logic;
 
 use Bootstrap\Helper\Validation\BootstrapValidator;
+use Bootstrap\Utility\Str;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
 use Ksb\Validation\Rule\PasswordMatchRule;
@@ -82,7 +83,7 @@ class UserLogic
      */
     public function register(User $user)
     {
-        $user->userName = trim(preg_replace('/\s+/', ' ', $user->userName));
+        $user->userName = Str::trim($user->userName);
 
         $v = new BootstrapValidator();
         $v->setData($user->getAttributesCamel());

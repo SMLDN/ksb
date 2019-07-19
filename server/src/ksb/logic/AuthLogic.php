@@ -3,7 +3,7 @@ namespace Ksb\Logic;
 
 use Bootstrap\Helper\CookieManager;
 use Bootstrap\Helper\SessionManager;
-use Illuminate\Support\Carbon;
+use Bootstrap\Utility\Time;
 use Ksb\Model\User;
 
 class AuthLogic
@@ -100,7 +100,7 @@ class AuthLogic
      */
     protected function isCookieValid(User $user)
     {
-        $rememberLast = Carbon::parse($user->rememberLast)->timestamp;
+        $rememberLast = Time::parse($user->rememberLast)->timestamp;
         return time() <= $rememberLast;
     }
 
@@ -174,7 +174,7 @@ class AuthLogic
         $rememberValue = hash("sha256", $user->email . time() . uniqid("ksb-protected"));
         $user->rememberKey = $rememberKey;
         $user->rememberValue = $rememberValue;
-        $user->rememberLast = Carbon::createFromTimestamp($cookieTime)->toDateTimeString();
+        $user->rememberLast = Time::createFromTimestamp($cookieTime)->toDateTimeString();
         $user->update();
         $this->user = $user;
 

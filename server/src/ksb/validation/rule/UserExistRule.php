@@ -3,7 +3,7 @@
 namespace Ksb\Validation\Rule;
 
 use Bootstrap\Interfaces\Helper\RuleInterface;
-use Illuminate\Support\Str;
+use Bootstrap\Utility\Str;
 use Ksb\Model\User;
 
 class UserExistRule implements RuleInterface

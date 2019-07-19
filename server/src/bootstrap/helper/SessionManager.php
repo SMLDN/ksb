@@ -2,7 +2,7 @@
 
 namespace Bootstrap\Helper;
 
-use Illuminate\Support\Str;
+use Bootstrap\Utility\Str;
 use Slim\Views\Twig;
 
 class SessionManager
