@@ -1,6 +1,7 @@
 <?php
 
 use Bootstrap\Middleware\AuthMiddleware;
+use Bootstrap\Middleware\FlashMiddleware;
 use Slim\Middleware\ErrorMiddleware;
 
 $setting = $container->get("setting");
@@ -10,4 +11,6 @@ $app->add(new ErrorMiddleware($app->getCallableResolver(), $app->getResponseFact
     $setting->get("errorMiddleware.logErrors"),
     $setting->get("errorMiddleware.logErrorDetails")));
 
-$app->add(new AuthMiddleware($container->get("auth")));
+$app->add($container->get(AuthMiddleware::class));
+
+$app->add($container->get(FlashMiddleware::class));

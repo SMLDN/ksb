@@ -4,7 +4,6 @@ namespace Bootstrap\Helper;
 
 use Bootstrap\Utility\Str;
 use Bootstrap\Utility\Time;
-use Slim\Views\Twig;
 
 class SessionManager
 {
@@ -91,21 +90,6 @@ class SessionManager
             return;
         }
         $_SESSION[$key] = $value;
-    }
-
-    /**
-     * Thiết lập giá trị tạm thời
-     *
-     * @param Twig $view
-     * @param [type] $key
-     * @return void
-     */
-    public static function setFlash(Twig $view, string $key)
-    {
-        if (self::get($key) != null && $view) {
-            $view->getEnvironment()->addGlobal(Str::camel($key), self::get($key));
-            self::reset($key);
-        }
     }
 
     /**

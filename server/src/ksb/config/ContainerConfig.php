@@ -4,11 +4,14 @@ namespace Ksb\Config;
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
-use Bootstrap\Helper\Extension\BootstrapTwigExtension;
+use Bootstrap\Middleware\AuthMiddleware;
+use Bootstrap\Middleware\FlashMiddleware;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
 use Ksb\Controller\UserController;
+use Ksb\Helper\Extension\KsbTwigExtension;
+use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
 use Ksb\Logic\UserLogic;
 use Slim\Psr7\Uri;
@@ -47,7 +50,7 @@ class ContainerConfig extends AuraContainerConfig
                 "debug" => true,
             ]);
             $view->addExtension(new DebugExtension());
-            $view->addExtension(new BootstrapTwigExtension($container->get("routeParser"), new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"])));
+            $view->addExtension(new KsbTwigExtension($container->get("routeParser"), new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"])));
             $view->getEnvironment()->addGlobal("user", $container->get("auth")->getUser());
             return $view;
         });
@@ -61,6 +64,12 @@ class ContainerConfig extends AuraContainerConfig
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserController::class, $container->lazyNew(UserController::class));
         $container->set(UserLogic::class, $container->lazyNew(UserLogic::class));
+        $container->set(Flash::class, $container->lazyNew(Flash::class));
+        $container->set(AuthMiddleware::class, $container->lazyNew(AuthMiddleware::class));
+        $container->set(FlashMiddleware::class, $container->lazyNew(FlashMiddleware::class));
+
+        //Params
+        $container->params[AuthMiddleware::class]["authLogic"] = $container->lazyGet("auth");
     }
 
     /**

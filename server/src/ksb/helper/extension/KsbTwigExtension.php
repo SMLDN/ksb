@@ -1,10 +1,10 @@
 <?php
-namespace Bootstrap\Helper\Extension;
+namespace Ksb\Helper\Extension;
 
 use Slim\Views\TwigExtension;
 use Twig\TwigFunction;
 
-class BootstrapTwigExtension extends TwigExtension
+class KsbTwigExtension extends TwigExtension
 {
     /**
      * @inheritDoc
