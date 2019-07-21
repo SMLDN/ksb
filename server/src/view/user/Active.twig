@@ -1,0 +1,14 @@
+{% extends "partial/MainLayout.twig" %}
+
+{% block title %}
+    Active
+{% endblock %}
+
+{% block section %}
+    <h1>Active</h1>
+
+    <h2>Tài khoản
+        {{ userName }}
+        đã được kích hoạt thành công</h2>
+    <a href="{{ urlFor('auth.login') }}">Login</a>
+{% endblock %}

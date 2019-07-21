@@ -4,7 +4,7 @@ namespace Ksb\Validation\Message;
 
 use Bootstrap\Interfaces\Helper\ValidateMessageInterface;
 
-class UserExistValidateMessage implements ValidateMessageInterface
+class UserActivedValidateMessage implements ValidateMessageInterface
 {
     public static $fieldName = "";
 
@@ -15,6 +15,6 @@ class UserExistValidateMessage implements ValidateMessageInterface
      */
     public static function getMsg()
     {
-        return "Thông tin đăng nhập không chính xác";
+        return "Tài khoản không tồn tại hoặc chưa được kích hoạt";
     }
 }

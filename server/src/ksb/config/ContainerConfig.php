@@ -8,6 +8,7 @@ use Bootstrap\Helper\Extension\BootstrapTwigExtension;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
+use Ksb\Controller\UserController;
 use Ksb\Logic\AuthLogic;
 use Ksb\Logic\UserLogic;
 use Slim\Psr7\Uri;
@@ -58,6 +59,7 @@ class ContainerConfig extends AuraContainerConfig
         // Lazy new for auto-wiring
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
+        $container->set(UserController::class, $container->lazyNew(UserController::class));
         $container->set(UserLogic::class, $container->lazyNew(UserLogic::class));
     }
 

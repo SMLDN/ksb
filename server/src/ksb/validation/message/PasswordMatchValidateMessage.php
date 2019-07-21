@@ -6,7 +6,7 @@ use Bootstrap\Interfaces\Helper\ValidateMessageInterface;
 
 class PasswordMatchValidateMessage implements ValidateMessageInterface
 {
-    public static $fieldName = "Mật khẩu";
+    public static $fieldName = "";
 
     /**
      * @inheritDoc
@@ -15,7 +15,7 @@ class PasswordMatchValidateMessage implements ValidateMessageInterface
      */
     public static function getMsg()
     {
-        return static::$fieldName . " không chính xác";
+        return "Thông tin đăng nhập không chính xác";
     }
 
     /**

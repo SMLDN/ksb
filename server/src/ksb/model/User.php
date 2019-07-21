@@ -7,6 +7,5 @@ class User extends BootstrapModel
 {
     protected $table = "user";
     protected $primaryKey = "user_id";
-
     protected $visible = ["user_id", "email", "user_name"];
 }

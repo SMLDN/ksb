@@ -6,6 +6,7 @@ use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
 use Bootstrap\Config\BootstrapSetting;
 use Bootstrap\Factory\BootstrapResponseFactory;
+use Bootstrap\Helper\Mailer\BootstrapMailer;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\CallableResolver;
 use Slim\Interfaces\CallableResolverInterface;
@@ -41,10 +42,15 @@ class BootstrapContainerConfig extends ContainerConfig
         $container->set("routeResolver", function () use ($container) {
             return new RouteResolver($container->get("routeCollector"));
         });
+
+        // Type for injection
         $container->types[ResponseFactoryInterface::class] = $container->lazyGet("responseFactory");
         $container->types[CallableResolverInterface::class] = $container->lazyGet("callableResolver");
         $container->types[RouteResolverInterface::class] = $container->lazyGet("routeResolver");
         $container->types[RouteParser::class] = $container->lazyGet("routeParser");
+
+        // Lazy new for auto-wiring
+        $container->set(BootstrapMailer::class, $container->lazyNew(BootstrapMailer::class));
     }
 
     /**

@@ -2,11 +2,18 @@
 
 namespace Ksb\Logic;
 
+use Bootstrap\Helper\Mailer\BootstrapMailer;
 use Bootstrap\Helper\Validation\BootstrapValidator;
 use Bootstrap\Utility\Str;
+use Bootstrap\Utility\Time;
+use Exception;
+use Illuminate\Database\Capsule\Manager;
+use Illuminate\Support\Facades\DB;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
+use Ksb\Model\UserActive;
 use Ksb\Validation\Rule\PasswordMatchRule;
+use Ksb\Validation\Rule\UserActivedRule;
 use Ksb\Validation\Rule\UserExistRule;
 use Ksb\Validation\Rule\UserUniqueRule;
 
@@ -14,15 +21,23 @@ class UserLogic
 {
     protected $authLogic;
 
+    protected $mailer;
+
+    protected $db;
+
+    protected $activeTokenLength = 32;
+
     /**
      * Construct
      *
      * @param AuthLogic $authLogic
      * @return void
      */
-    public function __construct(AuthLogic $authLogic)
+    public function __construct(AuthLogic $authLogic, BootstrapMailer $mailer, Manager $db)
     {
         $this->authLogic = $authLogic;
+        $this->mailer = $mailer;
+        $this->db = $db;
     }
 
     /**
@@ -46,6 +61,7 @@ class UserLogic
                     "minLength:6",
                     "maxLength:100",
                     "userExist",
+                    "userActived",
                 ],
             ]
         );
@@ -64,6 +80,7 @@ class UserLogic
 
         $v->addClassPath(UserExistRule::class);
         $v->addClassPath(PasswordMatchRule::class);
+        $v->addClassPath(UserActivedRule::class);
 
         if ($v->isPassed()) {
             $user = User::where("email", $user->email)->first();
@@ -133,7 +150,6 @@ class UserLogic
 
         if ($v->isPassed()) {
             $this->doRegister($user);
-            $this->authLogic->loginFromProgram($user);
         } else {
             $user->setValidationErrors($v->getErrors());
         }
@@ -149,9 +165,26 @@ class UserLogic
      */
     protected function doRegister(User $user)
     {
-        $user->password = password_hash($user->password, PASSWORD_ARGON2I);
-        $user->active_status = "0";
-        $user->save();
+        $this->db->getConnection()->beginTransaction();
+        $activeToken = substr(bin2hex(random_bytes($this->activeTokenLength)), 0, $this->activeTokenLength);
+        $tokenValidTime = Time::now()->addHours(1);
+        try {
+            $user->password = password_hash($user->password, PASSWORD_ARGON2I);
+            $user->active_status = "0";
+            $user->save();
+
+            UserActive::create([
+                "user_id" => $user->userId,
+                "active_token" => $activeToken,
+                "token_valid_time" => $tokenValidTime,
+            ]);
+            $this->db->getConnection()->commit();
+        } catch (Exception $e) {
+            $this->db->getConnection()->rollback();
+        }
+        // TODO chuyển sang dùng job queue
+        $this->mailer->sendRegisterMail($user->email, $user->userId, $user->userName, $activeToken);
+        return true;
     }
 
     /**

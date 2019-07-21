@@ -7,6 +7,7 @@
 {% block section %}
     <h1>Login</h1>
 
+    {{   flashErrors.email[0]  }}
     <form accept-charset="UTF-8" action="{{ urlFor('auth.login') }}" method="post">
         <h3>
             <label for="email">Email</label>

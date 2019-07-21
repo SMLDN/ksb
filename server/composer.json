@@ -7,7 +7,8 @@
         "slim/slim": "4.0.0-beta",
         "aura/di": "4.0.0-alpha1",
         "slim/twig-view": "3.0.0-alpha",
-        "illuminate/database": "5.8.27"
+        "illuminate/database": "5.8.27",
+        "phpmailer/phpmailer": "v6.0.7"
     },
     "require-dev": {
         "robmorgan/phinx": "0.11.x-dev",
