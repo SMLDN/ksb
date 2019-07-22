@@ -4,29 +4,32 @@ namespace Bootstrap\Config;
 
 class BootstrapSetting
 {
+    protected $defaultSettings;
+
     /**
-     * Thiết lập mặc định
-     *
-     * @var array
+     * Construct
      */
-    protected $defaultSettings = [
-        "errorMiddleware" => [
-            "displayErrorDetails" => true,
-            "logErrors" => true,
-            "logErrorDetails" => true,
-        ],
-        "view" => [
-            "templateDir" => __DIR__ . "/../../view",
-        ],
-        "db" => [
-            "driver" => "pgsql",
-            "host" => "localhost",
-            "database" => "ksb",
-            "username" => "ksb",
-            "password" => "ksb",
-            "charset" => "utf8",
-        ],
-    ];
+    public function __construct()
+    {
+        $this->defaultSettings = [
+            "errorMiddleware" => [
+                "displayErrorDetails" => getenv("DEBUG"),
+                "logErrors" => getenv("DEBUG"),
+                "logErrorDetails" => getenv("DEBUG"),
+            ],
+            "view" => [
+                "templateDir" => __DIR__ . "/../../view",
+            ],
+            "db" => [
+                "driver" => "pgsql",
+                "host" => getenv("DB_HOST"),
+                "database" => getenv("DB_DATABASE"),
+                "username" => getenv("DB_USERNAME"),
+                "password" => getenv("DB_PASSWORD"),
+                "charset" => "utf8",
+            ],
+        ];
+    }
 
     /**
      * Lấy giá trị từ Thiết lập mặc định

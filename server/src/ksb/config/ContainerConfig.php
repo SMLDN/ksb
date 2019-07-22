@@ -47,11 +47,12 @@ class ContainerConfig extends AuraContainerConfig
         // view
         $container->set("view", function () use ($container) {
             $view = new Twig($container->get("setting")->get("view.templateDir"), [
-                "debug" => true,
+                "debug" => getenv("DEBUG"),
             ]);
-            $view->addExtension(new DebugExtension());
+            if (getenv("DEBUG")) {
+                $view->addExtension(new DebugExtension());
+            }
             $view->addExtension(new KsbTwigExtension($container->get("routeParser"), new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"])));
-            $view->getEnvironment()->addGlobal("user", $container->get("auth")->getUser());
             return $view;
         });
 

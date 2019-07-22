@@ -24,14 +24,14 @@ class BootstrapMailer
 
         // mail setting
         $this->mailer->isSMTP(); // Set mailer to use SMTP
-        $this->mailer->SMTPDebug = 2; // Enable verbose debug output
-        $this->mailer->Host = "smtp.gmail.com"; // Specify main and backup SMTP servers
+        $this->mailer->SMTPDebug = getenv("DEBUG") ? 2 : 0; // Enable verbose debug output
+        $this->mailer->Host = getenv("MAIL_HOST"); // Specify main and backup SMTP servers
         $this->mailer->SMTPAuth = true; // Enable SMTP authentication
-        $this->mailer->Username = "ksbmailer2019"; // SMTP username
-        $this->mailer->Password = "KsbMailer2019"; // SMTP password
+        $this->mailer->Username = getenv("MAIL_USERNAME"); // SMTP username
+        $this->mailer->Password = getenv("MAIL_PASSWORD"); // SMTP password
         $this->mailer->SMTPSecure = "tls";
         $this->mailer->Port = 587;
-        $this->mailer->setFrom("ksbmailer2019@gmail.com", "Ksb Mailer");
+        $this->mailer->setFrom("ksbmailer2019@vocmaytinh.com", "Ksb Mailer");
         $this->mailer->CharSet = "UTF-8";
     }
 

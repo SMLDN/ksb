@@ -8,7 +8,6 @@ use Slim\Views\Twig;
 
 class HomeController
 {
-
     protected $view;
 
     /**

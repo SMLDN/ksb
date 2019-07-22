@@ -3,20 +3,20 @@
 use Aura\Di\ContainerBuilder;
 use Bootstrap\AppBootstrap;
 use Bootstrap\Config\BootstrapContainerConfig;
-use Bootstrap\Helper\SessionManager;
 use Ksb\Config\ContainerConfig;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
-date_default_timezone_set("Asia/Ho_Chi_Minh");
-
-SessionManager::start();
-
 $partialDir = __DIR__ . "/../ksb/partial/";
 
+// Init
+require_once $partialDir . "init.php";
+
+// Container
 $builder = new ContainerBuilder();
 $container = $builder->newConfiguredInstance([BootstrapContainerConfig::class, ContainerConfig::class], $builder::AUTO_RESOLVE);
 
+// Create app
 $app = AppBootstrap::createNewApp($container);
 
 //Config app middleware
