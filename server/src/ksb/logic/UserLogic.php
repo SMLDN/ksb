@@ -9,6 +9,7 @@ use Bootstrap\Utility\Time;
 use Exception;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Facades\DB;
+use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
 use Ksb\Model\UserActive;
@@ -20,11 +21,9 @@ use Ksb\Validation\Rule\UserUniqueRule;
 class UserLogic
 {
     protected $authLogic;
-
     protected $mailer;
-
     protected $db;
-
+    protected $flash;
     protected $activeTokenLength = 32;
 
     /**
@@ -33,11 +32,12 @@ class UserLogic
      * @param AuthLogic $authLogic
      * @return void
      */
-    public function __construct(AuthLogic $authLogic, BootstrapMailer $mailer, Manager $db)
+    public function __construct(AuthLogic $authLogic, BootstrapMailer $mailer, Manager $db, Flash $flash)
     {
         $this->authLogic = $authLogic;
         $this->mailer = $mailer;
         $this->db = $db;
+        $this->flash = $flash;
     }
 
     /**
@@ -88,7 +88,7 @@ class UserLogic
             return true;
         }
 
-        $user->setValidationErrors($v->getErrors());
+        $this->flash->addError($v->getErrors());
         return false;
     }
 
@@ -151,7 +151,7 @@ class UserLogic
         if ($v->isPassed()) {
             $this->doRegister($user);
         } else {
-            $user->setValidationErrors($v->getErrors());
+            $this->flash->addError($v->getErrors());
         }
 
         return $user;

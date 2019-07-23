@@ -2,7 +2,6 @@
 
 namespace Ksb\Controller;
 
-use Ksb\Helper\Flash;
 use Ksb\Logic\UserLogic;
 use Ksb\Model\User;
 use Psr\Http\Message\ResponseInterface;
@@ -24,12 +23,11 @@ class AuthController
      * @param UserLogic $userLogic
      * @param RouteParser $router
      */
-    public function __construct(Twig $view, UserLogic $userLogic, RouteParser $router, Flash $flash)
+    public function __construct(Twig $view, UserLogic $userLogic, RouteParser $router)
     {
         $this->view = $view;
         $this->userLogic = $userLogic;
         $this->router = $router;
-        $this->flash = $flash;
     }
 
     /**
@@ -64,7 +62,6 @@ class AuthController
             return $response->withRedirect($this->router->urlFor("home"));
         }
 
-        $this->flash->addError($user->getValidationErrors());
         return $response->withRedirect($this->router->urlFor("auth.login"));
     }
 
@@ -116,7 +113,6 @@ class AuthController
             return $response->withRedirect($this->router->urlFor("home"));
         }
 
-        $this->flash->addError($user->getValidationErrors());
         return $response->withRedirect($this->router->urlFor("auth.register"));
     }
 }
