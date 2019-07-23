@@ -27,6 +27,7 @@
         <div>
             <input type="submit" value="Đăng ký">
         </div>
+        {% include "partial/CsrfForm.twig" %}
     </form>
     <a href="{{ urlFor('home') }}">Home</a>
 {% endblock %}

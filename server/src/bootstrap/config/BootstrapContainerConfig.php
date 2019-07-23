@@ -7,6 +7,8 @@ use Aura\Di\ContainerConfig;
 use Bootstrap\Config\BootstrapSetting;
 use Bootstrap\Factory\BootstrapResponseFactory;
 use Bootstrap\Helper\Mailer\BootstrapMailer;
+use Bootstrap\Middleware\CsrfGenerateMiddleware;
+use Bootstrap\Middleware\FlashMiddleware;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\CallableResolver;
 use Slim\Interfaces\CallableResolverInterface;
@@ -51,6 +53,8 @@ class BootstrapContainerConfig extends ContainerConfig
 
         // Lazy new for auto-wiring
         $container->set(BootstrapMailer::class, $container->lazyNew(BootstrapMailer::class));
+        $container->set(FlashMiddleware::class, $container->lazyNew(FlashMiddleware::class));
+        $container->set(CsrfGenerateMiddleware::class, $container->lazyNew(CsrfGenerateMiddleware::class));
     }
 
     /**

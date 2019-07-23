@@ -1,6 +1,6 @@
 <?php
 
-namespace Bootstrap\Middleware;
+namespace Ksb\Middleware;
 
 use Ksb\Logic\AuthLogic;
 use Psr\Http\Message\ResponseInterface;

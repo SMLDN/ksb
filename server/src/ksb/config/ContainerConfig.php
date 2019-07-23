@@ -4,16 +4,17 @@ namespace Ksb\Config;
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
-use Bootstrap\Middleware\AuthMiddleware;
-use Bootstrap\Middleware\FlashMiddleware;
+use Bootstrap\Helper\SessionManager;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
 use Ksb\Controller\UserController;
+use Ksb\Handler\Errorhandler\HttpBadRequestHandler;
 use Ksb\Helper\Extension\KsbTwigExtension;
 use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
 use Ksb\Logic\UserLogic;
+use Ksb\Middleware\AuthMiddleware;
 use Slim\Psr7\Uri;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
@@ -53,6 +54,8 @@ class ContainerConfig extends AuraContainerConfig
                 $view->addExtension(new DebugExtension());
             }
             $view->addExtension(new KsbTwigExtension($container->get("routeParser"), new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"])));
+            $view->getEnvironment()->addGlobal("csrfKey", SessionManager::get("csrf_key"));
+            $view->getEnvironment()->addGlobal("csrfToken", SessionManager::get("csrf_token"));
             return $view;
         });
 
@@ -61,13 +64,13 @@ class ContainerConfig extends AuraContainerConfig
         $container->types[AuthLogic::class] = $container->lazyGet("auth");
 
         // Lazy new for auto-wiring
+        $container->set(HttpBadRequestHandler::class, $container->lazyNew(HttpBadRequestHandler::class));
+        $container->set(AuthMiddleware::class, $container->lazyNew(AuthMiddleware::class));
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserController::class, $container->lazyNew(UserController::class));
         $container->set(UserLogic::class, $container->lazyNew(UserLogic::class));
         $container->set(Flash::class, $container->lazyNew(Flash::class));
-        $container->set(AuthMiddleware::class, $container->lazyNew(AuthMiddleware::class));
-        $container->set(FlashMiddleware::class, $container->lazyNew(FlashMiddleware::class));
 
         //Params
         $container->params[AuthMiddleware::class]["authLogic"] = $container->lazyGet("auth");
@@ -83,5 +86,4 @@ class ContainerConfig extends AuraContainerConfig
     {
         $container->get("db");
     }
-
 }

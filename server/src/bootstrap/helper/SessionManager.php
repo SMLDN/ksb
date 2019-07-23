@@ -7,7 +7,6 @@ use Bootstrap\Utility\Time;
 
 class SessionManager
 {
-
     protected static $sessionValidTime = 180;
 
     /**
@@ -24,10 +23,25 @@ class SessionManager
             session_destroy();
             session_start();
         }
+        if (static::get("csrf_key") == null || static::get("csrf_token") == null) {
+            static::setCsrfValue();
+        }
     }
 
     /**
-     * Undocumented function
+     * Thiết lập CSRF Value
+     *
+     * @return void
+     */
+    public static function setCsrfValue()
+    {
+        //CSRF Field
+        static::set("csrf_key", uniqid("csrf_key"));
+        static::set("csrf_token", bin2hex(random_bytes(16)));
+    }
+
+    /**
+     * Session còn hiệu lực hay không?
      *
      * @return void
      */
@@ -61,6 +75,7 @@ class SessionManager
         session_id($newid);
         // Start with custom session ID
         session_start();
+        static::setCsrfValue();
     }
 
     /**

@@ -3,6 +3,7 @@
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
 use Ksb\Controller\UserController;
+use Slim\Routing\RouteCollectorProxy;
 
 //home
 $app->get("/", HomeController::class . ":home")->setName("home");
@@ -19,6 +20,6 @@ $app->get("/auth/register", AuthController::class . ":registerGet")->setName("au
 $app->post("/auth/register", AuthController::class . ":registerPost");
 
 //user
-$app->group("/user", function () use ($app) {
-    $app->get("/{userId}/active/{activeToken}", UserController::class . ":activeGet")->setName("user.active");
+$app->group("/user", function (RouteCollectorProxy $group) {
+    $group->get("/{userId}/active/{activeToken}", UserController::class . ":activeGet")->setName("user.active");
 });
