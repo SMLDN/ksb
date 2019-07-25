@@ -15,6 +15,7 @@ use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
 use Ksb\Logic\UserLogic;
 use Ksb\Middleware\AuthMiddleware;
+use Ksb\Middleware\FlashMiddleware;
 use Slim\Psr7\Uri;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
@@ -61,6 +62,7 @@ class ContainerConfig extends AuraContainerConfig
         // Auto-wiring
         $container->set(HttpBadRequestHandler::class, $container->lazyNew(HttpBadRequestHandler::class));
         $container->set(AuthMiddleware::class, $container->lazyNew(AuthMiddleware::class));
+        $container->set(FlashMiddleware::class, $container->lazyNew(FlashMiddleware::class));
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserController::class, $container->lazyNew(UserController::class));
@@ -71,9 +73,6 @@ class ContainerConfig extends AuraContainerConfig
         $container->types[Manager::class] = $container->lazyGet("db");
         $container->types[Twig::class] = $container->lazyGet("view");
         $container->types[AuthLogic::class] = $container->lazyGet("auth");
-
-        //Params
-        $container->params[AuthMiddleware::class]["authLogic"] = $container->lazyGet("auth");
     }
 
     /**

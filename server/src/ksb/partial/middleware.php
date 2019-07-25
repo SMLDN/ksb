@@ -1,9 +1,9 @@
 <?php
 
 use Bootstrap\Middleware\CsrfMiddleware;
-use Bootstrap\Middleware\FlashMiddleware;
 use Ksb\Handler\Errorhandler\HttpBadRequestHandler;
 use Ksb\Middleware\AuthMiddleware;
+use Ksb\Middleware\FlashMiddleware;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Middleware\ErrorMiddleware;
 

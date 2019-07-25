@@ -8,7 +8,6 @@ use Bootstrap\Config\BootstrapSetting;
 use Bootstrap\Factory\BootstrapResponseFactory;
 use Bootstrap\Helper\Mailer\BootstrapMailer;
 use Bootstrap\Middleware\CsrfGenerateMiddleware;
-use Bootstrap\Middleware\FlashMiddleware;
 use Slim\CallableResolver;
 use Slim\Routing\RouteCollector;
 use Slim\Routing\RouteParser;
@@ -39,7 +38,6 @@ class BootstrapContainerConfig extends ContainerConfig
 
         // Auto-wiring
         $container->set(BootstrapMailer::class, $container->lazyNew(BootstrapMailer::class));
-        $container->set(FlashMiddleware::class, $container->lazyNew(FlashMiddleware::class));
         $container->set(CsrfGenerateMiddleware::class, $container->lazyNew(CsrfGenerateMiddleware::class));
 
         // Type for injection
