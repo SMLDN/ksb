@@ -9,18 +9,18 @@ use Slim\Routing\RouteParser;
 class BootstrapMailer
 {
     protected $mailer;
-    protected $route;
+    protected $router;
 
     /**
      * Construct
      *
      * @param PHPMailer $mailer
      */
-    public function __construct(PHPMailer $mailer, RouteParser $route)
+    public function __construct(PHPMailer $mailer, RouteParser $router)
     {
         //injecting
         $this->mailer = $mailer;
-        $this->route = $route;
+        $this->router = $router;
 
         // mail setting
         $this->mailer->isSMTP(); // Set mailer to use SMTP
@@ -42,7 +42,7 @@ class BootstrapMailer
      */
     public function sendRegisterMail(string $toAddress, $userId, string $userName, string $activeToken)
     {
-        $url = $this->route->fullUrlFor(new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"]), "user.active", [
+        $url = $this->router->fullUrlFor(new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"]), "user.active", [
             "userId" => $userId,
             "activeToken" => $activeToken,
         ]);

@@ -13,9 +13,9 @@ $setting = $container->get("setting");
 $app->add(new CsrfMiddleware);
 // }
 
-$app->add($container->get(AuthMiddleware::class));
+$app->add($container->newInstance(AuthMiddleware::class));
 
-$app->add($container->get(FlashMiddleware::class));
+$app->add($container->newInstance(FlashMiddleware::class));
 
 $errorMiddleware = new ErrorMiddleware($app->getCallableResolver(), $app->getResponseFactory(),
     $setting->get("errorMiddleware.displayErrorDetails"),

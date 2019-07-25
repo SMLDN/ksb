@@ -6,14 +6,12 @@ use Ksb\Logic\UserLogic;
 use Ksb\Model\User;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Routing\RouteParser;
 use Slim\Views\Twig;
 
 class AuthController
 {
     protected $view;
     protected $userLogic;
-    protected $router;
     protected $flash;
 
     /**
@@ -21,13 +19,11 @@ class AuthController
      *
      * @param Twig $view
      * @param UserLogic $userLogic
-     * @param RouteParser $router
      */
-    public function __construct(Twig $view, UserLogic $userLogic, RouteParser $router)
+    public function __construct(Twig $view, UserLogic $userLogic)
     {
         $this->view = $view;
         $this->userLogic = $userLogic;
-        $this->router = $router;
     }
 
     /**
@@ -59,10 +55,10 @@ class AuthController
         $user->password = $request->getParsedBody()["loginPassword"] ?? null;
 
         if ($this->userLogic->login($user)) {
-            return $response->withRedirect($this->router->urlFor("home"));
+            return $response->redirectTo("home");
         }
 
-        return $response->withRedirect($this->router->urlFor("auth.login"));
+        return $response->redirectTo("auth.login");
     }
 
     /**
@@ -76,7 +72,7 @@ class AuthController
     public function logoutGet(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         $this->userLogic->logout();
-        return $response->withRedirect($this->router->urlFor("home"));
+        return $response->redirectTo("home");
     }
 
     /**
@@ -110,9 +106,8 @@ class AuthController
 
         $this->userLogic->register($user);
         if ($user->userId) {
-            return $response->withRedirect($this->router->urlFor("home"));
+            return $response->redirectTo("home");
         }
-
-        return $response->withRedirect($this->router->urlFor("auth.register"));
+        return $response->redirectTo("auth.register");
     }
 }

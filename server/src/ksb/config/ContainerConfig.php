@@ -40,7 +40,6 @@ class ContainerConfig extends AuraContainerConfig
 
             return $capsule;
         });
-        $container->types[Manager::class] = $container->lazyGet("db");
 
         // auth
         $container->set("auth", $container->lazyNew(AuthLogic::class));
@@ -59,11 +58,7 @@ class ContainerConfig extends AuraContainerConfig
             return $view;
         });
 
-        // Type for injection
-        $container->types[Twig::class] = $container->lazyGet("view");
-        $container->types[AuthLogic::class] = $container->lazyGet("auth");
-
-        // Lazy new for auto-wiring
+        // Auto-wiring
         $container->set(HttpBadRequestHandler::class, $container->lazyNew(HttpBadRequestHandler::class));
         $container->set(AuthMiddleware::class, $container->lazyNew(AuthMiddleware::class));
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
@@ -71,6 +66,11 @@ class ContainerConfig extends AuraContainerConfig
         $container->set(UserController::class, $container->lazyNew(UserController::class));
         $container->set(UserLogic::class, $container->lazyNew(UserLogic::class));
         $container->set(Flash::class, $container->lazyNew(Flash::class));
+
+        // Type for injection
+        $container->types[Manager::class] = $container->lazyGet("db");
+        $container->types[Twig::class] = $container->lazyGet("view");
+        $container->types[AuthLogic::class] = $container->lazyGet("auth");
 
         //Params
         $container->params[AuthMiddleware::class]["authLogic"] = $container->lazyGet("auth");

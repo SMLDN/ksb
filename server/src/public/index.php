@@ -17,7 +17,7 @@ $builder = new ContainerBuilder();
 $container = $builder->newConfiguredInstance([BootstrapContainerConfig::class, ContainerConfig::class], $builder::AUTO_RESOLVE);
 
 // Create app
-$app = AppBootstrap::createNewApp($container);
+$app = AppBootstrap::create($container);
 
 //Config app middleware
 require_once $partialDir . "middleware.php";

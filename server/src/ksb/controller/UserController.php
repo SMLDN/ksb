@@ -22,10 +22,9 @@ class UserController
      * @param UserLogic $userLogic
      * @param RouteParser $router
      */
-    public function __construct(Twig $view, RouteParser $router)
+    public function __construct(Twig $view)
     {
         $this->view = $view;
-        $this->router = $router;
     }
 
     /**
@@ -41,7 +40,7 @@ class UserController
         $userId = $args["userId"] ?? null;
         $activeToken = $args["activeToken"] ?? null;
         if ($userId == null || $activeToken == null) {
-            return $response->withRedirect($this->router->urlFor("home"));
+            return $response->redirectTo("home");
         }
 
         $userActive = UserActive::find($userId);
@@ -59,9 +58,9 @@ class UserController
             }
             // user không tồn tại này nọ
             $userActive->delete();
-            return $response->withRedirect($this->router->urlFor("home"));
+            return $response->redirectTo("home");
         }
         // thông tin ảo
-        return $response->withRedirect($this->router->urlFor("home"));
+        return $response->redirectTo("home");
     }
 }

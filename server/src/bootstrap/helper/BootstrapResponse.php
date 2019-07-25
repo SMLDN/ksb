@@ -3,38 +3,14 @@
 namespace Bootstrap\Helper;
 
 use Fig\Http\Message\StatusCodeInterface;
+use Slim\Interfaces\RouteParserInterface;
 use Slim\Psr7\Response;
 
 class BootstrapResponse extends Response
 {
-    /**
-     * TODO xài tạm đợi bên Slim4 được thực thi
-     * Trả response với status chỉ định trước
-     *
-     * @param [type] $code
-     * @param string $reasonPhrase
-     * @return void
-     */
-    public function withStatus($code, $reasonPhrase = '')
-    {
-        $code = $this->filterStatus($code);
-        if (!is_string($reasonPhrase) && !method_exists($reasonPhrase, '__toString')) {
-            throw new InvalidArgumentException('ReasonPhrase must be a string');
-        }
-        $clone = clone $this;
-        $clone->status = $code;
-        if ($reasonPhrase === '' && isset(static::$messages[$code])) {
-            $reasonPhrase = static::$messages[$code];
-        }
-        if ($reasonPhrase === '') {
-            throw new InvalidArgumentException('ReasonPhrase must be supplied for this code');
-        }
-        $clone->reasonPhrase = $reasonPhrase;
-        return $clone;
-    }
+    protected $router;
 
     /**
-     * TODO xài tạm đợi bên Slim4 được thực thi
      * Redirect về 1 trang chỉ định
      *
      * @param [type] $url
@@ -51,5 +27,36 @@ class BootstrapResponse extends Response
             return $responseWithRedirect->withStatus($status);
         }
         return $responseWithRedirect;
+    }
+
+    /**
+     * Redirect đến địa chỉ dựa theo route
+     *
+     * @return void
+     */
+    public function redirectTo($routeName, $status = null)
+    {
+        return $this->withRedirect($this->router->urlFor($routeName), $status);
+    }
+
+    /**
+     * setRouter
+     *
+     * @param RouteParserInterface $router
+     * @return void
+     */
+    public function setRouter(RouteParserInterface $router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * getRouter
+     *
+     * @return void
+     */
+    public function getRouter()
+    {
+        return $this->router;
     }
 }

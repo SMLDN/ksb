@@ -14,7 +14,7 @@ class AppBootstrap
      * @param ContainerInterface $container
      * @return void
      */
-    public static function createNewApp(ContainerInterface $container)
+    public static function create(ContainerInterface $container)
     {
         if (!$container || !$container->has("responseFactory")
             || !$container->has("callableResolver") || !$container->has("routeCollector")

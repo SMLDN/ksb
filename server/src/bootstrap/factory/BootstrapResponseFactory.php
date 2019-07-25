@@ -9,6 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class BootstrapResponseFactory implements ResponseFactoryInterface
 {
+    protected $router;
+
     /**
      * {@inheritdoc}
      */
@@ -17,11 +19,22 @@ class BootstrapResponseFactory implements ResponseFactoryInterface
         string $reasonPhrase = ''
     ): ResponseInterface {
         $res = new BootstrapResponse($code);
-
+        $res->setRouter($this->router);
         if ($reasonPhrase !== '') {
             $res = $res->withStatus($code, $reasonPhrase);
         }
 
         return $res;
+    }
+
+    /**
+     * setRouter
+     *
+     * @param [type] $router
+     * @return void
+     */
+    public function setRouter($router)
+    {
+        $this->router = $router;
     }
 }

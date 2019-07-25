@@ -9,10 +9,7 @@ use Bootstrap\Factory\BootstrapResponseFactory;
 use Bootstrap\Helper\Mailer\BootstrapMailer;
 use Bootstrap\Middleware\CsrfGenerateMiddleware;
 use Bootstrap\Middleware\FlashMiddleware;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\CallableResolver;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\RouteResolverInterface;
 use Slim\Routing\RouteCollector;
 use Slim\Routing\RouteParser;
 use Slim\Routing\RouteResolver;
@@ -31,30 +28,29 @@ class BootstrapContainerConfig extends ContainerConfig
         //setting
         $container->set("setting", $container->lazyNew(BootstrapSetting::class));
 
-        //router
+        // router
         $container->set("responseFactory", $container->lazyNew(BootstrapResponseFactory::class));
+        $container->set("callableResolver", $container->lazyNew(CallableResolver::class));
         $container->set("routeCollector", $container->lazyNew(RouteCollector::class));
-        $container->set("callableResolver", function () use ($container) {
-            return new CallableResolver($container);
-        });
-
+        $container->set("routeResolver", $container->lazyNew(RouteResolver::class));
         $container->set("routeParser", function () use ($container) {
-            return new RouteParser($container->get("routeCollector"));
-        });
-        $container->set("routeResolver", function () use ($container) {
-            return new RouteResolver($container->get("routeCollector"));
+            return $container->get("routeCollector")->getRouteParser();
         });
 
-        // Type for injection
-        $container->types[ResponseFactoryInterface::class] = $container->lazyGet("responseFactory");
-        $container->types[CallableResolverInterface::class] = $container->lazyGet("callableResolver");
-        $container->types[RouteResolverInterface::class] = $container->lazyGet("routeResolver");
-        $container->types[RouteParser::class] = $container->lazyGet("routeParser");
-
-        // Lazy new for auto-wiring
+        // Auto-wiring
         $container->set(BootstrapMailer::class, $container->lazyNew(BootstrapMailer::class));
         $container->set(FlashMiddleware::class, $container->lazyNew(FlashMiddleware::class));
         $container->set(CsrfGenerateMiddleware::class, $container->lazyNew(CsrfGenerateMiddleware::class));
+
+        // Type for injection
+        $container->types[RouteParser::class] = $container->lazyGet("routeParser");
+
+        // Params
+        $container->params[CallableResolver::class]["container"] = $container;
+        $container->params[RouteCollector::class]["responseFactory"] = $container->lazyGet("responseFactory");
+        $container->params[RouteCollector::class]["callableResolver"] = $container->lazyGet("callableResolver");
+        $container->params[RouteCollector::class]["container"] = $container;
+        $container->params[RouteResolver::class]["routeCollector"] = $container->lazyGet("routeCollector");
     }
 
     /**
@@ -65,6 +61,6 @@ class BootstrapContainerConfig extends ContainerConfig
      */
     public function modify(Container $container): void
     {
-
+        $container->get("responseFactory")->setRouter($container->get("routeParser"));
     }
 }
