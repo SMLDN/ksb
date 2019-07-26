@@ -196,5 +196,4 @@ class UserLogic
     {
         $this->authLogic->logout();
     }
-
 }

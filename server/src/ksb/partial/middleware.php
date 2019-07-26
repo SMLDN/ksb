@@ -9,9 +9,9 @@ use Slim\Middleware\ErrorMiddleware;
 
 $setting = $container->get("setting");
 
-// if (!getenv("DEBUG")) {
-$app->add(new CsrfMiddleware);
-// }
+if (!getenv("DEBUG")) {
+    $app->add(new CsrfMiddleware);
+}
 
 // Auth
 $app->add($container->newInstance(AuthMiddleware::class));

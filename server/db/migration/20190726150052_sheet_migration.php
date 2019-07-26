@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class UserActiveMigartion extends AbstractMigration
+class SheetMigration extends AbstractMigration
 {
     /**
      * Change Method.
@@ -31,9 +31,10 @@ class UserActiveMigartion extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table("user_active", ["id" => "user_id"]);
-        $table->addColumn("active_token", "string", ["limit" => 255, "comment" => "Chuỗi token để kích hoạt tài khoản"])
-            ->addColumn("token_valid_time", "timestamp", ["null" => true, "timezone" => false, "comment" => "Thời gian hết hạn của token"])
+        $table = $this->table("sheet", ["id" => "sheet_id"]);
+        $table->addColumn("user_id", "string", ["limit" => 127, "comment" => "User Id"])
+            ->addColumn("title", "string", ["limit" => 255, "comment" => "Tiêu đề bài viết"])
+            ->addColumn("content", "text", ["comment" => "Nội dung bài viết"])
             ->addColumn("created_at", "timestamp", ["default" => "CURRENT_TIMESTAMP", "timezone" => false, "comment" => "Thời gian tạo mới"])
             ->addColumn("updated_at", "timestamp", ["null" => true, "timezone" => false, "comment" => "Thời gian cập nhập"])
             ->create();

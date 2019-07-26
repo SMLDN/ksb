@@ -8,14 +8,14 @@ use Bootstrap\Helper\SessionManager;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
+use Ksb\Controller\SheetController;
 use Ksb\Controller\UserController;
 use Ksb\Handler\Errorhandler\HttpBadRequestHandler;
 use Ksb\Helper\Extension\KsbTwigExtension;
 use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
-use Ksb\Logic\UserLogic;
-use Ksb\Middleware\AuthMiddleware;
-use Ksb\Middleware\FlashMiddleware;
+use Ksb\Middleware\App\AuthMiddleware;
+use Ksb\Middleware\App\FlashMiddleware;
 use Ksb\Middleware\Route\AuthPermissionMiddleware;
 use Ksb\Middleware\Route\GuestPermissionMiddleware;
 use Slim\Psr7\Uri;
@@ -72,7 +72,8 @@ class ContainerConfig extends AuraContainerConfig
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserController::class, $container->lazyNew(UserController::class));
-        $container->set(UserLogic::class, $container->lazyNew(UserLogic::class));
+        $container->set(SheetController::class, $container->lazyNew(SheetController::class));
+        //logic
         $container->set(Flash::class, $container->lazyNew(Flash::class));
 
         // Type for injection

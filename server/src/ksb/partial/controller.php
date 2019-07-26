@@ -2,6 +2,7 @@
 
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
+use Ksb\Controller\SheetController;
 use Ksb\Controller\UserController;
 use Ksb\Middleware\Route\AuthPermissionMiddleware;
 use Ksb\Middleware\Route\GuestPermissionMiddleware;
@@ -26,5 +27,10 @@ $app->group("/auth", function (RouteCollectorProxy $group) {
 
 // user
 $app->group("/user", function (RouteCollectorProxy $group) {
-    $group->get("/{userId}/active/{activeToken}", UserController::class . ":activeGet")->setName("user.active")->add(GuestPermissionMiddleware::class);
+    // active
+    $group->get("/{userId:[0-9]+}/active/{activeToken:[a-zA-Z0-9]+}", UserController::class . ":activeGet")->setName("user.active")->add(GuestPermissionMiddleware::class);
+
+    // create sheet
+    $group->get("/sheet/create", SheetController::class . ":createGet")->setName("user.sheet.create")->add(AuthPermissionMiddleware::class);
+    $group->post("/sheet/create", SheetController::class . ":createPost")->add(AuthPermissionMiddleware::class);
 });

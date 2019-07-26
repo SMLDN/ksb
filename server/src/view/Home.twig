@@ -13,6 +13,9 @@
             Xin chào
             {{ user.userName }}!
         </h2>
+        <h3>
+            <a href="{{ urlFor('user.sheet.create') }}">Create sheet</a><br>
+        </h3>
     {% else %}
         <a href="{{ urlFor('auth.login') }}">Login</a><br>
         <a href="{{ urlFor('auth.register') }}">Register</a>
