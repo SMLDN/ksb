@@ -236,4 +236,13 @@ class AuthLogic
         return isset($this->user) ? true : false;
     }
 
+    /**
+     * Người dùng chưa đăng nhập?
+     *
+     * @return boolean
+     */
+    public function isGuest()
+    {
+        return !isset($this->user) ? true : false;
+    }
 }

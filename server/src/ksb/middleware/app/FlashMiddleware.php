@@ -1,28 +1,25 @@
 <?php
 
-namespace Ksb\Middleware;
+namespace Ksb\Middleware\App;
 
-use Ksb\Logic\AuthLogic;
+use Ksb\Helper\Flash;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Views\Twig;
 
-class AuthMiddleware implements MiddlewareInterface
+class FlashMiddleware implements MiddlewareInterface
 {
-    protected $authLogic;
-    protected $view;
+    protected $flash;
 
     /**
      * Construct
      *
-     * @param AuthLogic $authLogic
+     * @param Flash $flash
      */
-    public function __construct(Twig $view, AuthLogic $authLogic)
+    public function __construct(Flash $flash)
     {
-        $this->view = $view;
-        $this->authLogic = $authLogic;
+        $this->flash = $flash;
     }
 
     /**
@@ -34,8 +31,7 @@ class AuthMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->authLogic->autoLogin();
-        $this->view->getEnvironment()->addGlobal("user", $this->authLogic->getUser());
+        $this->flash->setGlobalFlash();
         return $handler->handle($request);
     }
 }

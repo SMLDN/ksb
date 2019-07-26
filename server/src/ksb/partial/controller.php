@@ -3,23 +3,28 @@
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
 use Ksb\Controller\UserController;
+use Ksb\Middleware\Route\AuthPermissionMiddleware;
+use Ksb\Middleware\Route\GuestPermissionMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
-//home
+// home
 $app->get("/", HomeController::class . ":home")->setName("home");
 
-//login
-$app->get("/auth/login", AuthController::class . ":loginGet")->setName("auth.login");
-$app->post("/auth/login", AuthController::class . ":loginPost");
+// auth
+$app->group("/auth", function (RouteCollectorProxy $group) {
+    //Login
+    $group->get("/login", AuthController::class . ":loginGet")->setName("auth.login")->add(GuestPermissionMiddleware::class);
+    $group->post("/login", AuthController::class . ":loginPost")->add(GuestPermissionMiddleware::class);
 
-//logout
-$app->get("/auth/logout", AuthController::class . ":logoutGet")->setName("auth.logout");
+    //Logout
+    $group->get("/logout", AuthController::class . ":logoutGet")->setName("auth.logout")->add(AuthPermissionMiddleware::class);
 
-//regsiter
-$app->get("/auth/register", AuthController::class . ":registerGet")->setName("auth.register");
-$app->post("/auth/register", AuthController::class . ":registerPost");
+    // Register
+    $group->get("/register", AuthController::class . ":registerGet")->setName("auth.register")->add(GuestPermissionMiddleware::class);
+    $group->post("/register", AuthController::class . ":registerPost")->add(GuestPermissionMiddleware::class);
+});
 
-//user
+// user
 $app->group("/user", function (RouteCollectorProxy $group) {
-    $group->get("/{userId}/active/{activeToken}", UserController::class . ":activeGet")->setName("user.active");
+    $group->get("/{userId}/active/{activeToken}", UserController::class . ":activeGet")->setName("user.active")->add(GuestPermissionMiddleware::class);
 });

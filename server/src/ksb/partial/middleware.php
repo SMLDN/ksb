@@ -2,8 +2,8 @@
 
 use Bootstrap\Middleware\CsrfMiddleware;
 use Ksb\Handler\Errorhandler\HttpBadRequestHandler;
-use Ksb\Middleware\AuthMiddleware;
-use Ksb\Middleware\FlashMiddleware;
+use Ksb\Middleware\App\AuthMiddleware;
+use Ksb\Middleware\App\FlashMiddleware;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Middleware\ErrorMiddleware;
 

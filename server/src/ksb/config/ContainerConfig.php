@@ -16,6 +16,8 @@ use Ksb\Logic\AuthLogic;
 use Ksb\Logic\UserLogic;
 use Ksb\Middleware\AuthMiddleware;
 use Ksb\Middleware\FlashMiddleware;
+use Ksb\Middleware\Route\AuthPermissionMiddleware;
+use Ksb\Middleware\Route\GuestPermissionMiddleware;
 use Slim\Psr7\Uri;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
@@ -61,8 +63,12 @@ class ContainerConfig extends AuraContainerConfig
 
         // Auto-wiring
         $container->set(HttpBadRequestHandler::class, $container->lazyNew(HttpBadRequestHandler::class));
+        // middleware
         $container->set(AuthMiddleware::class, $container->lazyNew(AuthMiddleware::class));
         $container->set(FlashMiddleware::class, $container->lazyNew(FlashMiddleware::class));
+        $container->set(GuestPermissionMiddleware::class, $container->lazyNew(GuestPermissionMiddleware::class));
+        $container->set(AuthPermissionMiddleware::class, $container->lazyNew(AuthPermissionMiddleware::class));
+        // controller
         $container->set(HomeController::class, $container->lazyNew(HomeController::class));
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserController::class, $container->lazyNew(UserController::class));
