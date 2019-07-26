@@ -5,9 +5,9 @@
     "require": {
         "slim/psr7": "0.3.0",
         "slim/slim": "4.0.0-beta",
-        "aura/di": "4.0.0-alpha1",
+        "aura/di": "4.0.0",
         "slim/twig-view": "3.0.0-alpha",
-        "illuminate/database": "5.8.27",
+        "illuminate/database": "5.8.29",
         "phpmailer/phpmailer": "v6.0.7",
         "vlucas/phpdotenv": "v3.4.0"
     },
@@ -17,8 +17,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Ksb\\": "src/ksb",
-            "Bootstrap\\": "src/bootstrap"
+            "Bootstrap\\": "src/bootstrap",
+            "Ksb\\": "src/ksb"
         }
     },
     "authors": [

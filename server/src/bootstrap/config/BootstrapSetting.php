@@ -52,5 +52,4 @@ class BootstrapSetting
         }
         return $result;
     }
-
 }

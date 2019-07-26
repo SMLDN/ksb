@@ -7,7 +7,6 @@ use Aura\Di\ContainerConfig;
 use Bootstrap\Config\BootstrapSetting;
 use Bootstrap\Factory\BootstrapResponseFactory;
 use Bootstrap\Helper\Mailer\BootstrapMailer;
-use Bootstrap\Middleware\CsrfGenerateMiddleware;
 use Slim\CallableResolver;
 use Slim\Routing\RouteCollector;
 use Slim\Routing\RouteParser;
@@ -38,7 +37,6 @@ class BootstrapContainerConfig extends ContainerConfig
 
         // Auto-wiring
         $container->set(BootstrapMailer::class, $container->lazyNew(BootstrapMailer::class));
-        $container->set(CsrfGenerateMiddleware::class, $container->lazyNew(CsrfGenerateMiddleware::class));
 
         // Type for injection
         $container->types[RouteParser::class] = $container->lazyGet("routeParser");
