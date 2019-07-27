@@ -16,7 +16,7 @@ class BootstrapContainerConfig extends ContainerConfig
 {
 
     /**
-     * Ghi đè hàm define
+     * @inheritDoc
      *
      * @param Container $container
      * @return void
@@ -25,7 +25,6 @@ class BootstrapContainerConfig extends ContainerConfig
     {
         //setting
         $container->set("setting", $container->lazyNew(BootstrapSetting::class));
-
         // router
         $container->set("responseFactory", $container->lazyNew(BootstrapResponseFactory::class));
         $container->set("callableResolver", $container->lazyNew(CallableResolver::class));
@@ -34,7 +33,6 @@ class BootstrapContainerConfig extends ContainerConfig
         $container->set("routeParser", function () use ($container) {
             return $container->get("routeCollector")->getRouteParser();
         });
-
         //mailer
         $container->set("mailer", $container->lazyNew(BootstrapMailer::class));
 
@@ -57,7 +55,7 @@ class BootstrapContainerConfig extends ContainerConfig
     }
 
     /**
-     * Ghi đè hàm modfiy
+     * @inheritDoc
      *
      * @param Container $container
      * @return void

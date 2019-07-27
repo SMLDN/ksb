@@ -1,9 +1,6 @@
 <?php
 
-use Aura\Di\ContainerBuilder;
-use Bootstrap\AppBootstrap;
-use Bootstrap\Config\BootstrapContainerConfig;
-use Ksb\Config\ContainerConfig;
+use Ksb\Config\RouteMiddlewareConfig;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
@@ -12,17 +9,13 @@ $partialDir = __DIR__ . "/../ksb/partial/";
 // Init
 require_once $partialDir . "init.php";
 
-// Container
-$builder = new ContainerBuilder();
-$container = $builder->newConfiguredInstance([BootstrapContainerConfig::class, ContainerConfig::class], $builder::AUTO_RESOLVE);
+// App
+require_once $partialDir . "app.php";
 
-// Create app
-$app = AppBootstrap::create($container);
-
-//Config app middleware
+// Middleware
 require_once $partialDir . "middleware.php";
 
-// Config controller
+// Controller
 require_once $partialDir . "controller.php";
 
 $app->run();

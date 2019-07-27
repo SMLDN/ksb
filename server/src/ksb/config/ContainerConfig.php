@@ -6,14 +6,8 @@ use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
 use Bootstrap\Helper\SessionManager;
 use Illuminate\Database\Capsule\Manager;
-use Ksb\Controller\AuthController;
-use Ksb\Controller\HomeController;
-use Ksb\Controller\SheetController;
-use Ksb\Controller\UserController;
 use Ksb\Helper\Extension\KsbTwigExtension;
 use Ksb\Logic\AuthLogic;
-use Ksb\Middleware\Route\AuthPermissionMiddleware;
-use Ksb\Middleware\Route\GuestPermissionMiddleware;
 use Slim\Psr7\Uri;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
@@ -21,7 +15,7 @@ use Twig\Extension\DebugExtension;
 class ContainerConfig extends AuraContainerConfig
 {
     /**
-     * Ghi đè hàm define
+     * @inheritDoc
      *
      * @param Container $container
      * @return void
@@ -57,15 +51,6 @@ class ContainerConfig extends AuraContainerConfig
             return $view;
         });
 
-        // middleware
-        $container->set(GuestPermissionMiddleware::class, $container->lazyNew(GuestPermissionMiddleware::class));
-        $container->set(AuthPermissionMiddleware::class, $container->lazyNew(AuthPermissionMiddleware::class));
-        // controller
-        $container->set(HomeController::class, $container->lazyNew(HomeController::class));
-        $container->set(AuthController::class, $container->lazyNew(AuthController::class));
-        $container->set(UserController::class, $container->lazyNew(UserController::class));
-        $container->set(SheetController::class, $container->lazyNew(SheetController::class));
-
         // Type for injection
         $container->types[Manager::class] = $container->lazyGet("db");
         $container->types[Twig::class] = $container->lazyGet("view");
@@ -73,7 +58,7 @@ class ContainerConfig extends AuraContainerConfig
     }
 
     /**
-     * Ghi đè hàm modify
+     * @inheritDoc
      *
      * @param Container $container
      * @return void
