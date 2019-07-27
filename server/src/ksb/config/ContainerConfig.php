@@ -10,12 +10,8 @@ use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
 use Ksb\Controller\SheetController;
 use Ksb\Controller\UserController;
-use Ksb\Handler\Errorhandler\HttpBadRequestHandler;
 use Ksb\Helper\Extension\KsbTwigExtension;
-use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
-use Ksb\Middleware\App\AuthMiddleware;
-use Ksb\Middleware\App\FlashMiddleware;
 use Ksb\Middleware\Route\AuthPermissionMiddleware;
 use Ksb\Middleware\Route\GuestPermissionMiddleware;
 use Slim\Psr7\Uri;
@@ -61,11 +57,7 @@ class ContainerConfig extends AuraContainerConfig
             return $view;
         });
 
-        // Auto-wiring
-        $container->set(HttpBadRequestHandler::class, $container->lazyNew(HttpBadRequestHandler::class));
         // middleware
-        $container->set(AuthMiddleware::class, $container->lazyNew(AuthMiddleware::class));
-        $container->set(FlashMiddleware::class, $container->lazyNew(FlashMiddleware::class));
         $container->set(GuestPermissionMiddleware::class, $container->lazyNew(GuestPermissionMiddleware::class));
         $container->set(AuthPermissionMiddleware::class, $container->lazyNew(AuthPermissionMiddleware::class));
         // controller
@@ -73,8 +65,6 @@ class ContainerConfig extends AuraContainerConfig
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserController::class, $container->lazyNew(UserController::class));
         $container->set(SheetController::class, $container->lazyNew(SheetController::class));
-        //logic
-        $container->set(Flash::class, $container->lazyNew(Flash::class));
 
         // Type for injection
         $container->types[Manager::class] = $container->lazyGet("db");

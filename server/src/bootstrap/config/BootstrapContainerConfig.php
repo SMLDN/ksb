@@ -35,18 +35,25 @@ class BootstrapContainerConfig extends ContainerConfig
             return $container->get("routeCollector")->getRouteParser();
         });
 
-        // Auto-wiring
-        $container->set(BootstrapMailer::class, $container->lazyNew(BootstrapMailer::class));
+        //mailer
+        $container->set("mailer", $container->lazyNew(BootstrapMailer::class));
 
         // Type for injection
         $container->types[RouteParser::class] = $container->lazyGet("routeParser");
+        $container->types[BootstrapMailer::class] = $container->lazyGet("mailer");
 
         // Params
-        $container->params[CallableResolver::class]["container"] = $container;
-        $container->params[RouteCollector::class]["responseFactory"] = $container->lazyGet("responseFactory");
-        $container->params[RouteCollector::class]["callableResolver"] = $container->lazyGet("callableResolver");
-        $container->params[RouteCollector::class]["container"] = $container;
-        $container->params[RouteResolver::class]["routeCollector"] = $container->lazyGet("routeCollector");
+        $container->params[CallableResolver::class] = [
+            "container" => $container,
+        ];
+        $container->params[RouteCollector::class] = [
+            "responseFactory" => $container->lazyGet("responseFactory"),
+            "callableResolver" => $container->lazyGet("callableResolver"),
+            "container" => $container,
+        ];
+        $container->params[RouteResolver::class] = [
+            "routeCollector" => $container->lazyGet("routeCollector"),
+        ];
     }
 
     /**

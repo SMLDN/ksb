@@ -24,5 +24,5 @@ $errorMiddleware = new ErrorMiddleware($app->getCallableResolver(), $app->getRes
     $setting->get("errorMiddleware.displayErrorDetails"),
     $setting->get("errorMiddleware.logErrors"),
     $setting->get("errorMiddleware.logErrorDetails"));
-$errorMiddleware->setErrorHandler(HttpBadRequestException::class, HttpBadRequestHandler::class);
+$errorMiddleware->setErrorHandler(HttpBadRequestException::class, $container->newInstance(HttpBadRequestHandler::class));
 $app->add($errorMiddleware);
