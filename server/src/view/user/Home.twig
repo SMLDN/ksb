@@ -13,7 +13,7 @@
             <p>
                 {{ sheet.title }}
             </p>
-            <a href="{{ urlFor('user.sheet.view', { 'userId': user.userId, 'slug': sheet.slug }) }}">View</a>
+            <a href="{{ urlFor('user.sheet.view', { 'userId': user.id, 'slug': sheet.slug }) }}">View</a>
         {% endfor %}
     {% endif %}
 

@@ -178,7 +178,7 @@ class UserLogic
             $user->save();
 
             UserActive::create([
-                "user_id" => $user->userId,
+                "user_id" => $user->id,
                 "active_token" => $activeToken,
                 "token_valid_time" => $tokenValidTime,
             ]);
@@ -188,7 +188,7 @@ class UserLogic
         }
         // TODO chuyển sang dùng job queue
         if (!getenv("DEBUG")) {
-            $this->mailer->sendRegisterMail($user->email, $user->userId, $user->userName, $activeToken);
+            $this->mailer->sendRegisterMail($user->email, $user->id, $user->userName, $activeToken);
         }
         return true;
     }

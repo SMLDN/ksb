@@ -31,7 +31,7 @@ class UserMigration extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table("user", ["id" => "user_id"]);
+        $table = $this->table("user");
         $table->addColumn("user_name", "string", ["limit" => 127, "comment" => "Tên hiển thị"])
             ->addColumn("password", "string", ["null" => true, "limit" => 255, "comment" => "Mật khẩu"])
             ->addColumn("remember_key", "string", ["null" => true, "limit" => 255, "comment" => "Khóa để lưu thông tin người dùng"])

@@ -31,7 +31,7 @@ class SheetMigration extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table("sheet", ["id" => "sheet_id"]);
+        $table = $this->table("sheet");
         $table->addColumn("user_id", "string", ["limit" => 127, "comment" => "User Id"])
             ->addColumn("title", "string", ["limit" => 255, "comment" => "Tiêu đề bài viết"])
             ->addColumn("slug", "string", ["limit" => 275, "comment" => "Slug"])

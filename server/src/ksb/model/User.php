@@ -7,8 +7,7 @@ use Ksb\Model\Sheet;
 class User extends BootstrapModel
 {
     protected $table = "user";
-    protected $primaryKey = "user_id";
-    protected $visible = ["user_id", "email", "user_name"];
+    protected $visible = ["id", "email", "user_name"];
 
     /**
      * Tham chiếu bảng Sheet
@@ -17,6 +16,6 @@ class User extends BootstrapModel
      */
     public function sheets()
     {
-        return $this->hasMany(Sheet::class, "user_id");
+        return $this->hasMany(Sheet::class);
     }
 }

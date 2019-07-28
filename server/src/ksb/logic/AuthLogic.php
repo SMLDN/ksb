@@ -179,9 +179,9 @@ class AuthLogic
         $this->user = $user;
 
         // update cookie
-        $this->setCookieLogin($user->userId, $rememberKey, $rememberValue, $cookieTime);
+        $this->setCookieLogin($user->id, $rememberKey, $rememberValue, $cookieTime);
         SessionManager::regenerate();
-        $this->setSessionLogin($user->userId, $rememberKey, $rememberValue);
+        $this->setSessionLogin($user->id, $rememberKey, $rememberValue);
     }
 
     /**
@@ -253,6 +253,6 @@ class AuthLogic
      */
     public function getUserId()
     {
-        return $this->user ? $this->user->userId : null;
+        return $this->user ? $this->user->id : null;
     }
 }

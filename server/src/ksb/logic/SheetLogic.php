@@ -56,13 +56,13 @@ class SheetLogic
                 "rule" => [
                     "require",
                     "minLength:4",
-                    "maxLength:9999",
+                    "maxLength:99999",
                 ],
             ]
         );
 
         if ($v->isPassed()) {
-            $sheet->userId = $this->authLogic->getRawUser()->userId;
+            $sheet->userId = $this->authLogic->getRawUser()->id;
             $sheet->slug = Str::makeSlugStr($sheet->title);
             $sheet->save();
             return true;

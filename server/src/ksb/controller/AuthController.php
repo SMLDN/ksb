@@ -105,7 +105,7 @@ class AuthController
         $user->password = $request->getParsedBody()["loginPassword"] ?? null;
 
         $this->userLogic->register($user);
-        if ($user->userId) {
+        if ($user->id) {
             return $response->redirectTo("home");
         }
         return $response->redirectTo("auth.register");
