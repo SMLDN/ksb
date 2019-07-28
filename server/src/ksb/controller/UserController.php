@@ -36,7 +36,7 @@ class UserController
      */
     public function me(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        $user = $this->authLogic->getRawUser();
+        $user = $this->authLogic->getUserRaw();
 
         if ($user) {
             return $this->view->render($response, "user/Me.twig", [

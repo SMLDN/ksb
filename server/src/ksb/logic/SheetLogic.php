@@ -62,8 +62,8 @@ class SheetLogic
         );
 
         if ($v->isPassed()) {
-            $sheet->userId = $this->authLogic->getRawUser()->id;
             $sheet->slug = Str::makeSlugStr($sheet->title);
+            $sheet->user()->associate($this->authLogic->getUserRaw());
             $sheet->save();
             return true;
         }

@@ -221,7 +221,7 @@ class AuthLogic
      *
      * @return void
      */
-    public function getRawUser()
+    public function getUserRaw()
     {
         return $this->user;
     }
