@@ -35,7 +35,7 @@ class AuthMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $this->authLogic->autoLogin();
-        $this->view->getEnvironment()->addGlobal("user", $this->authLogic->getUser());
+        $this->view->getEnvironment()->addGlobal("auth", $this->authLogic->getUser());
         return $handler->handle($request);
     }
 }

@@ -1,0 +1,23 @@
+{% extends "partial/MainLayout.twig" %}
+
+{% block title %}
+    {{ user.userName }}
+{% endblock %}
+
+{% block section %}
+    <h1>Me</h1>
+
+    {% if userRaw.sheets %}
+        {% for sheet in userRaw.sheets %}
+            <p>
+                {{ sheet.title }}
+            </p>
+            <a href="{{ urlFor('me.sheet.edit', { 'userId': user.userId, 'slug': sheet.slug }) }}">Edit</a>
+            <a href="{{ urlFor('user.sheet.view', { 'userId': user.userId, 'slug': sheet.slug }) }}">View</a>
+        {% endfor %}
+    {% endif %}
+
+    <div>
+        <a href="{{ urlFor('home') }}">Home</a>
+    </div>
+{% endblock %}

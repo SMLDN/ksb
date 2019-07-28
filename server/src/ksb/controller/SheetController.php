@@ -59,7 +59,7 @@ class SheetController
             return $response->redirectTo("home");
         }
 
-        return $response->redirectTo("user.sheet.create");
+        return $response->redirectTo("me.sheet.create");
     }
 
     /**

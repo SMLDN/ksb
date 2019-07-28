@@ -3,6 +3,7 @@
 namespace Ksb\Controller;
 
 use Bootstrap\Utility\Time;
+use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
 use Ksb\Model\UserActive;
 use Psr\Http\Message\ResponseInterface;
@@ -13,7 +14,7 @@ use Slim\Views\Twig;
 class UserController
 {
     protected $view;
-    protected $router;
+    protected $authLogic;
 
     /**
      * Construct
@@ -22,9 +23,50 @@ class UserController
      * @param UserLogic $userLogic
      * @param RouteParser $router
      */
-    public function __construct(Twig $view)
+    public function __construct(Twig $view, AuthLogic $authLogic)
     {
         $this->view = $view;
+        $this->authLogic = $authLogic;
+    }
+
+    /**
+     * Người dùng hiện tại
+     *
+     * @return void
+     */
+    public function me(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $user = $this->authLogic->getRawUser();
+
+        if ($user) {
+            return $this->view->render($response, "user/Me.twig", [
+                "user" => $user->toArrayCamel(),
+                "userRaw" => $user,
+            ]);
+        }
+
+        return $response->redirectTo("home");
+    }
+
+    /**
+     * Người dùng khác
+     *
+     * @return void
+     */
+    public function home(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $userId = $args["userId"] ?? null;
+        $user = User::find($userId);
+
+        // dump($user->sheets);
+        if ($user) {
+            return $this->view->render($response, "user/Home.twig", [
+                "user" => $user->toArrayCamel(),
+                "userRaw" => $user,
+            ]);
+        }
+
+        return $response->redirectTo("home");
     }
 
     /**

@@ -7,14 +7,15 @@
 {% block section %}
     <h1>Home</h1>
 
-    {% if user %}
+    {% if auth %}
         <a href="{{ urlFor('auth.logout') }}">Logout</a><br>
         <h2>
             Xin chào
-            {{ user.userName }}!
+            {{ auth.userName }}!
         </h2>
         <h3>
-            <a href="{{ urlFor('user.sheet.create') }}">Create sheet</a><br>
+            <a href="{{ urlFor('me.home') }}">Me</a><br>
+            <a href="{{ urlFor('me.sheet.create') }}">Create sheet</a><br>
         </h3>
     {% else %}
         <a href="{{ urlFor('auth.login') }}">Login</a><br>
