@@ -170,7 +170,11 @@ class UserLogic
         $tokenValidTime = Time::now()->addHours(1);
         try {
             $user->password = password_hash($user->password, PASSWORD_ARGON2I);
-            $user->active_status = "0";
+            if (!getenv("DEBUG")) {
+                $user->active_status = "0";
+            } else {
+                $user->active_status = "1";
+            }
             $user->save();
 
             UserActive::create([
@@ -183,7 +187,9 @@ class UserLogic
             $this->db->getConnection()->rollback();
         }
         // TODO chuyển sang dùng job queue
-        $this->mailer->sendRegisterMail($user->email, $user->userId, $user->userName, $activeToken);
+        if (!getenv("DEBUG")) {
+            $this->mailer->sendRegisterMail($user->email, $user->userId, $user->userName, $activeToken);
+        }
         return true;
     }
 

@@ -2,13 +2,13 @@
 
 namespace Ksb\Config;
 
+use Aptoma\Twig\Extension\MarkdownEngine\MichelfMarkdownEngine;
+use Aptoma\Twig\Extension\MarkdownExtension;
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
 use Bootstrap\Helper\SessionManager;
 use Illuminate\Database\Capsule\Manager;
-use Ksb\Helper\Extension\KsbTwigExtension;
 use Ksb\Logic\AuthLogic;
-use Slim\Psr7\Uri;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
 
@@ -45,7 +45,7 @@ class ContainerConfig extends AuraContainerConfig
             if (getenv("DEBUG")) {
                 $view->addExtension(new DebugExtension());
             }
-            $view->addExtension(new KsbTwigExtension($container->get("routeParser"), new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"])));
+            $view->addExtension(new MarkdownExtension(new MichelfMarkdownEngine));
             $view->getEnvironment()->addGlobal("csrfKey", SessionManager::get("csrf_key"));
             $view->getEnvironment()->addGlobal("csrfToken", SessionManager::get("csrf_token"));
             return $view;

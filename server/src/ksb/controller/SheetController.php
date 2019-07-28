@@ -28,7 +28,7 @@ class SheetController
     }
 
     /**
-     * Undocumented function
+     * Tạo sheet GET
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -41,7 +41,7 @@ class SheetController
     }
 
     /**
-     * Undocumented function
+     * Tạo sheet POST
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -60,5 +60,76 @@ class SheetController
         }
 
         return $response->redirectTo("user.sheet.create");
+    }
+
+    /**
+     * Xem sheet GET
+     *
+     * @return void
+     */
+    public function viewGet(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $slug = $args["slug"] ?? null;
+
+        $sheet = $this->sheetLogic->getSheetBySlug($slug);
+
+        if ($sheet) {
+            return $this->view->render($response, "sheet/View.twig", [
+                "sheet" => $sheet,
+            ]);
+        }
+
+        return $response->redirectTo("home");
+    }
+
+    /**
+     * Chỉnh sửa Sheet GET
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param [type] $args
+     * @return void
+     */
+    public function editGet(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $slug = $args["slug"] ?? null;
+
+        $rawSheet = $this->sheetLogic->getRawSheetBySlug($slug);
+
+        if ($rawSheet && $rawSheet->userId == $this->authLogic->getUserId()) {
+            $sheet = $rawSheet->toArrayCamel();
+            return $this->view->render($response, "sheet/Edit.twig", [
+                "sheet" => $sheet,
+            ]);
+        }
+
+        return $response->redirectTo("auth.login");
+    }
+
+    /**
+     * Chỉnh xửa Sheet POST
+     *
+     * @return void
+     */
+    public function editPost(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $slug = $args["slug"] ?? null;
+
+        $rawSheet = $this->sheetLogic->getRawSheetBySlug($slug);
+
+        if ($rawSheet && $rawSheet->userId == $this->authLogic->getUserId()) {
+            $rawSheet->fill([
+                "title" => $request->getParsedBody()["title"] ?? null,
+                "content" => $request->getParsedBody()["content"] ?? null,
+            ]);
+
+            if ($this->sheetLogic->edit($rawSheet)) {
+                return $this->view->render($response, "sheet/Edit.twig", [
+                    "sheet" => $rawSheet,
+                ]);
+            }
+        }
+
+        return $response->redirectTo("auth.login");
     }
 }

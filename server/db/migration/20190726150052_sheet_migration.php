@@ -34,9 +34,11 @@ class SheetMigration extends AbstractMigration
         $table = $this->table("sheet", ["id" => "sheet_id"]);
         $table->addColumn("user_id", "string", ["limit" => 127, "comment" => "User Id"])
             ->addColumn("title", "string", ["limit" => 255, "comment" => "Tiêu đề bài viết"])
+            ->addColumn("slug", "string", ["limit" => 275, "comment" => "Slug"])
             ->addColumn("content", "text", ["comment" => "Nội dung bài viết"])
             ->addColumn("created_at", "timestamp", ["default" => "CURRENT_TIMESTAMP", "timezone" => false, "comment" => "Thời gian tạo mới"])
             ->addColumn("updated_at", "timestamp", ["null" => true, "timezone" => false, "comment" => "Thời gian cập nhập"])
+            ->addIndex(["slug"], ["unique" => true, "name" => "idx_sheet_slug"])
             ->create();
     }
 }

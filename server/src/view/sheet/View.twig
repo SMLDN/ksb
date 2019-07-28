@@ -1,0 +1,12 @@
+{% extends "partial/MainLayout.twig" %}
+
+{% block title %}
+    View Sheet
+{% endblock %}
+
+{% block section %}
+    <h1>{{ sheet.title }}</h1>
+    <div>
+        {{ sheet.content | markdown }}
+    </div>
+{% endblock %}

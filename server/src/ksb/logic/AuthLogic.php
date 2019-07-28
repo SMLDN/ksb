@@ -245,4 +245,14 @@ class AuthLogic
     {
         return !isset($this->user) ? true : false;
     }
+
+    /**
+     * Lấy user id
+     *
+     * @return void
+     */
+    public function getUserId()
+    {
+        return $this->user ? $this->user->userId : null;
+    }
 }

@@ -29,4 +29,14 @@ class Str extends IStr
         }
         return $str1 == $str2;
     }
+
+    /**
+     * Tạo slug string
+     *
+     * @return void
+     */
+    public static function makeSlugStr(string $slug)
+    {
+        return Str::slug($slug) . "-" . Time::nowToString() . random_int(10000, 99999);
+    }
 }

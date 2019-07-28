@@ -1,25 +1,25 @@
 {% extends "partial/MainLayout.twig" %}
 
 {% block title %}
-    Create Sheet
+    Edit Sheet
 {% endblock %}
 
 {% block section %}
-    <h1>Create Sheet</h1>
+    <h1>Edit Sheet</h1>
 
-    <form accept-charset="UTF-8" action="{{ urlFor('user.sheet.create') }}" method="post">
+    <form accept-charset="UTF-8" action="{{ currentUrl() }}" method="post">
         <div>
             <label for="title">Title</label>
-            <input id="title" name="title"/>
+            <input id="title" name="title" value="{{ sheet.title }}"/>
         </div>
 
         <div>
             <label for="title">Content</label>
         </div>
-        <textarea cols="100" id="content" name="content" rows="20"></textarea>
+        <textarea cols="100" id="content" name="content" rows="20">{{ sheet.content }}</textarea>
 
         <div>
-            <input type="submit" value="Đăng bài">
+            <input type="submit" value="Lưu">
         </div>
         {% include "partial/CsrfForm.twig" %}
     </form>

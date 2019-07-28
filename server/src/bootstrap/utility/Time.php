@@ -29,4 +29,15 @@ class Time extends Carbon
 
         return $now >= $time;
     }
+
+    /**
+     * Tạo string thời gian hiện tại
+     *
+     * @return void
+     */
+    public static function nowToString()
+    {
+        $now = static::now();
+        return $now->format("YmdHis");
+    }
 }
