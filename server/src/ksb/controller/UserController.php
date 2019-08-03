@@ -2,6 +2,7 @@
 
 namespace Ksb\Controller;
 
+use Bootstrap\Utility\Str;
 use Bootstrap\Utility\Time;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
@@ -56,6 +57,9 @@ class UserController
     public function home(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         $userId = $args["userId"] ?? null;
+        if (Str::equal($userId, $this->authLogic->getUserId())) {
+            return $response->redirectTo("me.home");
+        }
         $user = User::find($userId);
 
         if ($user) {
