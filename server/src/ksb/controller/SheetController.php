@@ -57,7 +57,9 @@ class SheetController
             "content" => $request->getParsedBody()["content"] ?? null,
         ]);
 
-        if ($this->sheetLogic->create($sheet)) {
+        $tags = $request->getParsedBody()["tag"] ?? null;
+
+        if ($this->sheetLogic->create($sheet, $tags)) {
             if ($request->getUploadedFiles()) {
                 $this->sheetLogic->uploadFiles($request->getUploadedFiles(), $this->authLogic->getUserRaw(), $sheet);
             }
@@ -84,7 +86,7 @@ class SheetController
             }
             return $this->view->render($response, "sheet/View.twig", [
                 "sheet" => $sheet,
-                "",
+                "tags" => $sheet->tagsName(),
             ]);
         }
 

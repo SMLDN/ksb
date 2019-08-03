@@ -3,6 +3,7 @@ namespace Ksb\Model;
 
 use Bootstrap\Model\BootstrapModel;
 use Ksb\Model\SheetAttach;
+use Ksb\Model\SheetTag;
 use Ksb\Model\User;
 
 class Sheet extends BootstrapModel
@@ -29,5 +30,30 @@ class Sheet extends BootstrapModel
     public function sheetAttachs()
     {
         return $this->hasMany(SheetAttach::class);
+    }
+
+    /**
+     * Tham chiếu bảng Tag
+     *
+     * @return void
+     */
+    public function tags()
+    {
+        return $this->hasMany(SheetTag::class);
+    }
+
+    /**
+     * Danh sách Tag Name
+     *
+     * @return void
+     */
+    public function tagsName()
+    {
+        $sheetTags = $this->tags;
+        $tagArray = [];
+        foreach ($sheetTags as $sheetTag) {
+            array_push($tagArray, $sheetTag->tag->name);
+        }
+        return $tagArray;
     }
 }

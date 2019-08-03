@@ -10,13 +10,18 @@
     <form accept-charset="UTF-8" action="{{ urlFor('me.sheet.create') }}" method="post" enctype="multipart/form-data">
         <div>
             <label for="title">Title</label>
-            <input id="title" name="title"/>
         </div>
+        <input id="title" name="title"/>
 
         <div>
             <label for="title">Content</label>
         </div>
         <textarea cols="100" id="content" name="content" rows="20"></textarea>
+
+        <div>
+            <label for="tag">Tags</label>
+        </div>
+        <input id="tag" name="tag" type="text">
 
         <div>
             <label for="attach-content">Image File</label>

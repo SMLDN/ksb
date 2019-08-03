@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class SheetAttach extends AbstractMigration
+class SheetAttachMigration extends AbstractMigration
 {
     /**
      * Change Method.

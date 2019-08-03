@@ -4,16 +4,20 @@ namespace Ksb\Logic;
 
 use Bootstrap\Helper\Validation\BootstrapValidator;
 use Bootstrap\Utility\Str;
+use Illuminate\Database\Capsule\Manager;
 use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\Sheet;
 use Ksb\Model\SheetAttach;
+use Ksb\Model\SheetTag;
+use Ksb\Model\Tag;
 use Ksb\Model\User;
 
 class SheetLogic
 {
     protected $authLogic;
     protected $flash;
+    protected $db;
 
     /**
      * Construct
@@ -21,10 +25,11 @@ class SheetLogic
      * @param AuthLogic $authLogic
      * @return void
      */
-    public function __construct(AuthLogic $authLogic, Flash $flash)
+    public function __construct(AuthLogic $authLogic, Flash $flash, Manager $db)
     {
         $this->authLogic = $authLogic;
         $this->flash = $flash;
+        $this->db = $db;
     }
 
     /**
@@ -33,7 +38,7 @@ class SheetLogic
      * @param Sheet $sheet
      * @return void
      */
-    public function create(Sheet $sheet)
+    public function create(Sheet $sheet, $tags = "")
     {
         $sheet->title = Str::trim($sheet->title);
 
@@ -64,10 +69,28 @@ class SheetLogic
         );
 
         if ($v->isPassed()) {
-            $sheet->slug = Str::makeSlugStr($sheet->title);
-            $sheet->user()->associate($this->authLogic->getUserRaw());
-            $sheet->save();
-            return true;
+            $this->db->getConnection()->beginTransaction();
+            try {
+                $sheet->slug = Str::makeSlugStr($sheet->title);
+                $sheet->user()->associate($this->authLogic->getUserRaw());
+                $tagList = explode(" ", $tags);
+                $sheet->save();
+
+                $tagList = explode(" ", $tags);
+                foreach ($tagList as $tag) {
+                    $tag = Tag::where("name", $tag)->first();
+                    if ($tag) {
+                        $sheetTag = new SheetTag;
+                        $sheetTag->tag()->associate($tag);
+                        $sheetTag->sheet()->associate($sheet);
+                        $sheetTag->save();
+                    }
+                }
+                $this->db->getConnection()->commit();
+                return true;
+            } catch (Exception $e) {
+                $this->db->getConnection()->rollback();
+            }
         }
 
         return false;

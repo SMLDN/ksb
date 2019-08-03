@@ -17,7 +17,7 @@ class BootstrapResponse extends Response
      * @param integer $status
      * @param RouteParserInterface $router
      */
-    public function __construct(int $status = StatusCodeInterface::STATUS_OK, RouteParserInterface $router)
+    public function __construct(int $status = StatusCodeInterface::STATUS_OK, RouteParserInterface $router = null)
     {
         $this->router = $router;
         parent::__construct($status);
