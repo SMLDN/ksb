@@ -24,7 +24,7 @@ class UserLogic
     protected $mailer;
     protected $db;
     protected $flash;
-    protected $activeTokenLength = 32;
+    protected $activeTokenLength = 16;
 
     /**
      * Construct
@@ -166,7 +166,7 @@ class UserLogic
     protected function doRegister(User $user)
     {
         $this->db->getConnection()->beginTransaction();
-        $activeToken = substr(bin2hex(random_bytes($this->activeTokenLength)), 0, $this->activeTokenLength);
+        $activeToken = Str::randomStr($this->activeTokenLength);
         $tokenValidTime = Time::now()->addHours(1);
         try {
             $user->password = password_hash($user->password, PASSWORD_ARGON2I);

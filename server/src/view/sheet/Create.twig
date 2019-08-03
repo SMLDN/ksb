@@ -7,7 +7,7 @@
 {% block section %}
     <h1>Create Sheet</h1>
 
-    <form accept-charset="UTF-8" action="{{ urlFor('me.sheet.create') }}" method="post">
+    <form accept-charset="UTF-8" action="{{ urlFor('me.sheet.create') }}" method="post" enctype="multipart/form-data">
         <div>
             <label for="title">Title</label>
             <input id="title" name="title"/>
@@ -17,6 +17,11 @@
             <label for="title">Content</label>
         </div>
         <textarea cols="100" id="content" name="content" rows="20"></textarea>
+
+        <div>
+            <label for="attach-content">Image File</label>
+        </div>
+        <input id="attach-content" name="attach-content" type="file">
 
         <div>
             <input type="submit" value="Đăng bài">

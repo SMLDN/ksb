@@ -6,6 +6,7 @@ use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
 use Ksb\Controller\AuthController;
 use Ksb\Controller\HomeController;
+use Ksb\Controller\SheetAttachController;
 use Ksb\Controller\SheetController;
 use Ksb\Controller\UserController;
 
@@ -23,6 +24,7 @@ class ControllerConfig extends AuraContainerConfig
         $container->set(AuthController::class, $container->lazyNew(AuthController::class));
         $container->set(UserController::class, $container->lazyNew(UserController::class));
         $container->set(SheetController::class, $container->lazyNew(SheetController::class));
+        $container->set(SheetAttachController::class, $container->lazyNew(SheetAttachController::class));
     }
 
     /**

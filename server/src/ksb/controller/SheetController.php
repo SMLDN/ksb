@@ -50,12 +50,17 @@ class SheetController
      */
     public function createPost(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+
         $sheet = new Sheet();
         $sheet->fill([
             "title" => $request->getParsedBody()["title"] ?? null,
             "content" => $request->getParsedBody()["content"] ?? null,
         ]);
+
         if ($this->sheetLogic->create($sheet)) {
+            if ($request->getUploadedFiles()) {
+                $this->sheetLogic->uploadFiles($request->getUploadedFiles(), $this->authLogic->getUserRaw(), $sheet);
+            }
             return $response->redirectTo("home");
         }
 
@@ -70,12 +75,16 @@ class SheetController
     public function viewGet(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         $slug = $args["slug"] ?? null;
-
-        $sheet = $this->sheetLogic->getSheetBySlug($slug);
+        $userId = $args["userId"] ?? null;
+        $sheet = $this->sheetLogic->getRawSheetBySlug($slug);
 
         if ($sheet) {
+            if ($sheet->user->id != $userId) {
+                return $response->redirectTo("home");
+            }
             return $this->view->render($response, "sheet/View.twig", [
                 "sheet" => $sheet,
+                "",
             ]);
         }
 

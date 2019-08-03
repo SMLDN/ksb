@@ -41,8 +41,7 @@ class UserMigration extends AbstractMigration
             ->addColumn("active_status", "char", ["default" => "0", "limit" => 1, "comment" => "Trạng thái tài kích hoạt"])
             ->addColumn("created_at", "timestamp", ["default" => "CURRENT_TIMESTAMP", "timezone" => false, "comment" => "Thời gian tạo mới"])
             ->addColumn("updated_at", "timestamp", ["null" => true, "timezone" => false, "comment" => "Thời gian cập nhập"])
-            ->addIndex(["user_name"], ["unique" => true, "name" => "idx_user_name"])
-            ->addIndex(["email"], ["unique" => true, "name" => "idx_email"])
             ->create();
+        $count = $this->execute("ALTER SEQUENCE user_id_seq RESTART WITH 1000000");
     }
 }

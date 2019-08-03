@@ -58,7 +58,6 @@ class UserController
         $userId = $args["userId"] ?? null;
         $user = User::find($userId);
 
-        // dump($user->sheets);
         if ($user) {
             return $this->view->render($response, "user/Home.twig", [
                 "user" => $user->toArrayCamel(),

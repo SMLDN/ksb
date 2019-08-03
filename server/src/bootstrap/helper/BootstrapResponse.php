@@ -2,6 +2,7 @@
 
 namespace Bootstrap\Helper;
 
+use Bootstrap\Utility\Upload;
 use Fig\Http\Message\StatusCodeInterface;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Psr7\Response;
@@ -9,6 +10,18 @@ use Slim\Psr7\Response;
 class BootstrapResponse extends Response
 {
     protected $router;
+
+    /**
+     * Construct
+     *
+     * @param integer $status
+     * @param RouteParserInterface $router
+     */
+    public function __construct(int $status = StatusCodeInterface::STATUS_OK, RouteParserInterface $router)
+    {
+        $this->router = $router;
+        parent::__construct($status);
+    }
 
     /**
      * Redirect về 1 trang chỉ định
@@ -19,7 +32,7 @@ class BootstrapResponse extends Response
      */
     public function withRedirect($url, $status = null)
     {
-        $responseWithRedirect = $this->withHeader('Location', (string) $url);
+        $responseWithRedirect = $this->withHeader("Location", (string) $url);
         if (is_null($status) && $this->getStatusCode() === StatusCodeInterface::STATUS_OK) {
             $status = StatusCodeInterface::STATUS_FOUND;
         }
@@ -27,6 +40,17 @@ class BootstrapResponse extends Response
             return $responseWithRedirect->withStatus($status);
         }
         return $responseWithRedirect;
+    }
+
+    /**
+     * Response với Attach file
+     *
+     * @return void
+     */
+    public function withAttach($resource, string $mime = "image/png")
+    {
+        $this->getBody()->write(Upload::decodeToStream($resource));
+        return $this->withHeader("Content-Type", $mime);
     }
 
     /**

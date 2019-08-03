@@ -6,6 +6,7 @@ use Bootstrap\Helper\BootstrapResponse;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Interfaces\RouteParserInterface;
 
 class BootstrapResponseFactory implements ResponseFactoryInterface
 {
@@ -18,8 +19,7 @@ class BootstrapResponseFactory implements ResponseFactoryInterface
         int $code = StatusCodeInterface::STATUS_OK,
         string $reasonPhrase = ''
     ): ResponseInterface {
-        $res = new BootstrapResponse($code);
-        $res->setRouter($this->router);
+        $res = new BootstrapResponse($code, $this->router);
         if ($reasonPhrase !== '') {
             $res = $res->withStatus($code, $reasonPhrase);
         }
@@ -33,7 +33,7 @@ class BootstrapResponseFactory implements ResponseFactoryInterface
      * @param [type] $router
      * @return void
      */
-    public function setRouter($router)
+    public function setRouter(RouteParserInterface $router)
     {
         $this->router = $router;
     }

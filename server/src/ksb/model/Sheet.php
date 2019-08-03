@@ -2,6 +2,7 @@
 namespace Ksb\Model;
 
 use Bootstrap\Model\BootstrapModel;
+use Ksb\Model\SheetAttach;
 use Ksb\Model\User;
 
 class Sheet extends BootstrapModel
@@ -18,5 +19,15 @@ class Sheet extends BootstrapModel
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Tham chiếu bảng SheetAttach
+     *
+     * @return void
+     */
+    public function sheetAttachs()
+    {
+        return $this->hasMany(SheetAttach::class);
     }
 }

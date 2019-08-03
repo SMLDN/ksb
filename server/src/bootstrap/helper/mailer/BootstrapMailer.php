@@ -2,6 +2,7 @@
 
 namespace Bootstrap\Helper\Mailer;
 
+use Bootstrap\Utility\Math;
 use PHPMailer\PHPMailer\PHPMailer;
 use Slim\Psr7\Uri;
 use Slim\Routing\RouteParser;
@@ -43,7 +44,7 @@ class BootstrapMailer
     public function sendRegisterMail(string $toAddress, $userId, string $userName, string $activeToken)
     {
         $url = $this->router->fullUrlFor(new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"]), "user.active", [
-            "userId" => $userId,
+            "userIdBased" => Math::toBase($userId),
             "activeToken" => $activeToken,
         ]);
         $this->resetMailSetting();

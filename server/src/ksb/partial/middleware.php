@@ -1,6 +1,7 @@
 <?php
 
 use Bootstrap\Middleware\CsrfMiddleware;
+use Bootstrap\Middleware\CustomArgsMiddleware;
 use Ksb\Handler\Errorhandler\HttpBadRequestHandler;
 use Ksb\Middleware\App\AuthMiddleware;
 use Ksb\Middleware\App\FlashMiddleware;
@@ -22,8 +23,11 @@ if (!getenv("DEBUG")) {
 }
 
 // Twig
-
 $app->add($container->newInstance(TwigMiddleware::class));
+
+$app->add(new CustomArgsMiddleware);
+
+$app->addRoutingMiddleware();
 
 // Error
 $setting = $container->get("setting");

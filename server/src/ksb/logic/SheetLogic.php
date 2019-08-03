@@ -7,6 +7,8 @@ use Bootstrap\Utility\Str;
 use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\Sheet;
+use Ksb\Model\SheetAttach;
+use Ksb\Model\User;
 
 class SheetLogic
 {
@@ -116,6 +118,28 @@ class SheetLogic
     }
 
     /**
+     * Uplaod Files
+     *
+     * @param [type] $files
+     * @param User $user
+     * @param Sheet $sheet
+     * @return void
+     */
+    public function uploadFiles($files, User $user, Sheet $sheet)
+    {
+        foreach ($files as $file) {
+            if ($file->getClientFilename()) {
+                $sheetAttach = new SheetAttach();
+                $sheetAttach->attachContent = $file;
+                $sheetAttach->userId = $user->id;
+                $sheetAttach->sheetId = $sheet->id;
+                $sheetAttach->attachName = $file->getClientFilename();
+                $sheetAttach->save();
+            }
+        }
+    }
+
+    /**
      * Tìm sheet dựa vào slug
      *
      * @param string $slug
@@ -139,23 +163,7 @@ class SheetLogic
      */
     public function getRawSheetBySlug(string $slug)
     {
-        if ($this->isSlugValid($slug)) {
-            $sheet = Sheet::where("slug", $slug)->first();
-            return $sheet ?? null;
-        }
-
-        return null;
-    }
-
-    /**
-     * Check xem slug có hợp lệ không
-     *
-     * @param string $slug
-     * @return boolean
-     */
-    protected function isSlugValid(string $slug)
-    {
-        $pattern = '/\A([a-z\d\-]*)\-([\d]{14})([\d]{5})\z/i';
-        return preg_match($pattern, $slug) === 1;
+        $sheet = Sheet::where("slug", $slug)->first();
+        return $sheet ?? null;
     }
 }

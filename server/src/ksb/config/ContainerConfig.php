@@ -8,6 +8,7 @@ use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
 use Bootstrap\Helper\SessionManager;
 use Illuminate\Database\Capsule\Manager;
+use Intervention\Image\ImageManager;
 use Ksb\Logic\AuthLogic;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
@@ -51,10 +52,18 @@ class ContainerConfig extends AuraContainerConfig
             return $view;
         });
 
+        // image manager
+        $container->set("imageManager", function () {
+            return new ImageManager([
+                "driver" => "gd",
+            ]);
+        });
+
         // Type for injection
         $container->types[Manager::class] = $container->lazyGet("db");
         $container->types[Twig::class] = $container->lazyGet("view");
         $container->types[AuthLogic::class] = $container->lazyGet("auth");
+        $container->types[ImageManager::class] = $container->lazyGet("imageManager");
     }
 
     /**
