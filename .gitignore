@@ -1,2 +1,4 @@
 server/vendor
 .env
+cache
+!.gitkeep

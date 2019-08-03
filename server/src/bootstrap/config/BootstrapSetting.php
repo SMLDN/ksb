@@ -19,6 +19,7 @@ class BootstrapSetting
             ],
             "view" => [
                 "templateDir" => __DIR__ . "/../../view",
+                "cacheDir" => __DIR__ . "/../../cache",
             ],
             "db" => [
                 "driver" => "pgsql",

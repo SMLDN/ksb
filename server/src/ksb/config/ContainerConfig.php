@@ -42,6 +42,8 @@ class ContainerConfig extends AuraContainerConfig
         $container->set("view", function () use ($container) {
             $view = new Twig($container->get("setting")->get("view.templateDir"), [
                 "debug" => getenv("DEBUG"),
+                // "cache" => getenv("DEBUG") ? false : $container->get("setting")->get("view.cacheDir"),
+                "cache" => $container->get("setting")->get("view.cacheDir"),
             ]);
             if (getenv("DEBUG")) {
                 $view->addExtension(new DebugExtension());
