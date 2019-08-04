@@ -5,7 +5,6 @@ namespace Ksb\Logic;
 use Bootstrap\Helper\Validation\BootstrapValidator;
 use Bootstrap\Utility\Str;
 use Illuminate\Database\Capsule\Manager;
-use Ksb\Helper\Flash;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\Sheet;
 use Ksb\Model\SheetAttach;
@@ -16,7 +15,6 @@ use Ksb\Model\User;
 class SheetLogic
 {
     protected $authLogic;
-    protected $flash;
     protected $db;
 
     /**
@@ -25,10 +23,9 @@ class SheetLogic
      * @param AuthLogic $authLogic
      * @return void
      */
-    public function __construct(AuthLogic $authLogic, Flash $flash, Manager $db)
+    public function __construct(AuthLogic $authLogic, Manager $db)
     {
         $this->authLogic = $authLogic;
-        $this->flash = $flash;
         $this->db = $db;
     }
 

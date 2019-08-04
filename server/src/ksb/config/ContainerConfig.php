@@ -2,16 +2,11 @@
 
 namespace Ksb\Config;
 
-use Aptoma\Twig\Extension\MarkdownEngine\MichelfMarkdownEngine;
-use Aptoma\Twig\Extension\MarkdownExtension;
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
-use Bootstrap\Helper\SessionManager;
 use Illuminate\Database\Capsule\Manager;
 use Intervention\Image\ImageManager;
 use Ksb\Logic\AuthLogic;
-use Slim\Views\Twig;
-use Twig\Extension\DebugExtension;
 
 class ContainerConfig extends AuraContainerConfig
 {
@@ -38,21 +33,6 @@ class ContainerConfig extends AuraContainerConfig
         // auth
         $container->set("auth", $container->lazyNew(AuthLogic::class));
 
-        // view
-        $container->set("view", function () use ($container) {
-            $view = new Twig($container->get("setting")->get("view.templateDir"), [
-                "debug" => getenv("DEBUG"),
-                "cache" => getenv("DEBUG") ? false : $container->get("setting")->get("view.cacheDir"),
-            ]);
-            if (getenv("DEBUG")) {
-                $view->addExtension(new DebugExtension());
-            }
-            $view->addExtension(new MarkdownExtension(new MichelfMarkdownEngine));
-            $view->getEnvironment()->addGlobal("csrfKey", SessionManager::get("csrf_key"));
-            $view->getEnvironment()->addGlobal("csrfToken", SessionManager::get("csrf_token"));
-            return $view;
-        });
-
         // image manager
         $container->set("imageManager", function () {
             return new ImageManager([
@@ -62,7 +42,6 @@ class ContainerConfig extends AuraContainerConfig
 
         // Type for injection
         $container->types[Manager::class] = $container->lazyGet("db");
-        $container->types[Twig::class] = $container->lazyGet("view");
         $container->types[AuthLogic::class] = $container->lazyGet("auth");
         $container->types[ImageManager::class] = $container->lazyGet("imageManager");
     }
