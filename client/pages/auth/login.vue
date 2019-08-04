@@ -10,13 +10,24 @@
             <form action="post" method="post" @submit.prevent="submit">
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="email" placeholder="Your Email" autofocus />
+                  <input
+                    v-model="email"
+                    class="input is-large"
+                    type="email"
+                    placeholder="Your Email"
+                    autofocus
+                  />
                 </div>
               </div>
 
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="password" placeholder="Your Password" />
+                  <input
+                    v-model="loginPassword"
+                    class="input is-large"
+                    type="password"
+                    placeholder="Your Password"
+                  />
                 </div>
               </div>
               <!-- <div class="field">
@@ -41,12 +52,18 @@
 
 <script>
 export default {
+  data() {
+    return {
+      email: "",
+      loginPassword: ""
+    };
+  },
   auth: false,
   methods: {
-    async submit() {
-      const res = await this.$axios.get(
-        "https://jsonplaceholder.typicode.com/posts"
-      );
+    submit() {
+      this.$auth.loginWith("local", {
+        data: { email: this.email, loginPassword: this.loginPassword }
+      });
     }
   }
 };

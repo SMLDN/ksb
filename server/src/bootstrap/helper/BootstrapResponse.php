@@ -54,6 +54,19 @@ class BootstrapResponse extends Response
     }
 
     /**
+     * JSON
+     *
+     * @param [type] $data
+     * @return void
+     */
+    public function withJson($data)
+    {
+        $payload = json_encode($data);
+        $this->getBody()->write($payload);
+        return $this->withHeader("Content-Type", "application/json");
+    }
+
+    /**
      * Redirect đến địa chỉ dựa theo route
      *
      * @return void

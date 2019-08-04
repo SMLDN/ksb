@@ -1,9 +1,10 @@
 <?php
 
-namespace Ksb\Controller;
+namespace Ksb\Controller\Api;
 
 use Bootstrap\Utility\Str;
 use Bootstrap\Utility\Time;
+use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
 use Ksb\Model\UserActive;
@@ -37,16 +38,15 @@ class UserController
      */
     public function me(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        $user = $this->authLogic->getUserRaw();
+        $user = $this->authLogic->getUser();
 
         if ($user) {
-            return $this->view->render($response, "user/Me.twig", [
-                "user" => $user->toArrayCamel(),
-                "userRaw" => $user,
+            return $response->withJson([
+                "user" => $user,
             ]);
         }
 
-        return $response->redirectTo("home");
+        return $response->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
     }
 
     /**

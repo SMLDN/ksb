@@ -65,7 +65,7 @@ class BootstrapValidator
 
         $this->passed = empty($this->errors);
 
-        return ($this->passed);
+        return $this->passed;
     }
 
     /**

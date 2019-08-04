@@ -52,13 +52,34 @@ export default {
      ** Axios module configuration
      ** See https://axios.nuxtjs.org/options
      */
-    axios: {},
+    axios: {
+        baseURL: "http://localhost"
+    },
 
     router: {
         middleware: ["auth"]
     },
 
-    auth: {},
+    auth: {
+        strategies: {
+            local: {
+                endpoints: {
+                    login: {
+                        url: "/api/login",
+                        method: "post",
+                        propertyName: "token"
+                    },
+                    user: {
+                        url: "/api/me",
+                        method: "get",
+                        propertyName: "user"
+                    }
+                },
+                tokenRequired: true,
+                tokenType: "Bearer"
+            }
+        }
+    },
     /*
      ** Build configuration
      */

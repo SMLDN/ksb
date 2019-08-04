@@ -1,7 +1,8 @@
 <?php
 
-namespace Ksb\Controller;
+namespace Ksb\Controller\Api;
 
+use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\UserLogic;
 use Ksb\Model\User;
 use Psr\Http\Message\ResponseInterface;
@@ -34,10 +35,10 @@ class AuthController
      * @param [type] $args
      * @return void
      */
-    public function loginGet(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        return $this->view->render($response, "auth/Login.twig");
-    }
+    // public function loginGet(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     return $this->view->render($response, "auth/Login.twig");
+    // }
 
     /**
      * Trang đăng nhập POST
@@ -49,16 +50,16 @@ class AuthController
      */
     public function loginPost(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        $email = $request->getParsedBody()["email"] ?? null;
+        $password = $request->getParsedBody()["loginPassword"] ?? null;
 
-        $user = new User();
-        $user->email = $request->getParsedBody()["email"] ?? null;
-        $user->password = $request->getParsedBody()["loginPassword"] ?? null;
-
-        if ($this->userLogic->login($user)) {
-            return $response->redirectTo("home");
+        if ($token = $this->userLogic->loginByCrendential($email, $password)) {
+            return $response->withJson([
+                "token" => $token,
+            ]);
         }
 
-        return $response->redirectTo("auth.login");
+        return $response->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
     }
 
     /**

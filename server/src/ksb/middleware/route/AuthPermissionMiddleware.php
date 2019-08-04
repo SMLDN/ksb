@@ -3,6 +3,7 @@
 namespace Ksb\Middleware\Route;
 
 use Bootstrap\Helper\BootstrapResponse;
+use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\AuthLogic;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -40,6 +41,6 @@ class AuthPermissionMiddleware implements MiddlewareInterface
         }
 
         $response = new BootstrapResponse;
-        return $response->withRedirect($this->router->urlFor("auth.login"));
+        return $response->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
     }
 }

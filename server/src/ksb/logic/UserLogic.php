@@ -4,9 +4,11 @@ namespace Ksb\Logic;
 
 use Bootstrap\Helper\Mailer\BootstrapMailer;
 use Bootstrap\Helper\Validation\BootstrapValidator;
+use Bootstrap\Interfaces\JwtSubjectInterface;
 use Bootstrap\Utility\Str;
 use Bootstrap\Utility\Time;
 use Exception;
+use Firebase\JWT\JWT;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Facades\DB;
 use Ksb\Helper\Flash;
@@ -38,6 +40,88 @@ class UserLogic
         $this->mailer = $mailer;
         $this->db = $db;
         $this->flash = $flash;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $email
+     * @param [type] $password
+     * @return void
+     */
+    public function loginByCrendential($email, $password)
+    {
+        $v = new BootstrapValidator();
+        $v->setData([
+            "email" => $email,
+            "password" => $password,
+        ]);
+
+        // Email
+        $v->addRule("email",
+            [
+                "fieldName" => "Email",
+                "rule" => [
+                    "require",
+                    "email",
+                    "minLength:6",
+                    "maxLength:100",
+                    "userExist",
+                    "userActived",
+                ],
+            ]
+        );
+
+        // Mật khẩu
+        $v->addRule("password",
+            [
+                "fieldName" => "Mật khẩu",
+                "rule" => [
+                    "require",
+                    "password",
+                    "passwordMatch:" . $email,
+                ],
+            ]
+        );
+
+        $v->addClassPath(UserExistRule::class);
+        $v->addClassPath(PasswordMatchRule::class);
+        $v->addClassPath(UserActivedRule::class);
+
+        if ($v->isPassed()) {
+            $user = User::where("email", $email)->first();
+            return $this->buildToken($user);
+        }
+    }
+
+    /**
+     * Build Token
+     *
+     * @param JwtSubjectInterface $user
+     * @return void
+     */
+    protected function buildToken(JwtSubjectInterface $user)
+    {
+        $payload = $this->buildPayload($user);
+        return JWT::encode($payload, getenv("JWT_SECRET"));
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param JwtSubjectInterface $user
+     * @return void
+     */
+    protected function buildPayload(JwtSubjectInterface $user)
+    {
+        return [
+            "iss" => $_SERVER["REQUEST_URI"],
+            "sub" => $user->getSubject(),
+            "iat" => Time::nowTimestamp(),
+            "nbf" => Time::nowTimestamp(),
+            "exp" => Time::now()->addHours(getenv("JWT_TTL"))->timestamp,
+            "jti" => Str::randomStr(64),
+        ];
     }
 
     /**
