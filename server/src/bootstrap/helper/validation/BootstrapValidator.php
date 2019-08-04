@@ -28,6 +28,8 @@ class BootstrapValidator
 
     protected $passed;
 
+    protected $spliter = " | ";
+
     /**
      * Construct
      *
@@ -50,7 +52,7 @@ class BootstrapValidator
     {
         foreach ($this->rules as $field => $ruleProp) {
             $fieldName = $ruleProp[$this->fieldNamePropName] ?? $field;
-            $ruleList = $ruleProp[$this->rulePropName] ?? null;
+            $ruleList = $this->getRuleListFromStr($ruleProp[$this->rulePropName]);
             if (!isset($ruleList)) {
                 throw new DataEmptyException;
             }
@@ -66,6 +68,17 @@ class BootstrapValidator
         $this->passed = empty($this->errors);
 
         return $this->passed;
+    }
+
+    /**
+     * Lấy Rule list từ string
+     *
+     * @param string $ruleStr
+     * @return void
+     */
+    protected function getRuleListFromStr(string $ruleStr)
+    {
+        return explode($this->spliter, $ruleStr);
     }
 
     /**

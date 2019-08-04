@@ -9,7 +9,6 @@ use Bootstrap\Utility\Str;
 use Bootstrap\Utility\Time;
 use Firebase\JWT\JWT;
 use Illuminate\Database\Capsule\Manager;
-use Illuminate\Support\Facades\DB;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
 use Ksb\Validation\Rule\PasswordMatchRule;
@@ -55,14 +54,7 @@ class UserLogic
         $v->addRule("email",
             [
                 "fieldName" => "Email",
-                "rule" => [
-                    "require",
-                    "email",
-                    "minLength:6",
-                    "maxLength:100",
-                    "userExist",
-                    "userActived",
-                ],
+                "rule" => "require | email | minLength:6 | maxLength:100 | userExist | userActived",
             ]
         );
 
@@ -70,11 +62,7 @@ class UserLogic
         $v->addRule("password",
             [
                 "fieldName" => "Mật khẩu",
-                "rule" => [
-                    "require",
-                    "password",
-                    "passwordMatch:" . $email,
-                ],
+                "rule" => "require | password | passwordMatch:" . $email,
             ]
         );
 
