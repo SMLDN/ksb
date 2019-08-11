@@ -2,6 +2,7 @@
 
 namespace Ksb\Logic;
 
+use Bootstrap\Exception\ValidationException;
 use Bootstrap\Helper\Mailer\BootstrapMailer;
 use Bootstrap\Helper\Validation\BootstrapValidator;
 use Bootstrap\Interfaces\JwtSubjectInterface;
@@ -74,6 +75,8 @@ class UserLogic
             $user = User::where("email", $email)->first();
             return $this->buildToken($user);
         }
+
+        throw new ValidationException($v);
     }
 
     /**

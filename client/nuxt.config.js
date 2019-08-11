@@ -1,5 +1,9 @@
 export default {
     mode: "universal",
+
+    server: {
+        port: 80
+    },
     /*
      ** Headers of the page
      */
@@ -30,7 +34,11 @@ export default {
     /*
      ** Plugins to load before mounting the App
      */
-    plugins: [],
+    plugins: [
+        "./plugins/mixin/auth.js",
+        "./plugins/mixin/serverError.js",
+        "./plugins/axios.js"
+    ],
     /*
      ** Nuxt.js dev-modules
      */
@@ -48,16 +56,13 @@ export default {
         "@nuxtjs/axios",
         "@nuxtjs/auth"
     ],
+
     /*
      ** Axios module configuration
      ** See https://axios.nuxtjs.org/options
      */
     axios: {
-        baseURL: "http://localhost"
-    },
-
-    router: {
-        middleware: ["auth"]
+        baseURL: "http://localhost:8080"
     },
 
     auth: {
@@ -69,6 +74,10 @@ export default {
                         method: "post",
                         propertyName: "token"
                     },
+                    logout: {
+                        url: "/api/logout",
+                        method: "post"
+                    },
                     user: {
                         url: "/api/me",
                         method: "get",
@@ -78,8 +87,16 @@ export default {
                 tokenRequired: true,
                 tokenType: "Bearer"
             }
+        },
+        redirect: {
+            login: "/auth/login"
         }
     },
+
+    router: {
+        middleware: ["auth"]
+    },
+
     /*
      ** Build configuration
      */
@@ -94,6 +111,12 @@ export default {
         /*
          ** You can extend webpack config here
          */
-        extend(config, ctx) {}
+        extend(config, ctx) {
+            if (ctx.isDev) {
+                config.devtool = ctx.isClient
+                    ? "source-map"
+                    : "inline-source-map";
+            }
+        }
     }
 };

@@ -230,10 +230,11 @@ class BootstrapValidator
         $fullErrors = $this->errors;
         $errors = [];
         foreach ($fullErrors as $field => $error) {
-            $errors[$field] = [];
+            $tmpError = [];
             foreach ($error as $rule => $msg) {
-                array_push($errors[$field], $msg);
+                array_push($tmpError, $msg);
             }
+            $errors[$field] = $tmpError;
         }
         return $errors;
     }

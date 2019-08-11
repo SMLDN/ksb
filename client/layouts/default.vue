@@ -1,8 +1,17 @@
 <template>
   <div>
+    <TopNav />
     <nuxt />
   </div>
 </template>
 
-<style>
-</style>
+<script>
+import TopNav from "./partials/TopNav.vue";
+export default {
+  components: {
+    TopNav
+  }
+};
+</script>
+
+

@@ -3,7 +3,6 @@
 namespace Ksb\Controller\Api;
 
 use Bootstrap\Utility\Str;
-use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
 use Psr\Http\Message\ResponseInterface;
@@ -36,13 +35,9 @@ class UserController
     {
         $user = $this->authLogic->getUser();
 
-        if ($user) {
-            return $response->withJson([
-                "user" => $user,
-            ]);
-        }
-
-        return $response->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
+        return $response->withJson([
+            "user" => $user,
+        ]);
     }
 
     /**

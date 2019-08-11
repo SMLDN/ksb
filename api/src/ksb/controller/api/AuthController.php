@@ -2,6 +2,7 @@
 
 namespace Ksb\Controller\Api;
 
+use Bootstrap\Exception\ValidationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\UserLogic;
 use Ksb\Model\User;
@@ -35,13 +36,28 @@ class AuthController
         $email = $request->getParsedBody()["email"] ?? null;
         $password = $request->getParsedBody()["loginPassword"] ?? null;
 
-        if ($token = $this->userLogic->loginByCrendential($email, $password)) {
-            return $response->withJson([
-                "token" => $token,
-            ]);
+        try {
+            if ($token = $this->userLogic->loginByCrendential($email, $password)) {
+                return $response->withJson([
+                    "token" => $token,
+                ]);
+            }
+        } catch (ValidationException $e) {
+            return $response->withJson($e->getValidationError())->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
         }
+    }
 
-        return $response->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
+    /**
+     * Trang đăng xuất POST
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param [type] $args
+     * @return void
+     */
+    public function logoutPost(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        return $response->withStatus(StatusCodeInterface::STATUS_OK);
     }
 
     /**
