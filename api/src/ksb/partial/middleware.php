@@ -1,7 +1,7 @@
 <?php
 
-use Bootstrap\Middleware\CorsMiddleware;
-use Bootstrap\Middleware\JsonBodyParserMiddleware;
+use Aloha\Middleware\CorsMiddleware;
+use Aloha\Middleware\JsonBodyParserMiddleware;
 use Ksb\Middleware\App\AuthMiddleware;
 use Slim\Middleware\ErrorMiddleware;
 

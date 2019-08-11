@@ -1,11 +1,11 @@
 <?php
 namespace Ksb\Model;
 
-use Bootstrap\Model\BootstrapModel;
+use Aloha\Model\AlohaModel;
 use Ksb\Model\Sheet;
 use Ksb\Model\User;
 
-class SheetAttach extends BootstrapModel
+class SheetAttach extends AlohaModel
 {
     protected $table = "sheet_attach";
     protected $visible = ["attach_content", "attach_name", "created_at", "updated_at"];

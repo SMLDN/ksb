@@ -1,7 +1,7 @@
 {
-    "name": "ksb-client",
+    "name": "ksb-web",
     "version": "0.1.0",
-    "description": "Ksb client",
+    "description": "Knowledge Sharing Bulletin",
     "author": "SLDN",
     "private": true,
     "scripts": {

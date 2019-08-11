@@ -2,7 +2,7 @@
 
 namespace Ksb\Controller\Api;
 
-use Bootstrap\Exception\ValidationException;
+use Aloha\Exception\ValidationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\UserLogic;
 use Ksb\Model\User;

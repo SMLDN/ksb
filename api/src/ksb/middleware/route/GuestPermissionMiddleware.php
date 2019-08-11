@@ -2,7 +2,7 @@
 
 namespace Ksb\Middleware\Route;
 
-use Bootstrap\Helper\BootstrapResponse;
+use Aloha\Helper\Response;
 use Ksb\Logic\AuthLogic;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,7 +39,7 @@ class GuestPermissionMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $response = new BootstrapResponse;
+        $response = new Response;
         return $response->withRedirect($this->router->urlFor("home"));
     }
 }

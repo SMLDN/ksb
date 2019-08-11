@@ -2,8 +2,8 @@
 
 namespace Ksb\Logic;
 
-use Bootstrap\Helper\Validation\BootstrapValidator;
-use Bootstrap\Utility\Str;
+use Aloha\Helper\Validation\AlohaValidator;
+use Aloha\Utility\Str;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\Sheet;
@@ -39,7 +39,7 @@ class SheetLogic
     {
         $sheet->title = Str::trim($sheet->title);
 
-        $v = new BootstrapValidator();
+        $v = new AlohaValidator();
         $v->setData($sheet->getAttributesCamel());
 
         // Tiêu đề
@@ -103,7 +103,7 @@ class SheetLogic
     {
         $sheet->title = Str::trim($sheet->title);
 
-        $v = new BootstrapValidator();
+        $v = new AlohaValidator();
         $v->setData($sheet->getAttributesCamel());
 
         // Tiêu đề

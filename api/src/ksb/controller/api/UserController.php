@@ -2,7 +2,7 @@
 
 namespace Ksb\Controller\Api;
 
-use Bootstrap\Utility\Str;
+use Aloha\Utility\Str;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\User;
 use Psr\Http\Message\ResponseInterface;

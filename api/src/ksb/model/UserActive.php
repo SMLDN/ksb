@@ -1,9 +1,9 @@
 <?php
 namespace Ksb\Model;
 
-use Bootstrap\Model\BootstrapModel;
+use Aloha\Model\AlohaModel;
 
-class UserActive extends BootstrapModel
+class UserActive extends AlohaModel
 {
     protected $table = "user_active";
     protected $primaryKey = "user_id";

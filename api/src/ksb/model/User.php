@@ -1,11 +1,11 @@
 <?php
 namespace Ksb\Model;
 
-use Bootstrap\Interfaces\JwtSubjectInterface;
-use Bootstrap\Model\BootstrapModel;
+use Aloha\Interfaces\JwtSubjectInterface;
+use Aloha\Model\AlohaModel;
 use Ksb\Model\Sheet;
 
-class User extends BootstrapModel implements JwtSubjectInterface
+class User extends AlohaModel implements JwtSubjectInterface
 {
     protected $table = "user";
     protected $visible = ["id", "email", "user_name"];

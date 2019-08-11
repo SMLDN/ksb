@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Nuxtjs",
             "args": ["dev"],
-            "program": "${workspaceFolder}/client/node_modules/nuxt/bin/nuxt.js",
+            "program": "${workspaceFolder}/web/node_modules/nuxt/bin/nuxt.js",
             "cwd": "${workspaceFolder}/web"
         },
         {
@@ -22,7 +22,7 @@
         {
             "type": "php",
             "request": "launch",
-            "name": "Server",
+            "name": "Api",
             "port": 9000
         }
     ],

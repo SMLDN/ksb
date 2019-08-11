@@ -2,12 +2,12 @@
 
 namespace Ksb\Logic;
 
-use Bootstrap\Exception\ValidationException;
-use Bootstrap\Helper\Mailer\BootstrapMailer;
-use Bootstrap\Helper\Validation\BootstrapValidator;
-use Bootstrap\Interfaces\JwtSubjectInterface;
-use Bootstrap\Utility\Str;
-use Bootstrap\Utility\Time;
+use Aloha\Exception\ValidationException;
+use Aloha\Helper\Mailer\AlohaMailer;
+use Aloha\Helper\Validation\AlohaValidator;
+use Aloha\Interfaces\JwtSubjectInterface;
+use Aloha\Utility\Str;
+use Aloha\Utility\Time;
 use Firebase\JWT\JWT;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Logic\AuthLogic;
@@ -29,7 +29,7 @@ class UserLogic
      * @param AuthLogic $authLogic
      * @return void
      */
-    public function __construct(AuthLogic $authLogic, BootstrapMailer $mailer, Manager $db)
+    public function __construct(AuthLogic $authLogic, AlohaMailer $mailer, Manager $db)
     {
         $this->authLogic = $authLogic;
         $this->mailer = $mailer;
@@ -45,7 +45,7 @@ class UserLogic
      */
     public function loginByCrendential($email, $password)
     {
-        $v = new BootstrapValidator();
+        $v = new AlohaValidator();
         $v->setData([
             "email" => $email,
             "password" => $password,
@@ -119,7 +119,7 @@ class UserLogic
     // {
     //     $user->userName = Str::trim($user->userName);
 
-    //     $v = new BootstrapValidator();
+    //     $v = new AlohaValidator();
     //     $v->setData($user->getAttributesCamel());
 
     //     // Tên hiển thị

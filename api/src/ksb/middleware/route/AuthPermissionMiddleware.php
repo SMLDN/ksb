@@ -2,7 +2,7 @@
 
 namespace Ksb\Middleware\Route;
 
-use Bootstrap\Helper\BootstrapResponse;
+use Aloha\Helper\Response;
 use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\AuthLogic;
 use Psr\Http\Message\ResponseInterface;
@@ -40,7 +40,7 @@ class AuthPermissionMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $response = new BootstrapResponse;
+        $response = new Response;
         return $response->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
     }
 }

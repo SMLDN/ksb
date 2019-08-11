@@ -2,7 +2,7 @@
 
 namespace Ksb\Validation\Rule;
 
-use Bootstrap\Interfaces\Helper\RuleInterface;
+use Aloha\Interfaces\Helper\RuleInterface;
 use Ksb\Model\User;
 
 class PasswordMatchRule implements RuleInterface

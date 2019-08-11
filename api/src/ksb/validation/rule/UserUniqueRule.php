@@ -2,8 +2,8 @@
 
 namespace Ksb\Validation\Rule;
 
-use Bootstrap\Interfaces\Helper\RuleInterface;
-use Bootstrap\Utility\Str;
+use Aloha\Interfaces\Helper\RuleInterface;
+use Aloha\Utility\Str;
 use Ksb\Model\User;
 
 class UserUniqueRule implements RuleInterface

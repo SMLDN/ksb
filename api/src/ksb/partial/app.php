@@ -1,8 +1,8 @@
 <?php
 
+use Aloha\AppAloha;
+use Aloha\Config\AlohaContainerConfig;
 use Aura\Di\ContainerBuilder;
-use Bootstrap\AppBootstrap;
-use Bootstrap\Config\BootstrapContainerConfig;
 use Ksb\Config\ContainerConfig;
 use Ksb\Config\ControllerConfig;
 use Ksb\Config\RouteMiddlewareConfig;
@@ -12,11 +12,11 @@ use Ksb\Config\RouteMiddlewareConfig;
 // Container
 $builder = new ContainerBuilder();
 $container = $builder->newConfiguredInstance([
-    BootstrapContainerConfig::class,
+    AlohaContainerConfig::class,
     ContainerConfig::class,
     ControllerConfig::class,
     RouteMiddlewareConfig::class,
 ], $builder::AUTO_RESOLVE);
 
 // Create app
-$app = AppBootstrap::create($container);
+$app = AppAloha::create($container);

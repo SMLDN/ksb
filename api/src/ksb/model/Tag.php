@@ -1,10 +1,10 @@
 <?php
 namespace Ksb\Model;
 
-use Bootstrap\Model\BootstrapModel;
+use Aloha\Model\AlohaModel;
 use Ksb\Model\SheetTag;
 
-class Tag extends BootstrapModel
+class Tag extends AlohaModel
 {
     protected $table = "tag";
 

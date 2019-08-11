@@ -2,7 +2,7 @@
 
 namespace Ksb\Validation\Message;
 
-use Bootstrap\Interfaces\Helper\ValidateMessageInterface;
+use Aloha\Interfaces\Helper\ValidateMessageInterface;
 
 class UserActivedValidateMessage implements ValidateMessageInterface
 {
