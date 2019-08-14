@@ -28,6 +28,7 @@ class AppAloha
         AppFactory::setRouteCollector($container->get("routeCollector"));
         AppFactory::setRouteResolver($container->get("routeResolver"));
         $app = AppFactory::create();
+        $app->setBasePath(getenv("SLIM_BASE_PATH"));
         return $app;
     }
 }

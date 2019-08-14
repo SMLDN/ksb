@@ -17,10 +17,6 @@ class Setting
                 "logErrors" => getenv("DEBUG"),
                 "logErrorDetails" => getenv("DEBUG"),
             ],
-            "view" => [
-                "templateDir" => __DIR__ . "/../../view",
-                "cacheDir" => __DIR__ . "/../../cache",
-            ],
             "db" => [
                 "driver" => "pgsql",
                 "host" => getenv("DB_HOST"),

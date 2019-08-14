@@ -4,10 +4,10 @@ namespace Ksb\Config;
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig as AuraContainerConfig;
-use Ksb\Controller\Api\AuthController;
-use Ksb\Controller\Api\UserController;
+use Ksb\Controller\AuthController;
 use Ksb\Controller\SheetAttachController;
 use Ksb\Controller\SheetController;
+use Ksb\Controller\UserController;
 
 class ControllerConfig extends AuraContainerConfig
 {

@@ -6,7 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 // --Controller-- //
 
-$app->options("/api[{path:.*}]", function (ServerRequestInterface $request, ResponseInterface $response) {
+$app->options("/[{path:.*}]", function (ServerRequestInterface $request, ResponseInterface $response) {
     return $response->withStatus(StatusCodeInterface::STATUS_OK);
 });
 

@@ -1,14 +1,17 @@
 <?php
 
-use Ksb\Controller\Api\UserController;
+use Ksb\Controller\UserController;
 use Ksb\Middleware\Route\AuthPermissionMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
 // --- User controller --- //
 
-// Tài khoản người dùng hiện tại
-$app->group("/api/me", function (RouteCollectorProxy $group) {
-    $group->get("", UserController::class . ":me")->setName("me.home")->add(AuthPermissionMiddleware::class);
-});
+$app->group("/user", function (RouteCollectorProxy $group) {
+    // Tài khoản người dùng hiện tại
+    // Me
+    $group->get("/me", UserController::class . ":me")->setName("user.me")->add(AuthPermissionMiddleware::class);
 
-// Tài khoản khác
+    // Tài khoản khác
+    // Activative
+    $group->get("/{userId:[0-9]+}/active/{activeToken:[a-z0-9]+}", UserController::class . ":activeGet")->setName("user.active");
+});

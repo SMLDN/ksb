@@ -44,7 +44,7 @@ class AlohaMailer
     public function sendRegisterMail(string $toAddress, $userId, string $userName, string $activeToken)
     {
         $url = $this->router->fullUrlFor(new Uri($_SERVER["REQUEST_SCHEME"], $_SERVER["HTTP_HOST"]), "user.active", [
-            "userIdBased" => Math::toBase($userId),
+            "userId" => Math::toBase($userId),
             "activeToken" => $activeToken,
         ]);
         $this->resetMailSetting();

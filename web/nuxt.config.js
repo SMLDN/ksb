@@ -4,6 +4,7 @@ export default {
     server: {
         port: 80
     },
+
     /*
      ** Headers of the page
      */
@@ -37,7 +38,8 @@ export default {
     plugins: [
         "./plugins/mixin/auth.js",
         "./plugins/mixin/serverError.js",
-        "./plugins/axios.js"
+        "./plugins/axios.js",
+        "./plugins/directive.js"
     ],
     /*
      ** Nuxt.js dev-modules
@@ -62,7 +64,7 @@ export default {
      ** See https://axios.nuxtjs.org/options
      */
     axios: {
-        baseURL: "http://localhost:8080"
+        baseURL: "http://localhost:8080/api"
     },
 
     auth: {
@@ -70,16 +72,16 @@ export default {
             local: {
                 endpoints: {
                     login: {
-                        url: "/api/login",
+                        url: "/auth/login",
                         method: "post",
                         propertyName: "token"
                     },
                     logout: {
-                        url: "/api/logout",
+                        url: "/auth/logout",
                         method: "post"
                     },
                     user: {
-                        url: "/api/me",
+                        url: "/user/me",
                         method: "get",
                         propertyName: "user"
                     }
@@ -94,7 +96,7 @@ export default {
     },
 
     router: {
-        middleware: ["auth"]
+        middleware: [/* "auth",  */ "resetServerError"]
     },
 
     /*

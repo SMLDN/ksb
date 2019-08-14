@@ -1,6 +1,6 @@
 <?php
 
-namespace Ksb\Controller\Api;
+namespace Ksb\Controller;
 
 use Aloha\Exception\ValidationException;
 use Fig\Http\Message\StatusCodeInterface;
@@ -68,18 +68,23 @@ class AuthController
      * @param [type] $args
      * @return void
      */
-    // public function registerPost(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
-    //     $user = new User();
+    public function registerPost(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $user = new User();
 
-    //     $user->email = $request->getParsedBody()["email"] ?? null;
-    //     $user->userName = $request->getParsedBody()["userName"] ?? null;
-    //     $user->password = $request->getParsedBody()["loginPassword"] ?? null;
+        $user->email = $request->getParsedBody()["email"] ?? null;
+        $user->userName = $request->getParsedBody()["userName"] ?? null;
+        $user->password = $request->getParsedBody()["loginPassword"] ?? null;
 
-    //     $this->userLogic->register($user);
-    //     if ($user->id) {
-    //         return $response->redirectTo("home");
-    //     }
-    //     return $response->redirectTo("auth.register");
-    // }
+        try {
+            $this->userLogic->register($user);
+            if ($user->id) {
+                return $response->withJson([
+                    "status" => $user->getAttributesCamel(),
+                ]);
+            }
+        } catch (ValidationException $e) {
+            return $response->withJson($e->getValidationError())->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
+        }
+    }
 }

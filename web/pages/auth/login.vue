@@ -1,21 +1,20 @@
 <template>
-    <section class="hero is-fullheight">
+    <section class="hero">
         <div class="hero-body">
             <div class="container has-text-centered">
                 <div class="column is-4 is-offset-4">
-                    <h3 class="title has-text-grey">Đăng Nhập</h3>
-                    <p class="subtitle has-text-grey">Đăng nhập để tham gia Vọc Máy Tính.</p>
+                    <h1 class="title has-text-grey">Đăng nhập</h1>
                     <div class="box">
-                        <figure class="avatar"></figure>
                         <form action="post" method="post" @submit.prevent="submit">
                             <div class="field">
                                 <div class="control">
                                     <input
                                         v-model="form.email"
-                                        class="input is-large"
+                                        v-focus
+                                        :class="{ 'is-danger': errorMsg }"
+                                        class="input is-medium"
                                         type="email"
                                         placeholder="Email"
-                                        autofocus
                                     />
                                 </div>
                             </div>
@@ -23,9 +22,10 @@
                                 <div class="control">
                                     <input
                                         v-model="form.loginPassword"
-                                        class="input is-large"
+                                        :class="{ 'is-danger': errorMsg}"
+                                        class="input is-medium"
                                         type="password"
-                                        placeholder="Mật Khẩu"
+                                        placeholder="Mật khẩu"
                                     />
                                 </div>
                             </div>
@@ -41,15 +41,13 @@
                 </label>
                             </div>-->
                             <button
-                                class="button is-block is-primary is-large is-fullwidth"
+                                class="button is-block is-warning is-medium is-fullwidth"
                             >Đăng nhập</button>
                         </form>
                     </div>
-                    <!-- <p class="has-text-grey">
-            <a href="../">Sign Up</a> &nbsp;·&nbsp;
-            <a href="../">Forgot Password</a> &nbsp;·&nbsp;
-            <a href="../">Need Help?</a>
-                    </p>-->
+                    <p class="has-text-grey">
+                        <nuxt-link :to=" { name: 'auth-register' } ">Tạo tài khoản</nuxt-link>
+                    </p>
                 </div>
             </div>
         </div>
@@ -92,24 +90,29 @@ export default {
      * Method
      */
     methods: {
-        submit() {
-            this.$auth.login({
-                data: this.form
-            });
+        /**
+         * Submit
+         */
+        async submit() {
+            try {
+                await this.$auth.login({
+                    data: this.form
+                });
 
-            this.$router.push({
-                path: this.$route.query.redirect || "/"
-            });
+                this.$router.push({
+                    path: this.$route.query.redirect || "/"
+                });
+            } catch (e) {
+                this.resetForm();
+            }
+        },
+
+        /**
+         * Clear Form khi có lỗi phát sinh
+         */
+        resetForm() {
+            this.form.loginPassword = "";
         }
     }
 };
 </script>
-
-<style>
-.label.is-danger {
-    font-size: 1em;
-    font-weight: 400;
-    color: #ff3860;
-    text-align: center;
-}
-</style>
