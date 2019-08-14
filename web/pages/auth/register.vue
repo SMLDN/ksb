@@ -3,48 +3,69 @@
         <div class="hero-body">
             <div class="container has-text-centered">
                 <div class="column is-4 is-offset-4">
-                    <template v-if="status === 'unfinish'">
+                    <template v-if="status === '0'">
                         <h1 class="title has-text-grey">Tạo tài khoản</h1>
                         <div class="box">
                             <figure class="avatar"></figure>
                             <form action="post" method="post" @submit.prevent="submit">
                                 <div class="field">
                                     <div class="control">
+                                        <label for="user-name" class="label">
+                                            Tên hiển thị
+                                            <br />(được phép sử dụng tiếng Việt có dấu và dấu cách)
+                                        </label>
                                         <input
+                                            id="user-name"
                                             v-model="form.userName"
                                             v-focus
+                                            :class="{ 'is-danger': serverError.userName }"
+                                            autocomplete="off"
                                             class="input is-medium"
                                             type="text"
                                             placeholder="Tên hiển thị"
                                             title="Tên hiển thị (được phép sử dụng tiếng Việt có dấu và dấu cách)"
                                         />
+                                        <p
+                                            v-if="serverError.userName"
+                                            class="help is-danger"
+                                        >{{ serverError.userName[0] }}</p>
                                     </div>
                                 </div>
                                 <div class="field">
                                     <div class="control">
+                                        <label for="password" class="label">Email</label>
                                         <input
+                                            id="email"
                                             v-model="form.email"
+                                            :class="{ 'is-danger': serverError.email }"
+                                            autocomplete="off"
                                             class="input is-medium"
                                             type="email"
                                             placeholder="Email"
                                             title="Email"
                                         />
+                                        <p
+                                            v-if="serverError.email"
+                                            class="help is-danger"
+                                        >{{ serverError.email[0] }}</p>
                                     </div>
                                 </div>
                                 <div class="field">
                                     <div class="control">
+                                        <label for="password" class="label">Mật khẩu</label>
                                         <input
+                                            id="password"
                                             v-model="form.loginPassword"
+                                            :class="{ 'is-danger': serverError.password }"
                                             class="input is-medium"
                                             type="password"
                                             placeholder="Mật khẩu"
                                             title="Mật khẩu"
                                         />
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <div class="control">
-                                        <div v-if="errorMsg" class="label is-danger">{{ errorMsg }}</div>
+                                        <p
+                                            v-if="serverError.password"
+                                            class="help is-danger"
+                                        >{{ serverError.password[0] }}</p>
                                     </div>
                                 </div>
                                 <!-- <div class="field">
@@ -107,24 +128,6 @@ export default {
     },
 
     /**
-     * Computed
-     */
-    computed: {
-        errorMsg() {
-            if (this.serverError.email) {
-                return this.serverError.email[0];
-            }
-            if (this.serverError.userName) {
-                return this.serverError.userName[0];
-            }
-            if (this.serverError.password) {
-                return this.serverError.password[0];
-            }
-            return null;
-        }
-    },
-
-    /**
      * Method
      */
     methods: {
@@ -132,7 +135,16 @@ export default {
             try {
                 await this.$axios.$post("/auth/register", this.form);
                 this.status = "1";
-            } catch (e) {}
+            } catch (e) {
+                this.resetForm();
+            }
+        },
+
+        /**
+         * Clear Form khi có lỗi phát sinh
+         */
+        resetForm() {
+            this.form.loginPassword = "";
         }
     }
 };

@@ -8,7 +8,9 @@
                         <form action="post" method="post" @submit.prevent="submit">
                             <div class="field">
                                 <div class="control">
+                                    <label for="email" class="label">Email</label>
                                     <input
+                                        id="email"
                                         v-model="form.email"
                                         v-focus
                                         :class="{ 'is-danger': errorMsg }"
@@ -20,7 +22,9 @@
                             </div>
                             <div class="field">
                                 <div class="control">
+                                    <label for="email" class="label">Mật khẩu</label>
                                     <input
+                                        id="password"
                                         v-model="form.loginPassword"
                                         :class="{ 'is-danger': errorMsg}"
                                         class="input is-medium"
