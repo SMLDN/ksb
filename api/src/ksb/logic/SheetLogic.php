@@ -2,6 +2,7 @@
 
 namespace Ksb\Logic;
 
+use Aloha\Exception\ValidationException;
 use Aloha\Helper\Validation\AlohaValidator;
 use Aloha\Utility\Str;
 use Illuminate\Database\Capsule\Manager;
@@ -46,10 +47,7 @@ class SheetLogic
         $v->addRule("title",
             [
                 "fieldName" => "Tiêu đề",
-                "rule" => [
-                    "require",
-                    "maxLength:255",
-                ],
+                "rule" => "require | maxLength:255",
             ]
         );
 
@@ -57,11 +55,7 @@ class SheetLogic
         $v->addRule("content",
             [
                 "fieldName" => "Nội dung bài viết",
-                "rule" => [
-                    "require",
-                    "minLength:4",
-                    "maxLength:99999",
-                ],
+                "rule" => "require | minLength:4 | maxLength:99999",
             ]
         );
 
@@ -89,6 +83,8 @@ class SheetLogic
                 $this->db->getConnection()->rollback();
             }
         }
+
+        throw new ValidationException($v);
 
         return false;
     }
@@ -138,7 +134,7 @@ class SheetLogic
     }
 
     /**
-     * Uplaod Files
+     * Upload Files
      *
      * @param [type] $files
      * @param User $user
@@ -167,12 +163,8 @@ class SheetLogic
      */
     public function getSheetBySlug(string $slug)
     {
-        if ($this->isSlugValid($slug)) {
-            $sheet = Sheet::where("slug", $slug)->first();
-            return $sheet ? $sheet->toArrayCamel() : null;
-        }
-
-        return null;
+        $sheet = Sheet::where("slug", $slug)->first();
+        return $sheet ? $sheet->toArrayCamel() : null;
     }
 
     /**

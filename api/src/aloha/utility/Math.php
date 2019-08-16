@@ -1,5 +1,4 @@
 <?php
-
 namespace Aloha\Utility;
 
 class Math

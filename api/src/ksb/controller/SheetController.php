@@ -2,6 +2,8 @@
 
 namespace Ksb\Controller;
 
+use Aloha\Exception\ValidationException;
+use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\AuthLogic;
 use Ksb\Logic\SheetLogic;
 use Ksb\Model\Sheet;
@@ -33,24 +35,45 @@ class SheetController
      * @param [type] $args
      * @return void
      */
-    // public function createPost(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
+    public function createPost(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $sheet = new Sheet();
+        $sheet->fill([
+            "title" => $request->getParsedBody()["title"] ?? null,
+            "content" => $request->getParsedBody()["content"] ?? null,
+        ]);
 
-    //     $sheet = new Sheet();
-    //     $sheet->fill([
-    //         "title" => $request->getParsedBody()["title"] ?? null,
-    //         "content" => $request->getParsedBody()["content"] ?? null,
-    //     ]);
+        $tags = $request->getParsedBody()["tag"] ?? null;
 
-    //     $tags = $request->getParsedBody()["tag"] ?? null;
+        try {
+            $this->sheetLogic->create($sheet, $tags);
+            return $response->withJson([]);
+        } catch (ValidationException $e) {
+            return $response->withJson($e->getValidationError())->withStatus(StatusCodeInterface::STATUS_NOT_ACCEPTABLE);
+        }
+    }
 
-    //     if ($this->sheetLogic->create($sheet, $tags)) {
-    //         if ($request->getUploadedFiles()) {
-    //             $this->sheetLogic->uploadFiles($request->getUploadedFiles(), $this->authLogic->getUserRaw(), $sheet);
-    //         }
-    //         return $response->redirectTo("home");
-    //     }
+    /**
+     * Xem sheet
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param [type] $args
+     * @return void
+     */
+    public function viewGet(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $userId = $args["userId"] ?? null;
+        $slug = $args["slug"] ?? null;
 
-    //     return $response->redirectTo("me.sheet.create");
-    // }
+        $sheet = $this->sheetLogic->getSheetBySlug($slug);
+
+        if ($sheet) {
+            return $response->withJson([
+                "sheet" => $sheet,
+            ]);
+        } else {
+            return $response->withJson([])->withStatus(StatusCodeInterface::STATUS_NOT_FOUND);
+        }
+    }
 }

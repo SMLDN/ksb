@@ -4,7 +4,6 @@ namespace Ksb\Middleware\App;
 
 use Aloha\Helper\Response;
 use Exception;
-use Fig\Http\Message\StatusCodeInterface;
 use Ksb\Logic\AuthLogic;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -37,8 +36,6 @@ class AuthMiddleware implements MiddlewareInterface
         try {
             $this->authLogic->loginByHeader($request);
         } catch (Exception $e) {
-            $response = new Response;
-            return $response->withStatus(StatusCodeInterface::STATUS_UNAUTHORIZED);
         }
         return $handler->handle($request);
     }

@@ -1,28 +1,28 @@
 <template>
-    <div>
-        <TopNav />
-        <nuxt />
-    </div>
+  <div>
+    <top-nav />
+    <nuxt />
+  </div>
 </template>
 
 <script>
 import TopNav from "./partials/TopNav.vue";
 export default {
-    components: {
-        TopNav
-    }
+  components: {
+    TopNav
+  }
 };
 </script>
 
 <style >
 html {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 .label.is-danger {
-    font-size: 1em;
-    font-weight: 400;
-    color: #ff3860;
-    text-align: center;
+  font-size: 1em;
+  font-weight: 400;
+  color: #ff3860;
+  text-align: center;
 }
 </style>
 

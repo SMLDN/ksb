@@ -8,7 +8,7 @@ class Str extends IStr
     // UUID
     const UUID_PATTERN = "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}";
     // Slug
-    const SLUG_PATTERN = "[a-z0-9-]*-[0-9]{19}";
+    const SLUG_PATTERN = "[a-z0-9-]+-[0-9]{19}";
 
     /**
      * Loại bỏ dấu cách dư thừa
