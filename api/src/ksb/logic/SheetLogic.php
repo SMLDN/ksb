@@ -4,6 +4,7 @@ namespace Ksb\Logic;
 
 use Aloha\Exception\ValidationException;
 use Aloha\Helper\Validation\AlohaValidator;
+use Aloha\Utility\ClassUtil;
 use Aloha\Utility\Str;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Logic\AuthLogic;
@@ -177,5 +178,20 @@ class SheetLogic
     {
         $sheet = Sheet::where("slug", $slug)->first();
         return $sheet ?? null;
+    }
+
+    /**
+     * Danh sách sheet mới nhất
+     *
+     * @return void
+     */
+    public function getLatestSheet()
+    {
+        $sheetList = $this->db->table("sheet")
+            ->join("user", "user.id", "=", "sheet.user_id")
+            ->select("user.user_name", "sheet.id", "sheet.user_id", "sheet.created_at", "sheet.title", "sheet.slug")
+            ->orderBy("sheet.created_at", "desc")
+            ->get();
+        return ClassUtil::listToCamel($sheetList);
     }
 }

@@ -76,4 +76,20 @@ class SheetController
             return $response->withJson([])->withStatus(StatusCodeInterface::STATUS_NOT_FOUND);
         }
     }
+
+    /**
+     * Latest Sheet List GET
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param [type] $args
+     * @return void
+     */
+    public function latestGet(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+
+        return $response->withJson([
+            "sheetList" => $this->sheetLogic->getLatestSheet(),
+        ]);
+    }
 }

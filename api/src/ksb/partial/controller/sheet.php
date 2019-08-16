@@ -8,6 +8,8 @@ use Slim\Routing\RouteCollectorProxy;
 $app->group("/sheet", function (RouteCollectorProxy $group) {
 // Tạo sheet
     $group->post("/create", SheetController::class . ":createPost")->setName("sheet.create")->add(AuthPermissionMiddleware::class);
+
+    $group->get("/latest", SheetController::class . ":latestGet")->setName("sheet.latest");
 });
 
 // Sheet view

@@ -97,7 +97,6 @@ export default {
      */
     async submit() {
       try {
-        console.log(this.$auth);
         await this.$auth.login({
           data: this.form
         });
