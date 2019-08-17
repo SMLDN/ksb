@@ -1,33 +1,33 @@
 {
-    "name": "ksb/api",
-    "description": "Knowledge Sharing Bulletin",
-    "type": "project",
-    "require": {
-        "slim/psr7": "0.3.0",
-        "slim/slim": "4.0.0",
-        "aura/di": "4.0.0",
-        "illuminate/database": "5.8.30",
-        "phpmailer/phpmailer": "v6.0.7",
-        "vlucas/phpdotenv": "v3.4.0",
-        "intervention/image": "2.5.0",
-        "ramsey/uuid": "3.8.0",
-        "firebase/php-jwt": "v5.0.0"
-    },
-    "require-dev": {
-        "robmorgan/phinx": "0.10.8",
-        "symfony/var-dumper": "v4.3.2"
-    },
-    "autoload": {
-        "psr-4": {
-            "Aloha\\": "src/aloha",
-            "Ksb\\": "src/ksb"
-        }
-    },
-    "authors": [
-        {
-            "name": "Tea Bag",
-            "email": "sakmyapeo@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable"
+  "name": "ksb/api",
+  "description": "Knowledge Sharing Bulletin",
+  "type": "project",
+  "require": {
+    "slim/psr7": "0.4.0",
+    "slim/slim": "4.1.0",
+    "aura/di": "4.0.0",
+    "illuminate/database": "5.8.32",
+    "phpmailer/phpmailer": "v6.0.7",
+    "vlucas/phpdotenv": "v3.4.0",
+    "intervention/image": "2.5.0",
+    "ramsey/uuid": "3.8.0",
+    "firebase/php-jwt": "v5.0.0"
+  },
+  "require-dev": {
+    "robmorgan/phinx": "0.10.8",
+    "symfony/var-dumper": "v4.3.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Aloha\\": "src/aloha",
+      "Ksb\\": "src/ksb"
+    }
+  },
+  "authors": [
+    {
+      "name": "Tea Bag",
+      "email": "sakmyapeo@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable"
 }
