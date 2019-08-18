@@ -4,7 +4,7 @@ namespace Ksb\Logic;
 
 use Aloha\Exception\ValidationException;
 use Aloha\Helper\Validation\AlohaValidator;
-use Aloha\Utility\ClassUtil;
+use Aloha\Utility\CollectionUtil;
 use Aloha\Utility\Str;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Logic\AuthLogic;
@@ -187,11 +187,10 @@ class SheetLogic
      */
     public function getLatestSheet()
     {
-        $sheetList = $this->db->table("sheet")
-            ->join("user", "user.id", "=", "sheet.user_id")
-            ->select("user.user_name", "sheet.id", "sheet.user_id", "sheet.created_at", "sheet.title", "sheet.slug")
-            ->orderBy("sheet.created_at", "desc")
+        $sheetList = Sheet::latest()
+            ->take(15)
+            ->with("user")
             ->get();
-        return ClassUtil::listToCamel($sheetList);
+        return CollectionUtil::toArrayCamel($sheetList, ["content"], ["user"]);
     }
 }

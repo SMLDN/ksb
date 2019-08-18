@@ -27,6 +27,15 @@ export default {
   },
 
   /**
+   * Head
+   */
+  head() {
+    return {
+      title: this.sheet.title + " - Vọc Máy Tính"
+    };
+  },
+
+  /**
    * Data
    */
   data() {

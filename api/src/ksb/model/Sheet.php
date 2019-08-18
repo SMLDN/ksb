@@ -9,7 +9,7 @@ use Ksb\Model\User;
 class Sheet extends AlohaModel
 {
     protected $table = "sheet";
-    protected $visible = ["title", "content", "created_at", "updated_at"];
+    protected $visible = ["title", "content", "created_at", "updated_at", "slug"];
     protected $fillable = ["title", "content"];
 
     /**

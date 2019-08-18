@@ -9,15 +9,15 @@
             class="sheet-item tile is-parent is-vertical box"
           >
             <nuxt-link
-              :to="{ name:'user-userId-sheet-slug', params: {userId: basedUserId(sheet.userId), slug: sheet.slug} }"
+              :to="{ name:'user-userId-sheet-slug', params: {userId: basedUserId(sheet.user.id), slug: sheet.slug} }"
               class="sheet-title tile is-child"
             >{{ sheet.title }}</nuxt-link>
             <div class="sheet-meta has-text-grey tile is-child">
               bởi
               <nuxt-link
-                :to="{ name: 'user-userId', params: {userId: basedUserId(sheet.userId)} }"
+                :to="{ name: 'user-userId', params: {userId: basedUserId(sheet.user.id)} }"
                 class="user-link has-text-grey"
-              >{{ sheet.userName }}</nuxt-link>
+              >{{ sheet.user.userName }}</nuxt-link>
               vào lúc {{ sheet.createdAt }}
             </div>
           </div>

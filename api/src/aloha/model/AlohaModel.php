@@ -156,10 +156,31 @@ class AlohaModel extends Model
     public function toArrayCamel()
     {
         $camelArray = [];
-
         $arrays = $this->toArray();
         foreach ($arrays as $key => $value) {
             $camelArray[Str::camel($key)] = $value;
+        }
+
+        return $camelArray;
+    }
+
+    /**
+     * Lấy entity với tên key dạng camel case (kèm loại trừ)
+     *
+     * @return void
+     */
+    public function toArrayCamelWithExclude(array $excludes)
+    {
+        if ($excludes === []) {
+            return $this->toArrayCamel();
+        }
+        $camelArray = [];
+        $arrays = $this->toArray();
+        foreach ($arrays as $key => $value) {
+            if (!\in_array($key, $excludes)) {
+                $camelArray[Str::camel($key)] = $value;
+            }
+            continue;
         }
 
         return $camelArray;

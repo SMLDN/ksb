@@ -1,5 +1,4 @@
 <?php
-
 namespace Ksb\Controller;
 
 use Aloha\Exception\ValidationException;
@@ -87,7 +86,6 @@ class SheetController
      */
     public function latestGet(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-
         return $response->withJson([
             "sheetList" => $this->sheetLogic->getLatestSheet(),
         ]);
