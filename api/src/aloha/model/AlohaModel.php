@@ -157,11 +157,29 @@ class AlohaModel extends Model
     {
         $camelArray = [];
         $arrays = $this->toArray();
-        foreach ($arrays as $key => $value) {
-            $camelArray[Str::camel($key)] = $value;
+        foreach ($arrays as $key => $values) {
+            $camelArray[Str::camel($key)] = $this->recursiveToCamel($values);
+        }
+        return $camelArray;
+    }
+
+    /**
+     * Lấy tên key camel hồi quy
+     *
+     * @param [type] $value
+     * @return void
+     */
+    protected function recursiveToCamel($values)
+    {
+        if (!\is_array($values)) {
+            return $values;
         }
 
-        return $camelArray;
+        $ret = [];
+        foreach ($values as $k => $v) {
+            $ret[Str::camel($k)] = $this->recursiveToCamel($v);
+        }
+        return $ret;
     }
 
     /**

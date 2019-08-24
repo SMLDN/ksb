@@ -39,6 +39,9 @@ import marked from "marked";
 export default {
   middleware: "auth",
 
+  /**
+   * Data
+   */
   data() {
     return {
       sheet: {
@@ -50,12 +53,18 @@ export default {
     };
   },
 
+  /**
+   * Computed
+   */
   computed: {
     compiledMarkdown() {
       return marked(this.sheet.content);
     }
   },
 
+  /**
+   * Methods
+   */
   methods: {
     async postSheet() {
       try {

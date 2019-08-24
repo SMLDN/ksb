@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import * as MathUtil from "~/util/MathUtil.js";
+import MathUtil from "~/util/MathUtil.js";
 
 export default {
   /**
@@ -67,14 +67,8 @@ export default {
 .sheet-item .sheet-title {
   font-size: 1.5rem;
 }
-.sheet-item .sheet-title:hover {
-  text-decoration: underline;
-  color: #3273dc;
-}
+
 .sheet-item .sheet-meta {
   font-size: 0.9rem;
-}
-.user-link.has-text-grey:hover {
-  text-decoration: underline;
 }
 </style>

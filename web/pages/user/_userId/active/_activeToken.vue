@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import * as MathUtil from "~/util/MathUtil.js";
+import MathUtil from "~/util/MathUtil.js";
 
 export default {
   /**

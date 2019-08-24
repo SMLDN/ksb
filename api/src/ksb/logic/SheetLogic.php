@@ -164,8 +164,9 @@ class SheetLogic
      */
     public function getSheetBySlug(string $slug)
     {
-        $sheet = Sheet::where("slug", $slug)->first();
-        return $sheet ? $sheet->toArrayCamel() : null;
+        return Sheet::where("slug", $slug)
+            ->with("tags.tag")
+            ->first();
     }
 
     /**
@@ -176,8 +177,8 @@ class SheetLogic
      */
     public function getRawSheetBySlug(string $slug)
     {
-        $sheet = Sheet::where("slug", $slug)->first();
-        return $sheet ?? null;
+        return Sheet::where("slug", $slug)
+            ->first();
     }
 
     /**

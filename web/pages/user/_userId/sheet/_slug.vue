@@ -2,6 +2,7 @@
   <div class="hero">
     <div class="hero-body container content">
       <h1 class="title">{{ sheet.title }}</h1>
+      <sheet-tags :sheet-tag-list="sheet.tags"></sheet-tags>
       <div v-html="compiledMarkdown"></div>
     </div>
   </div>
@@ -9,9 +10,14 @@
 
 <script>
 import marked from "marked";
-import * as MathUtil from "~/util/MathUtil.js";
+import SheetTags from "~/components/common/SheetTags";
+import MathUtil from "~/util/MathUtil.js";
 
 export default {
+  components: {
+    SheetTags
+  },
+
   /**
    * Validate
    */

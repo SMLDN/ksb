@@ -4,16 +4,16 @@ import { mapGetters } from "vuex";
 /**
  * Server Error
  */
-const ServerError = {
-    install(Vue, options) {
-        Vue.mixin({
-            computed: {
-                ...mapGetters({
-                    serverError: "serverError/errors"
-                })
-            }
-        });
-    }
+const serverError = {
+  install(Vue, options) {
+    Vue.mixin({
+      computed: {
+        ...mapGetters({
+          serverError: "serverError/errors"
+        })
+      }
+    });
+  }
 };
 
-Vue.use(ServerError);
+Vue.use(serverError);
