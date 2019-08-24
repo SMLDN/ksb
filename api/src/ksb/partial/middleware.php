@@ -1,7 +1,6 @@
 <?php
 
 use Aloha\Middleware\CorsMiddleware;
-use Aloha\Middleware\JsonBodyParserMiddleware;
 use Ksb\Middleware\App\AuthMiddleware;
 use Slim\Middleware\ErrorMiddleware;
 
@@ -10,13 +9,11 @@ use Slim\Middleware\ErrorMiddleware;
 // Auth
 $app->add($container->newInstance(AuthMiddleware::class));
 
-// Flash
-
 // Routing Middleware
 $app->addRoutingMiddleware();
 
-// Json Parser
-$app->add(new JsonBodyParserMiddleware);
+// Body Parsing Middleware Parser
+$app->addBodyParsingMiddleware();
 
 // Error
 $setting = $container->get("setting");
