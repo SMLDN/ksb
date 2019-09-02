@@ -1,65 +1,32 @@
 <template>
-  <section id="main-hero" class="hero">
-    <div v-if="errorMsg" class="notification is-danger">
-      <button class="delete" @click="resetErrorMsg"></button>
-      {{ errorMsg }}
-    </div>
-
-    <div id="editor" class="hero-body tile is-vertical is-ancestor">
-      <div class="toolbox tile">
-        <div class="tile is-parent is-8 is-vertical">
-          <div class="tile is-child">
-            <input v-model="sheet.title" type="text" class="input is-medium" placeholder="Tiêu đề" />
-          </div>
-          <div class="tile is-child">
-            <input v-model="sheet.tag" type="text" class="input is-small" placeholder="Tags" />
-          </div>
-        </div>
-        <div class="tile is-parent">
-          <button class="button is-warning" @click="postSheet">Đăng bài</button>
+  <sheet-editor>
+    <template v-slot:action-button>
+      <div class="tile is-parent is-vertical">
+        <div class="tile is-child">
+          <button class="button is-warning is-medium" @click="postSheet">Đăng bài</button>
         </div>
       </div>
-      <div id="sheet-body" class="tile is-parent">
-        <div class="tile is-child is-6">
-          <textarea
-            id="sheet-content"
-            v-model="sheet.content"
-            class="textarea has-fixed-size"
-            placeholder="Nội dung bài viết..."
-          ></textarea>
-        </div>
-        <div id="sheet-preview" class="content tile is-child" v-html="compiledMarkdown"></div>
-      </div>
-    </div>
-  </section>
+    </template>
+  </sheet-editor>
 </template>
 
 <script>
-import marked from "marked";
+import { mapGetters } from "vuex";
+import SheetEditor from "~/components/sheet/SheetEditor";
+
 export default {
   middleware: "auth",
-
-  /**
-   * Data
-   */
-  data() {
-    return {
-      sheet: {
-        title: "",
-        content: "",
-        tag: ""
-      },
-      errorMsg: ""
-    };
+  components: {
+    SheetEditor
   },
 
   /**
    * Computed
    */
   computed: {
-    compiledMarkdown() {
-      return marked(this.sheet.content);
-    }
+    ...mapGetters({
+      sheet: "sheet/sheet"
+    })
   },
 
   /**
@@ -68,71 +35,16 @@ export default {
   methods: {
     async postSheet() {
       try {
-        await this.$axios.$post("sheet/create", this.sheet);
-      } catch (e) {
-        this.errorMsg = e.response.data;
-        setTimeout(() => {
-          this.errorMsg = "";
-        }, 3000);
-      }
-    },
-
-    resetErrorMsg() {
-      this.errorMsg = "";
+        const { sheet } = await this.$axios.$post("sheet/create", {
+          title: this.sheet.title,
+          tags: this.sheet.tagsText,
+          content: this.sheet.content
+        });
+        this.$router.push({
+          path: `/sheet/edit/${sheet.slug}`
+        });
+      } catch (e) {}
     }
   }
 };
 </script>
-
-<style>
-.notification {
-  position: absolute;
-  top: 3.2em;
-  z-index: 10;
-  margin: auto;
-  width: 100%;
-}
-#main-hero {
-  min-height: calc(100vh - 3.25rem);
-}
-#editor {
-  margin-bottom: 0;
-  padding-top: 1rem;
-  padding-left: 0.5rem;
-}
-#editor .toolbox {
-  max-height: 5.25rem;
-}
-#editor .toolbox .is-parent {
-  padding-top: 0;
-}
-#editor .toolbox .is-child {
-  padding-bottom: 0.5rem;
-  padding-top: 0;
-  margin-bottom: 0 !important;
-}
-#sheet-content {
-  height: 100%;
-}
-#sheet-body {
-  position: absolute;
-  top: 8.25rem;
-  height: calc(100% - 8.25rem);
-  width: 100%;
-  padding-right: 3px;
-}
-#sheet-body .tile.is-child {
-  max-height: 100%;
-}
-#sheet-content {
-  max-height: 100%;
-  border: none;
-  border-right: 1px #ccc solid;
-  border-radius: 0;
-  box-shadow: none;
-}
-#sheet-preview {
-  overflow: auto;
-  padding-left: 6px;
-}
-</style>

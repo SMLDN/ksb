@@ -1,0 +1,70 @@
+<template>
+  <sheet-editor>
+    <template v-slot:action-button>
+      <div class="tile is-parent is-vertical">
+        <div class="tile is-child">
+          <button class="button is-warning is-medium" @click="saveSheet">Lưu</button>
+        </div>
+      </div>
+    </template>
+  </sheet-editor>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import SheetEditor from "~/components/sheet/SheetEditor";
+
+export default {
+  middleware: "auth",
+  components: {
+    SheetEditor
+  },
+
+  /**
+   * Validate
+   */
+  validate({ params }) {
+    const pattern = /^[a-z0-9-]+-[0-9]{19}$/;
+    return params.slug && pattern.test(params.slug);
+  },
+
+  /**
+   * Computed
+   */
+  computed: {
+    ...mapGetters({
+      sheet: "sheet/sheet"
+    })
+  },
+
+  /**
+   * AsyncData
+   */
+  async fetch({ app, store, params, redirect }) {
+    const slug = params.slug;
+    const userId = app.$auth.user.id;
+    try {
+      const result = await app.$axios.$get(`/user/${userId}/sheet/${slug}`);
+      store.dispatch("sheet/setSheet", result.sheet);
+    } catch (e) {
+      redirect("/");
+    }
+  },
+
+  /**
+   * Methods
+   */
+  methods: {
+    async saveSheet() {
+      try {
+        await this.$axios.$put("sheet/modify/" + this.sheet.slug, {
+          title: this.sheet.title,
+          tags: this.sheet.tagsText,
+          content: this.sheet.content,
+          slug: this.sheet.slug
+        });
+      } catch (e) {}
+    }
+  }
+};
+</script>

@@ -4,8 +4,8 @@ namespace Ksb\Logic;
 
 use Aloha\Exception\ValidationException;
 use Aloha\Helper\Validation\AlohaValidator;
-use Aloha\Utility\CollectionUtil;
 use Aloha\Utility\Str;
+use Exception;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\Sheet;
@@ -41,6 +41,94 @@ class SheetLogic
     {
         $sheet->title = Str::trim($sheet->title);
 
+        // Validation
+        try {
+            $this->checkSheet($sheet);
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+
+        $this->db->getConnection()->beginTransaction();
+        try {
+            $sheet->slug = Str::makeSlugStr($sheet->title);
+            $sheet->user()->associate($this->authLogic->getUserRaw());
+            $tagList = explode(" ", $tags);
+            $sheet->save();
+
+            $tagList = explode(" ", $tags);
+            foreach ($tagList as $tag) {
+                $tag = Tag::where("name", $tag)->first();
+                if ($tag) {
+                    $sheetTag = new SheetTag;
+                    $sheetTag->tag()->associate($tag);
+                    $sheetTag->sheet()->associate($sheet);
+                    $sheetTag->save();
+                }
+            }
+            $this->db->getConnection()->commit();
+        } catch (Exception $e) {
+            $this->db->getConnection()->rollback();
+            throw new Exception;
+        }
+    }
+
+    /**
+     * Chỉnh sửa sheet
+     *
+     * @param Sheet $sheet
+     * @return void
+     */
+    public function modify(Sheet $sheet, $tags = "")
+    {
+        $sheet->title = Str::trim($sheet->title);
+
+        // Validation
+        try {
+            $this->checkSheet($sheet);
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+
+        $currentSheet = Sheet::where("slug", $sheet->slug)->first();
+
+        if (!$currentSheet || $currentSheet->userId != $this->authLogic->getUserId()) {
+            throw new Exception;
+        }
+
+        $this->db->getConnection()->beginTransaction();
+        try {
+            $currentSheet->title = $sheet->title;
+            $currentSheet->content = $sheet->content;
+            $currentSheet->save();
+
+            SheetTag::where("sheet_id", $currentSheet->id)->delete();
+            $tagList = explode(" ", $tags);
+            foreach ($tagList as $tag) {
+                $tag = Tag::where("name", $tag)->first();
+                if ($tag) {
+                    $sheetTag = new SheetTag;
+                    $sheetTag->tag()->associate($tag);
+                    $sheetTag->sheet()->associate($currentSheet);
+                    $sheetTag->save();
+                }
+            }
+            $this->db->getConnection()->commit();
+        } catch (Exception $e) {
+            $this->db->getConnection()->rollback();
+            throw new Exception;
+        }
+
+    }
+
+    /**
+     * Sheet Validation
+     *
+     * @param Sheet $sheet
+     * @return void
+     */
+    protected function checkSheet(Sheet $sheet)
+    {
+
         $v = new AlohaValidator();
         $v->setData($sheet->getAttributesCamel());
 
@@ -60,78 +148,9 @@ class SheetLogic
             ]
         );
 
-        if ($v->isPassed()) {
-            $this->db->getConnection()->beginTransaction();
-            try {
-                $sheet->slug = Str::makeSlugStr($sheet->title);
-                $sheet->user()->associate($this->authLogic->getUserRaw());
-                $tagList = explode(" ", $tags);
-                $sheet->save();
-
-                $tagList = explode(" ", $tags);
-                foreach ($tagList as $tag) {
-                    $tag = Tag::where("name", $tag)->first();
-                    if ($tag) {
-                        $sheetTag = new SheetTag;
-                        $sheetTag->tag()->associate($tag);
-                        $sheetTag->sheet()->associate($sheet);
-                        $sheetTag->save();
-                    }
-                }
-                $this->db->getConnection()->commit();
-                return true;
-            } catch (Exception $e) {
-                $this->db->getConnection()->rollback();
-            }
+        if (!$v->isPassed()) {
+            throw new ValidationException($v);
         }
-
-        throw new ValidationException($v);
-
-        return false;
-    }
-
-    /**
-     * Chỉnh sửa sheet
-     *
-     * @param Sheet $sheet
-     * @return void
-     */
-    public function edit(Sheet $sheet)
-    {
-        $sheet->title = Str::trim($sheet->title);
-
-        $v = new AlohaValidator();
-        $v->setData($sheet->getAttributesCamel());
-
-        // Tiêu đề
-        $v->addRule("title",
-            [
-                "fieldName" => "Tiêu đề",
-                "rule" => [
-                    "require",
-                    "maxLength:255",
-                ],
-            ]
-        );
-
-        // Nội dung
-        $v->addRule("content",
-            [
-                "fieldName" => "Nội dung bài viết",
-                "rule" => [
-                    "require",
-                    "minLength:4",
-                    "maxLength:99999",
-                ],
-            ]
-        );
-
-        if ($v->isPassed()) {
-            $sheet->save();
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -192,6 +211,6 @@ class SheetLogic
             ->take(15)
             ->with("user")
             ->get();
-        return CollectionUtil::toArrayCamel($sheetList, ["content"], ["user"]);
+        return $sheetList;
     }
 }

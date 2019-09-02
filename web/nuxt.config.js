@@ -38,7 +38,8 @@ export default {
    */
   plugins: [
     "~/plugins/mixin/auth.js",
-    "~/plugins/mixin/serverError.js",
+    "~/plugins/mixin/server-error.js",
+    "~/plugins/mixin/reset-sheet.js",
     "~/plugins/axios.js",
     "~/plugins/directive.js"
   ],
@@ -94,7 +95,7 @@ export default {
   },
 
   router: {
-    middleware: ["resetServerError"]
+    middleware: ["reset-server-error"]
   },
 
   /*

@@ -4,7 +4,7 @@ import { mapGetters } from "vuex";
 /**
  * Server Error
  */
-const serverError = {
+const ServerError = {
   install(Vue, options) {
     Vue.mixin({
       computed: {
@@ -16,4 +16,4 @@ const serverError = {
   }
 };
 
-Vue.use(serverError);
+Vue.use(ServerError);

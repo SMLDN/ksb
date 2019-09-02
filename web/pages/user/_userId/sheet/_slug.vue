@@ -2,7 +2,14 @@
   <div class="hero">
     <div class="hero-body container content">
       <h1 class="title">{{ sheet.title }}</h1>
-      <sheet-tags :sheet-tag-list="sheet.tags"></sheet-tags>
+      <div class="level">
+        <sheet-tags :sheet-tag-list="sheet.tags" class="level-left"></sheet-tags>
+        <nuxt-link
+          v-if="sheet.userId === currentUser.id"
+          :to="{ name: 'sheet-edit-slug', params: {slug: sheet.slug } }"
+          class="level-right"
+        >Sửa bài</nuxt-link>
+      </div>
       <div v-html="compiledMarkdown"></div>
     </div>
   </div>
