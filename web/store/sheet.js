@@ -69,5 +69,16 @@ export const actions = {
     commit("SET_PROP", {
       content
     });
+  },
+
+  appendContent({ state, commit }, str) {
+    let content = state.sheet.content;
+    if (content.length !== 0) {
+      content += "\n";
+    }
+    content += str;
+    commit("SET_PROP", {
+      content
+    });
   }
 };

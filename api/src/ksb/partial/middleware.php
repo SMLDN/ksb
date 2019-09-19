@@ -23,5 +23,7 @@ $errorMiddleware = new ErrorMiddleware($app->getCallableResolver(), $app->getRes
     $setting->get("errorMiddleware.logErrorDetails"));
 $app->add($errorMiddleware);
 
-// CORS
-$app->add(new CorsMiddleware);
+if (getenv("DEBUG")) {
+    // CORS
+    $app->add(new CorsMiddleware);
+}

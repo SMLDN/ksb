@@ -16,7 +16,8 @@
     "@nuxtjs/axios": "5.5.4",
     "@nuxtjs/bulma": "1.2.4",
     "marked": "0.7.0",
-    "nuxt": "2.8.1"
+    "nuxt": "2.8.1",
+    "nuxt-dropzone": "^1.0.4"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.1.2",

@@ -9,7 +9,6 @@ use Exception;
 use Illuminate\Database\Capsule\Manager;
 use Ksb\Logic\AuthLogic;
 use Ksb\Model\Sheet;
-use Ksb\Model\SheetAttach;
 use Ksb\Model\SheetTag;
 use Ksb\Model\Tag;
 use Ksb\Model\User;
@@ -150,28 +149,6 @@ class SheetLogic
 
         if (!$v->isPassed()) {
             throw new ValidationException($v);
-        }
-    }
-
-    /**
-     * Upload Files
-     *
-     * @param [type] $files
-     * @param User $user
-     * @param Sheet $sheet
-     * @return void
-     */
-    public function uploadFiles($files, User $user, Sheet $sheet)
-    {
-        foreach ($files as $file) {
-            if ($file->getClientFilename()) {
-                $sheetAttach = new SheetAttach();
-                $sheetAttach->attachContent = $file;
-                $sheetAttach->userId = $user->id;
-                $sheetAttach->sheetId = $sheet->id;
-                $sheetAttach->attachName = $file->getClientFilename();
-                $sheetAttach->save();
-            }
         }
     }
 

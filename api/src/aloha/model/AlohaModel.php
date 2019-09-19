@@ -12,8 +12,10 @@ use Ramsey\Uuid\Uuid;
 
 class AlohaModel extends Model
 {
-    protected $uuidVersion = 4;
     protected $keyType = "int";
+    protected $excludes = [];
+    // UUID
+    protected $uuidVersion = 4;
     protected $useUuid = false;
     public $incrementing = true;
 
@@ -202,5 +204,15 @@ class AlohaModel extends Model
         }
 
         return $camelArray;
+    }
+
+    /**
+     * Lấy entity với tên key dạng camel case (kèm loại trừ property)
+     *
+     * @return void
+     */
+    public function toArrayCamelWithDefaultExclude()
+    {
+        return $this->toArrayCamelWithExclude($this->excludes);
     }
 }

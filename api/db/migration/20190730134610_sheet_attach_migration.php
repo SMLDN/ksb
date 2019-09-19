@@ -34,7 +34,6 @@ class SheetAttachMigration extends AbstractMigration
         $table = $this->table("sheet_attach", ["id" => false, "primary_key" => "id"]);
         $table->addColumn("id", "uuid")
             ->addColumn("user_id", "integer")
-            ->addColumn("sheet_id", "integer")
             ->addColumn("attach_content", "binary", ["comment" => "File đính kèm"])
             ->addColumn("attach_name", "string", ["limit" => 127, "comment" => "Tên file"])
             ->addColumn("created_at", "timestamp", ["default" => "CURRENT_TIMESTAMP", "timezone" => false, "comment" => "Thời gian tạo mới"])
