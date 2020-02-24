@@ -14,10 +14,7 @@
             >{{ sheet.title }}</nuxt-link>
             <div class="sheet-meta has-text-grey tile is-child">
               bởi
-              <nuxt-link
-                :to="{ name: 'user-userId', params: {userId: basedUserId(sheet.user.id)} }"
-                class="user-link has-text-grey"
-              >{{ sheet.user.userName }}</nuxt-link>
+              {{ sheet.user.userName }}
               vào lúc {{ sheet.createdAt }}
             </div>
           </div>
