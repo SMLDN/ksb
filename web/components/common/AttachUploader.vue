@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       options: {
-        url: "http://localhost:8080/api/sheet-attach/create",
+        url: this.getUrl(),
         previewTemplate: `
         <div class="dz-preview dz-file-preview">
           <div class="dz-details">
@@ -29,10 +29,10 @@ export default {
           <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
         </div>
         `,
-        maxFilesize: 5,
         createImageThumbnails: false,
         paramName: "attachContent",
         dictDefaultMessage: "Tải lên",
+        acceptedFiles: "image/*",
         headers: {
           Authorization: this.$auth.getToken("local")
         }
@@ -46,6 +46,9 @@ export default {
   methods: {
     uploadedAttach(file, response) {
       this.$emit("uploaded-attach", response);
+    },
+    getUrl() {
+      return "http://localhost:8080/api/sheet-attach/create";
     }
   }
 };

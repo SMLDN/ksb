@@ -2,7 +2,7 @@
   <nav id="top-nav-bar" class="navbar is-warning" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <nuxt-link class="navbar-item" :to="{ name: 'index' }">
-        <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" />
+        <img src="/img/KSB.png" />
       </nuxt-link>
 
       <a
